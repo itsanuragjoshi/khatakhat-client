@@ -1,0 +1,221 @@
+:root {
+  --color-tone-1: #1a1a1a;
+  --color-tone-2: #707382;
+  --color-tone-3: #c4c4c4;
+  --color-tone-4: #dbdce0;
+  --color-tone-5: #efefef;
+  --color-tone-6: #ffffff;
+  --color-background: var(--color-tone-6);
+  --color-background-reverse: var(--color-tone-1);
+  --color-background-light: var(--color-tone-5);
+  --color-font: var(--color-tone-1);
+  --color-font-reverse: var(--color-tone-6);
+  --color-border-dark: var(--color-tone-1);
+  --color-border-light: var(--color-tone-4);
+  --color-switch: var(--color-tone-2);
+  --color-switch-knob: var(--color-tone-6);
+  --font-family-primary: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.dark {
+  --color-background: var(--color-tone-1);
+  --color-background-reverse: var(--color-tone-6);
+  --color-background-light: var(--color-tone-2);
+  --color-font: var(--color-tone-6);
+  --color-font-reverse: var(--color-tone-1);
+  --color-border-dark: var(--color-tone-6);
+  --color-border-light: var(--color-tone-2);
+}
+
+/* Apply .dark styles when user prefers dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--color-tone-1);
+    --color-background-reverse: var(--color-tone-6);
+    --color-background-light: var(--color-tone-2);
+    --color-font: var(--color-tone-6);
+    --color-font-reverse: var(--color-tone-1);
+    --color-border-dark: var(--color-tone-6);
+    --color-border-light: var(--color-tone-2);
+  }
+}
+
+html {
+  font-size: 12px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  font-family: var(--font-family-primary) !important;
+  line-height: initial;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-font);
+  font-size: 1rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+main {
+  flex-grow: 1;
+}
+
+
+button {
+  background: none;
+  white-space: nowrap;
+  color: var(--color-font);
+  cursor: pointer;
+}
+
+.dNone,
+.hide {
+  display: none !important;
+}
+
+.error {
+  color: red;
+}
+
+svg[fill="currentColor"]:not([fill="none"]),
+svg :is(rect,
+  path,
+  line,
+  circle,
+  ellipse,
+  polyline,
+  polygon)[fill="currentColor"]:not([fill="none"]) {
+  fill: var(--color-font);
+}
+
+svg[stroke="currentColor"]:not([stroke="none"]),
+svg :is(rect,
+  path,
+  line,
+  circle,
+  ellipse,
+  polyline,
+  polygon)[stroke="currentColor"]:not([stroke="none"]) {
+  stroke: var(--color-font);
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-font);
+  cursor: pointer !important;
+}
+
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: inherit;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+.postTitle {
+  font-size: 1.25rem;
+}
+
+::placeholder,
+input {
+  color: var(--color-font);
+}
+
+.actionWrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.button {
+  border-radius: 0;
+  width: max-content;
+  padding: 10px 20px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.button:disabled {
+  background-color: var(--color-tone-2);
+  border: 2px solid var(--color-tone-2);
+  color: var(--color-tone-6);
+}
+
+.button:disabled svg {
+  height: 24px !important;
+  width: 24px !important;
+  stroke: var(--color-tone-6) !important;
+}
+
+.buttonPrimary {
+  background-color: var(--color-background-reverse);
+  border: 2px solid var(--color-border-dark);
+  color: var(--color-font-reverse);
+}
+
+.buttonSecondary {
+  background-color: var(--color-background);
+  border: 2px solid var(--color-border-dark);
+  color: var(--color-font);
+}
+
+
+menu a.active,
+menu a.active:hover {
+  background: var(--color-background-reverse);
+  color: var(--color-font-reverse);
+}
+
+@media screen and (min-width: 1024px) {
+  .container {
+    padding: 20px 96px;
+    gap: 40px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+  }
+
+  h3 {
+    font-size: 2rem;
+  }
+
+  .articles {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+  }
+}
