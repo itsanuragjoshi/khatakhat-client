@@ -1,0 +1,100 @@
+menu {
+    width: 200px;
+    height: 100vh;
+    border-right: 1px solid var(--color-border-light);
+    background: var(--color-background);
+    display: flex;
+    flex-direction: column;
+}
+
+menu.collapsed {
+    width: max-content;
+}
+
+.logoWrapper {
+    height: 56px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--color-border-light);
+    display: flex;
+    align-items: center;
+}
+
+.logoWrapper span {
+    font-size: 1.25rem;
+}
+
+.logoWrapper a {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 10px;
+}
+
+.collapseBtnWrapper {
+    width: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid var(--color-border-light);
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.nav {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.navList {
+    padding: 10px 0;
+}
+
+.navList,
+.subNavList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.subNavList {
+    width: 100%;
+}
+
+.navItem,
+.subNavItem {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+}
+
+.navItem {
+    padding: 0 10px;
+}
+
+.navLink,
+.subNavLink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+}
+
+.navLink :nth-child(2) {
+    flex: 1;
+}
+
+.subNavLink {
+    padding-left: 38px;
+}
+
+.navLink:hover,
+.subNavLink:hover {
+    background-color: var(--color-background-light);
+}
+
+.rotatedArrow {
+    transform: rotate(180deg);
+}
