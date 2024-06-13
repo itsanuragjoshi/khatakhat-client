@@ -22,7 +22,7 @@ const MenuButton = ({ to, icon, title, subNavList, collapsed, open, handleSubNav
               {subNavList.map((subItem, j) => (
                 <li key={j} title={subItem.title} className={styles.subNavItem}>
                   <NavLink to={subItem.to} className={styles.subNavLink} onClick={expandMenu}>
-                    {subItem.title}
+                    <span>{subItem.title}</span>
                   </NavLink>
                 </li>
               ))}

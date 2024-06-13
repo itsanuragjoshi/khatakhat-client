@@ -23,10 +23,17 @@ const navList = [
       {
         to: "/customers",
         title: "Customers",
+        new: true,
       },
       {
         to: "/invoices",
         title: "Invoices",
+        new: true,
+      },
+      {
+        to: "/paymentsreceived",
+        title: "Payments Received",
+        new: true,
       },
     ],
   },

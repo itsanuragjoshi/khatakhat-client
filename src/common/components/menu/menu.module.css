@@ -1,7 +1,7 @@
 menu {
     width: 200px;
     height: 100vh;
-    border-right: 1px solid var(--color-border-light);
+    outline: 1px solid var(--color-border-light);
     background: var(--color-background);
     display: flex;
     flex-direction: column;
@@ -13,8 +13,8 @@ menu.collapsed {
 
 .logoWrapper {
     height: 56px;
-    padding: 10px 20px;
-    border-bottom: 1px solid var(--color-border-light);
+    padding: 8px 16px;
+    outline: 1px solid var(--color-border-light);
     display: flex;
     align-items: center;
 }
@@ -27,7 +27,7 @@ menu.collapsed {
     display: flex;
     align-items: center;
     justify-content: left;
-    gap: 10px;
+    gap: 8px;
 }
 
 .collapseBtnWrapper {
@@ -35,8 +35,8 @@ menu.collapsed {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-top: 1px solid var(--color-border-light);
-    padding: 10px 20px;
+    outline: 1px solid var(--color-border-light);
+    padding: 8px 16px;
     cursor: pointer;
 }
 
@@ -46,7 +46,7 @@ menu.collapsed {
 }
 
 .navList {
-    padding: 10px 0;
+    padding: 8px 0;
 }
 
 .navList,
@@ -70,24 +70,25 @@ menu.collapsed {
 }
 
 .navItem {
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 .navLink,
 .subNavLink {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
+    gap: 8px;
+    padding: 8px;
     width: 100%;
 }
 
-.navLink :nth-child(2) {
+.navLink :nth-child(2),
+.subNavLink :nth-child(1) {
     flex: 1;
 }
 
 .subNavLink {
-    padding-left: 38px;
+    padding-left: 34px;
 }
 
 .navLink:hover,
