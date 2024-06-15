@@ -1,10 +1,16 @@
 menu {
     width: 200px;
-    height: 100vh;
-    outline: 1px solid var(--color-border-light);
-    background: var(--color-background);
+    /* outline: 1px solid var(--color-border-light); */
+    background: var(--color-background-reverse);
+    color: var(--color-font-reverse);
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+menu a {
+    color: var(--color-font-reverse);
 }
 
 menu.collapsed {
@@ -14,7 +20,8 @@ menu.collapsed {
 .logoWrapper {
     height: 56px;
     padding: 8px 16px;
-    outline: 1px solid var(--color-border-light);
+    border-bottom: 1px solid var(--color-border-light);
+    /* background: var(--color-background-primary); */
     display: flex;
     align-items: center;
 }
@@ -28,14 +35,16 @@ menu.collapsed {
     align-items: center;
     justify-content: left;
     gap: 8px;
+    color: var(--color-font-light);
 }
 
 .collapseBtnWrapper {
+    height: 40px;
     width: inherit;
     display: flex;
     align-items: center;
     justify-content: center;
-    outline: 1px solid var(--color-border-light);
+    border-top: 1px solid var(--color-border-light);
     padding: 8px 16px;
     cursor: pointer;
 }
@@ -94,6 +103,7 @@ menu.collapsed {
 .navLink:hover,
 .subNavLink:hover {
     background-color: var(--color-background-light);
+    color: var(--color-font);
 }
 
 .rotatedArrow {
