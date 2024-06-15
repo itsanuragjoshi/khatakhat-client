@@ -192,7 +192,7 @@ const CustomersNew = () => {
                         <div>
                             <legend><span>Shipping Address</span>
                                 <span>
-                                    <Button btnType="button" btnClass="btnLink" btnText="Copy Billing Address" onClick={(e) => { e.preventDefault(); copyBillingToShipping(); }} />
+                                    <Button btnType="button" btnClass="btnLink" btnText="Copy Billing Address" btnClick={(e) => { e.preventDefault(); copyBillingToShipping(); }} />
                                 </span>
                             </legend>
 
