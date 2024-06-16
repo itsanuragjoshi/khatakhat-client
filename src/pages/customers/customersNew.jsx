@@ -4,9 +4,13 @@ import Header from '../../common/components/header/Header';
 import useFetchData from '../../common/hooks/useFetchData';
 import styles from './customersNew.module.css';
 
-const CustomersNew = () => {
+import EmailIcon from '@mui/icons-material/EmailOutlined';
+import PhoneIcon from '@mui/icons-material/PhoneOutlined';
+import MobileIcon from '@mui/icons-material/PhoneAndroidOutlined';
 
-    const [input, setInput] = useState({
+
+const CustomersNew = () => {
+    const initialInputValues = {
         customerType: '',
         customerName: '',
         customerDisplayName: '',
@@ -29,13 +33,28 @@ const CustomersNew = () => {
         customerShippingCity: '',
         customerShippingState: '',
         customerShippingPincode: '',
-    });
+    };
+
+    const [input, setInput] = useState(initialInputValues);
 
     const handleChange = (event) => {
         const { name, value, type, checked } = event.target;
         const finalValue = type === 'checkbox' ? checked : value;
 
         setInput((prevInput) => ({ ...prevInput, [name]: finalValue }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        Object.entries(input).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+        console.log('FormData:', Object.fromEntries(formData.entries()));
+    };
+
+    const handleReset = () => {
+        setInput(initialInputValues);
     };
 
     const copyBillingToShipping = () => {
@@ -59,6 +78,8 @@ const CustomersNew = () => {
     const { data: shippingStates, loading: shippingStatesLoading, error: shippingStatesError } = useFetchData(
         input.customerShippingCountry ? `${import.meta.env.VITE_APP_API_URI}/states/${input.customerShippingCountry}` : null
     );
+
+    const { data: gstStates, loading: gstStatesLoading, error: gstStatesError } = useFetchData(`${import.meta.env.VITE_APP_API_URI}/gstCodes`);
 
     return (
         <>
@@ -96,14 +117,29 @@ const CustomersNew = () => {
 
                         <div className={styles.formGroup}>
                             <label htmlFor="customerEmail">Customer Email</label>
-                            <input type="email" name="customerEmail" id="customerEmail" className={styles.formControl} onChange={handleChange} value={input.customerEmail} />
+                            <div className={styles.formInputGroup}>
+                                <span>
+                                    <EmailIcon />
+                                </span>
+                                <input type="email" name="customerEmail" id="customerEmail" className={styles.formControl} placeholder="Email Address" onChange={handleChange} value={input.customerEmail} />
+                            </div>
                         </div>
 
                         <div className={styles.formGroup}>
                             <label>Customer Phone</label>
                             <div className={styles.formGroupInline}>
-                                <input type="tel" name="customerWorkPhone" id="customerWorkPhone" className={styles.formControl} placeholder="Work Phone" onChange={handleChange} value={input.customerWorkPhone} />
-                                <input type="tel" name="customerMobile" id="customerMobile" className={styles.formControl} placeholder="Mobile" onChange={handleChange} value={input.customerMobile} />
+                                <div className={styles.formInputGroup}>
+                                    <span>
+                                        <PhoneIcon />
+                                    </span>
+                                    <input type="tel" name="customerWorkPhone" id="customerWorkPhone" className={styles.formControl} placeholder="Work Phone" onChange={handleChange} value={input.customerWorkPhone} />
+                                </div>
+                                <div className={styles.formInputGroup}>
+                                    <span>
+                                        <MobileIcon />
+                                    </span>
+                                    <input type="tel" name="customerMobile" id="customerMobile" className={styles.formControl} placeholder="Mobile" onChange={handleChange} value={input.customerMobile} />
+                                </div>
                             </div>
                         </div>
 
@@ -128,19 +164,27 @@ const CustomersNew = () => {
                                 </div>
                             </div>
                         </div>
+                        {/* Conditionally render GSTIN/UIN and Place of Supply inputs */}
+                        {input.customerGST === 'Yes' && ( // Hide when 'No' is selected
+                            <>
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="customerGSTIN" className={styles.required}>GSTIN / UIN</label>
+                                    <input type="text" className={styles.formControl} name="customerGSTIN" id="customerGSTIN" maxLength={15} onChange={handleChange} value={input.customerGSTIN} required />
+                                </div>
 
-                        <div className={styles.formGroup}>
-                            <label htmlFor="customerGSTIN" className={styles.required}>GSTIN / UIN</label>
-                            <input type="text" className={styles.formControl} name="customerGSTIN" id="customerGSTIN" maxLength={15} onChange={handleChange} value={input.customerGSTIN} required />
-                        </div>
-
-                        <div className={styles.formGroup}>
-                            <label htmlFor="customerPlaceOfSupply" className={styles.required}>Place of Supply</label>
-                            <select name="customerPlaceOfSupply" id="customerPlaceOfSupply" onChange={handleChange} value={input.customerPlaceOfSupply} required>
-                                <option value="INR">INR</option>
-                                <option value="USD">USD</option>
-                            </select>
-                        </div>
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="customerPlaceOfSupply" className={styles.required}>Place of Supply</label>
+                                    <select name="customerPlaceOfSupply" id="customerPlaceOfSupply" onChange={handleChange} value={input.customerPlaceOfSupply} required>
+                                        <option value="" disabled>Select Place of Supply</option>
+                                        {gstStates?.map(({ stateName, stateCode, gstCode }) => (
+                                            <option key={gstCode} value={stateName}>
+                                                {`[${stateCode}] - ${stateName}`}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </>
+                        )}
                     </fieldset>
 
                     <fieldset className={styles.formFieldset}>
@@ -241,8 +285,8 @@ const CustomersNew = () => {
                     </fieldset>
                 </form>
                 <div className="btnToolbar">
-                    <Button btnType="submit" btnClass="btnPrimary" btnText="Add Customer" />
-                    <Button btnType="reset" btnClass="btnSecondary" btnText="Cancel" />
+                    <Button btnType="submit" btnClass="btnPrimary" btnText="Add Customer" btnClick={handleSubmit} />
+                    <Button btnType="reset" btnClass="btnSecondary" btnText="Cancel" btnClick={handleReset} />
                 </div>
             </main>
         </>
