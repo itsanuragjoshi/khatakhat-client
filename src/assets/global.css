@@ -6,6 +6,7 @@
   --color-tone-5: #efefef;
   --color-tone-6: #ffffff;
   --color-tone-7: #1463F3;
+  --color-tone-8: #ff0000;
 
   --color-background: var(--color-tone-6);
   --color-background-reverse: var(--color-tone-1);
@@ -17,10 +18,12 @@
   --color-font-light: var(--color-tone-6);
   --color-font-dark: var(--color-tone-1);
   --color-font-primary: var(--color-tone-7);
+  --color-font-error: var(--color-tone-8);
 
   --color-border-dark: var(--color-tone-1);
   --color-border-light: var(--color-tone-4);
   --color-border-primary: var(--color-tone-7);
+  --color-border-error: var(--color-tone-8);
 
   --color-switch: var(--color-tone-2);
   --color-switch-knob: var(--color-tone-6);
@@ -35,6 +38,7 @@
     monospace;
 
   --form-input-focus-box-shadow: 0 0 0 2px rgba(20, 99, 243, 0.1);
+  --form-input-error-box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.1);
 }
 
 html {

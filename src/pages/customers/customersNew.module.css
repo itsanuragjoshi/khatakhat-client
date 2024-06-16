@@ -82,13 +82,21 @@
     box-shadow: var(--form-input-focus-box-shadow);
 }
 
-.required {
-    color: red;
+.formControl.error {
+    border-color: var(--color-border-error);
+    box-shadow: var(--form-input-error-box-shadow);
+}
+
+
+span.error {
+    color: var(--color-font-error);
+    font-size: 0.875rem;
+    grid-column-start: 2;
 }
 
 .required::after {
     content: '*';
-    color: red;
+    color: var(--color-font-error);
 }
 
 .formInputGroup {

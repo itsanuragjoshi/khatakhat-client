@@ -11,6 +11,31 @@ import MobileIcon from '@mui/icons-material/PhoneAndroidOutlined';
 
 const CustomersNew = () => {
     const initialInputValues = {
+        customerType: 'Business',
+        customerName: '',
+        customerDisplayName: '',
+        customerEmail: '',
+        customerWorkPhone: '',
+        customerMobile: '',
+        customerCurrency: '',
+        customerGST: 'No',
+        customerGSTIN: '',
+        customerPlaceOfSupply: '',
+        customerBillingCountry: '',
+        customerBillingAddress1: '',
+        customerBillingAddress2: '',
+        customerBillingCity: '',
+        customerBillingState: '',
+        customerBillingPincode: '',
+        customerShippingCountry: '',
+        customerShippingAddress1: '',
+        customerShippingAddress2: '',
+        customerShippingCity: '',
+        customerShippingState: '',
+        customerShippingPincode: '',
+    };
+
+    const initialErrorValues = {
         customerType: '',
         customerName: '',
         customerDisplayName: '',
@@ -36,6 +61,65 @@ const CustomersNew = () => {
     };
 
     const [input, setInput] = useState(initialInputValues);
+    const [errors, setErrors] = useState(initialErrorValues);
+
+    const handleValidation = () => {
+        const newErrors = { ...initialErrorValues };
+        let isValid = true;
+
+        if (!input.customerType) {
+            isValid = false;
+            newErrors.customerType = 'Customer Type is required.';
+        }
+
+        if (!input.customerDisplayName) {
+            isValid = false;
+            newErrors.customerDisplayName = 'Customer Display Name is required.';
+        }
+
+        if (input.customerEmail && !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(input.customerEmail)) {
+            isValid = false;
+            newErrors.customerEmail = 'Invalid email format.';
+        }
+
+        if (input.customerWorkPhone && !/^[+]{1}(?:[0-9\-\\(\\)\\/.]\s?){6,15}[0-9]{1}$/.test(input.customerWorkPhone)) {
+            isValid = false;
+            newErrors.customerWorkPhone = 'Invalid phone number format. Please enter + CountryCode NationalNumber.';
+        }
+
+        if (input.customerMobile && !/^[+]{1}(?:[0-9\-\\(\\)\\/.]\s?){6,15}[0-9]{1}$/.test(input.customerMobile)) {
+            isValid = false;
+            newErrors.customerMobile = 'Invalid mobile number format. Please enter + CountryCode NationalNumber.';
+        }
+
+        if (input.customerGST === 'Yes') {
+            if (!input.customerGSTIN) {
+                isValid = false;
+                newErrors.customerGSTIN = 'GSTIN/UIN is required.';
+            } else if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/.test(input.customerGSTIN)) {
+                isValid = false;
+                newErrors.customerGSTIN = 'Invalid GSTIN format.';
+            }
+
+            if (!input.customerPlaceOfSupply) {
+                isValid = false;
+                newErrors.customerPlaceOfSupply = 'Place of Supply is required.';
+            }
+        }
+
+        if (input.customerBillingPincode && !/^(?!.*[ -\s])([a-zA-Z0-9]+(?: [-\s]?[a-zA-Z0-9]+)*)(?!.*[ -\s])$/.test(input.customerBillingPincode)) {
+            isValid = false;
+            newErrors.customerBillingPincode = 'Invalid pincode / zip code / postal code format.';
+        }
+
+        if (input.customerShippingPincode && !/^(?!.*[ -\s])([a-zA-Z0-9]+(?: [-\s]?[a-zA-Z0-9]+)*)(?!.*[ -\s])$/.test(input.customerShippingPincode)) {
+            isValid = false;
+            newErrors.customerShippingPincode = 'Invalid pincode / zip code / postal code format.';
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
 
     const handleChange = (event) => {
         const { name, value, type, checked } = event.target;
@@ -46,15 +130,22 @@ const CustomersNew = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        Object.entries(input).forEach(([key, value]) => {
-            formData.append(key, value);
-        });
-        console.log('FormData:', Object.fromEntries(formData.entries()));
+        if (handleValidation()) {
+            const formData = new FormData();
+            Object.entries(input).forEach(([key, value]) => {
+                formData.append(key, value);
+            });
+            console.log('FormData:', Object.fromEntries(formData.entries()));
+            setInput(initialInputValues);
+            setErrors(initialErrorValues);
+        } else {
+            console.log('Validation failed');
+        }
     };
 
     const handleReset = () => {
         setInput(initialInputValues);
+        setErrors(initialErrorValues);
     };
 
     const copyBillingToShipping = () => {
@@ -72,11 +163,11 @@ const CustomersNew = () => {
     const { data: countries, loading: countriesLoading, error: countriesError } = useFetchData(`${import.meta.env.VITE_APP_API_URI}/countries`);
 
     const { data: billingStates, loading: billingStatesLoading, error: billingStatesError } = useFetchData(
-        input.customerBillingCountry ? `${import.meta.env.VITE_APP_API_URI}/states/${input.customerBillingCountry}` : null
+        input.customerBillingCountry ? `${import.meta.env.VITE_APP_API_URI}/states/${encodeURIComponent(input.customerBillingCountry)}` : null
     );
 
     const { data: shippingStates, loading: shippingStatesLoading, error: shippingStatesError } = useFetchData(
-        input.customerShippingCountry ? `${import.meta.env.VITE_APP_API_URI}/states/${input.customerShippingCountry}` : null
+        input.customerShippingCountry ? `${import.meta.env.VITE_APP_API_URI}/states/${encodeURIComponent(input.customerShippingCountry)}` : null
     );
 
     const { data: gstStates, loading: gstStatesLoading, error: gstStatesError } = useFetchData(`${import.meta.env.VITE_APP_API_URI}/gstCodes`);
@@ -103,16 +194,19 @@ const CustomersNew = () => {
                                     <label htmlFor="customerTypeIndividual">Individual</label>
                                 </div>
                             </div>
+                            {errors.customerType && <span className={styles.error}>{errors.customerType}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
                             <label htmlFor="customerName">Customer Name</label>
-                            <input type="text" className={styles.formControl} name="customerName" id="customerName" onChange={handleChange} value={input.customerName} />
+                            <input type="text" className={`${styles.formControl} ${errors.customerName && styles.error}`} name="customerName" id="customerName" onChange={handleChange} value={input.customerName} />
+                            {errors.customerName && <span className={styles.error}>{errors.customerName}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
                             <label htmlFor="customerDisplayName" className={styles.required}>Customer Display Name</label>
-                            <input type="text" className={styles.formControl} name="customerDisplayName" id="customerDisplayName" onChange={handleChange} value={input.customerDisplayName} required />
+                            <input type="text" className={`${styles.formControl} ${errors.customerDisplayName && styles.error}`} name="customerDisplayName" id="customerDisplayName" onChange={handleChange} value={input.customerDisplayName} required />
+                            {errors.customerDisplayName && <span className={styles.error}>{errors.customerDisplayName}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
@@ -121,8 +215,9 @@ const CustomersNew = () => {
                                 <span>
                                     <EmailIcon />
                                 </span>
-                                <input type="email" name="customerEmail" id="customerEmail" className={styles.formControl} placeholder="Email Address" onChange={handleChange} value={input.customerEmail} />
+                                <input type="email" name="customerEmail" id="customerEmail" className={`${styles.formControl} ${errors.customerEmail && styles.error}`} placeholder="Email Address" onChange={handleChange} value={input.customerEmail} />
                             </div>
+                            {errors.customerEmail && <span className={styles.error}>{errors.customerEmail}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
@@ -132,15 +227,17 @@ const CustomersNew = () => {
                                     <span>
                                         <PhoneIcon />
                                     </span>
-                                    <input type="tel" name="customerWorkPhone" id="customerWorkPhone" className={styles.formControl} placeholder="Work Phone" onChange={handleChange} value={input.customerWorkPhone} />
+                                    <input type="tel" name="customerWorkPhone" id="customerWorkPhone" className={`${styles.formControl} ${errors.customerWorkPhone && styles.error}`} placeholder="Work Phone" onChange={handleChange} value={input.customerWorkPhone} />
                                 </div>
                                 <div className={styles.formInputGroup}>
                                     <span>
                                         <MobileIcon />
                                     </span>
-                                    <input type="tel" name="customerMobile" id="customerMobile" className={styles.formControl} placeholder="Mobile" onChange={handleChange} value={input.customerMobile} />
+                                    <input type="tel" name="customerMobile" id="customerMobile" className={`${styles.formControl} ${errors.customerMobile && styles.error}`} placeholder="Mobile" onChange={handleChange} value={input.customerMobile} />
                                 </div>
                             </div>
+                            {errors.customerWorkPhone && <span className={styles.error}>{errors.customerWorkPhone}</span>}
+                            {errors.customerMobile && <span className={styles.error}>{errors.customerMobile}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
@@ -149,6 +246,7 @@ const CustomersNew = () => {
                                 <option value="INR">INR</option>
                                 <option value="USD">USD</option>
                             </select>
+                            {errors.customerCurrency && <span className={styles.error}>{errors.customerCurrency}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
@@ -163,13 +261,15 @@ const CustomersNew = () => {
                                     <label htmlFor="gstTreatmentNo">No</label>
                                 </div>
                             </div>
+                            {errors.customerGST && <span className={styles.error}>{errors.customerGST}</span>}
                         </div>
                         {/* Conditionally render GSTIN/UIN and Place of Supply inputs */}
                         {input.customerGST === 'Yes' && ( // Hide when 'No' is selected
                             <>
                                 <div className={styles.formGroup}>
                                     <label htmlFor="customerGSTIN" className={styles.required}>GSTIN / UIN</label>
-                                    <input type="text" className={styles.formControl} name="customerGSTIN" id="customerGSTIN" maxLength={15} onChange={handleChange} value={input.customerGSTIN} required />
+                                    <input type="text" className={`${styles.formControl} ${errors.customerGSTIN && styles.error}`} name="customerGSTIN" id="customerGSTIN" maxLength={15} onChange={handleChange} value={input.customerGSTIN} required />
+                                    {errors.customerGSTIN && <span className={styles.error}>{errors.customerGSTIN}</span>}
                                 </div>
 
                                 <div className={styles.formGroup}>
@@ -182,6 +282,7 @@ const CustomersNew = () => {
                                             </option>
                                         ))}
                                     </select>
+                                    {errors.customerPlaceOfSupply && <span className={styles.error}>{errors.customerPlaceOfSupply}</span>}
                                 </div>
                             </>
                         )}
@@ -194,24 +295,28 @@ const CustomersNew = () => {
                             <select name="customerBillingCountry" id="customerBillingCountry" onChange={handleChange} value={input.customerBillingCountry}>
                                 <option value="" disabled>Select Country</option>
                                 {countries?.map(({ countryCode, countryName }) => (
-                                    <option key={countryCode} value={countryCode}>
+                                    <option key={countryCode} value={countryName}>
                                         {countryName}
                                     </option>
                                 ))}
                             </select>
+                            {errors.customerBillingCountry && <span className={styles.error}>{errors.customerBillingCountry}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
                             <label htmlFor="customerBillingAddress1">Address</label>
                             <div className={styles.formGroupBlock}>
-                                <input type="text" className={styles.formControl} name="customerBillingAddress1" id="customerBillingAddress1" placeholder='Flat/Building Number' onChange={handleChange} value={input.customerBillingAddress1} />
-                                <input type="text" className={styles.formControl} name="customerBillingAddress2" id="customerBillingAddress2" placeholder='Area/Locality' onChange={handleChange} value={input.customerBillingAddress2} />
+                                <input type="text" className={`${styles.formControl} ${errors.customerBillingAddress1 && styles.error}`} name="customerBillingAddress1" id="customerBillingAddress1" placeholder='Flat/Building Number' onChange={handleChange} value={input.customerBillingAddress1} />
+                                <input type="text" className={`${styles.formControl} ${errors.customerBillingAddress2 && styles.error}`} name="customerBillingAddress2" id="customerBillingAddress2" placeholder='Area/Locality' onChange={handleChange} value={input.customerBillingAddress2} />
                             </div>
+                            {errors.customerBillingAddress1 && <span className={styles.error}>{errors.customerBillingAddress1}</span>}
+                            {errors.customerBillingAddress2 && <span className={styles.error}>{errors.customerBillingAddress2}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
                             <label htmlFor="customerBillingCity">City</label>
-                            <input type="text" className={styles.formControl} name="customerBillingCity" id="customerBillingCity" maxLength={15} onChange={handleChange} value={input.customerBillingCity} />
+                            <input type="text" className={`${styles.formControl} ${errors.customerBillingCity && styles.error}`} name="customerBillingCity" id="customerBillingCity" maxLength={15} onChange={handleChange} value={input.customerBillingCity} />
+                            {errors.customerBillingCity && <span className={styles.error}>{errors.customerBillingCity}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
@@ -224,11 +329,13 @@ const CustomersNew = () => {
                                     </option>
                                 ))}
                             </select>
+                            {errors.customerBillingState && <span className={styles.error}>{errors.customerBillingState}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
                             <label htmlFor="customerBillingPincode">Pincode</label>
-                            <input type="text" className={styles.formControl} name="customerBillingPincode" id="customerBillingPincode" onChange={handleChange} value={input.customerBillingPincode} />
+                            <input type="text" className={`${styles.formControl} ${errors.customerBillingPincode && styles.error}`} name="customerBillingPincode" id="customerBillingPincode" onChange={handleChange} value={input.customerBillingPincode} />
+                            {errors.customerBillingPincode && <span className={styles.error}>{errors.customerBillingPincode}</span>}
                         </div>
                     </fieldset>
 
@@ -239,31 +346,34 @@ const CustomersNew = () => {
                                     <Button btnType="button" btnClass="btnLink" btnText="Copy Billing Address" btnClick={(e) => { e.preventDefault(); copyBillingToShipping(); }} />
                                 </span>
                             </legend>
-
                         </div>
                         <div className={styles.formGroup}>
                             <label htmlFor="customerShippingCountry">Country</label>
                             <select name="customerShippingCountry" id="customerShippingCountry" onChange={handleChange} value={input.customerShippingCountry}>
                                 <option value="" disabled>Select Country</option>
                                 {countries?.map(({ countryCode, countryName }) => (
-                                    <option key={countryCode} value={countryCode}>
+                                    <option key={countryCode} value={countryName}>
                                         {countryName}
                                     </option>
                                 ))}
                             </select>
+                            {errors.customerShippingCountry && <span className={styles.error}>{errors.customerShippingCountry}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
                             <label htmlFor="customerShippingAddress1">Address</label>
                             <div className={styles.formGroupBlock}>
-                                <input type="text" className={styles.formControl} name="customerShippingAddress1" id="customerShippingAddress1" placeholder='Flat/Building Number' onChange={handleChange} value={input.customerShippingAddress1} />
-                                <input type="text" className={styles.formControl} name="customerShippingAddress2" id="customerShippingAddress2" placeholder='Area/Locality' onChange={handleChange} value={input.customerShippingAddress2} />
+                                <input type="text" className={`${styles.formControl} ${errors.customerShippingAddress1 && styles.error}`} name="customerShippingAddress1" id="customerShippingAddress1" placeholder='Flat/Building Number' onChange={handleChange} value={input.customerShippingAddress1} />
+                                <input type="text" className={`${styles.formControl} ${errors.customerShippingAddress2 && styles.error}`} name="customerShippingAddress2" id="customerShippingAddress2" placeholder='Area/Locality' onChange={handleChange} value={input.customerShippingAddress2} />
                             </div>
+                            {errors.customerShippingAddress1 && <span className={styles.error}>{errors.customerShippingAddress1}</span>}
+                            {errors.customerShippingAddress2 && <span className={styles.error}>{errors.customerShippingAddress2}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
                             <label htmlFor="customerShippingCity">City</label>
-                            <input type="text" className={styles.formControl} name="customerShippingCity" id="customerShippingCity" maxLength={15} onChange={handleChange} value={input.customerShippingCity} />
+                            <input type="text" className={`${styles.formControl} ${errors.customerShippingCity && styles.error}`} name="customerShippingCity" id="customerShippingCity" maxLength={15} onChange={handleChange} value={input.customerShippingCity} />
+                            {errors.customerShippingCity && <span className={styles.error}>{errors.customerShippingCity}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
@@ -276,11 +386,13 @@ const CustomersNew = () => {
                                     </option>
                                 ))}
                             </select>
+                            {errors.customerShippingState && <span className={styles.error}>{errors.customerShippingState}</span>}
                         </div>
 
                         <div className={styles.formGroup}>
                             <label htmlFor="customerShippingPincode">Pincode</label>
-                            <input type="text" className={styles.formControl} name="customerShippingPincode" id="customerShippingPincode" onChange={handleChange} value={input.customerShippingPincode} />
+                            <input type="text" className={`${styles.formControl} ${errors.customerShippingPincode && styles.error}`} name="customerShippingPincode" id="customerShippingPincode" onChange={handleChange} value={input.customerShippingPincode} />
+                            {errors.customerShippingPincode && <span className={styles.error}>{errors.customerShippingPincode}</span>}
                         </div>
                     </fieldset>
                 </form>
