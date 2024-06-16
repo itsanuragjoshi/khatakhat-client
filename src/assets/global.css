@@ -200,6 +200,10 @@ menu a.active:hover {
   height: 30px;
 }
 
+.btn:hover {
+  opacity: 0.8;
+}
+
 .btnPrimary {
   background: var(--color-btn-primary-background);
   border: 1px solid var(--color-btn-primary-border);
@@ -214,6 +218,7 @@ menu a.active:hover {
 .btnLink {
   color: var(--color-font-primary);
   text-decoration: underline;
+  font-weight: 800;
 }
 
 .btnToolbar {
