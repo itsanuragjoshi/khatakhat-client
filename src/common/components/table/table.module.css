@@ -1,0 +1,36 @@
+.table {
+  border-bottom: 1px solid var(--color-border-light);
+  position: relative;
+  overflow-y: auto;
+  table-layout: auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--color-background-light);
+  outline: 1px solid var(--color-border-light);
+  text-transform: uppercase;
+}
+
+.tr {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.th {
+  padding: 5px 10px;
+  text-align: left;
+}
+
+.td {
+  padding: 10px;
+  text-align: left;
+}
+
+.th:first-of-type,
+.td:first-of-type {
+  padding-left: 20px;
+}

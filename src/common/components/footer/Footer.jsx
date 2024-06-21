@@ -1,7 +1,7 @@
-import styles from "./footer.module.css"
+import styles from "./footer.module.css";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer>
@@ -20,4 +20,4 @@ const Footer = () => {
   );
 };
 
-export default Footer
+export default Footer;

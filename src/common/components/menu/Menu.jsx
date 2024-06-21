@@ -1,23 +1,36 @@
-import styles from './menu.module.css';
-import Dashboard from '@mui/icons-material/HomeOutlined';
-import Settings from '@mui/icons-material/SettingsOutlined';
-import ArrowBack from '@mui/icons-material/ArrowBackIosNewOutlined';
-import ArrowForward from '@mui/icons-material/ArrowForwardIosOutlined';
-import Logo from '@mui/icons-material/AccountBalanceWalletOutlined';
-import Sell from '@mui/icons-material/SellOutlined';
+import styles from "./menu.module.css";
+import Logo from "@mui/icons-material/AccountBalanceWalletOutlined";
+import DashboardIcon from "@mui/icons-material/HomeOutlined";
+import SettingsIcon from "@mui/icons-material/SettingsOutlined";
+import ArrowBackIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import SellIcon from "@mui/icons-material/SellOutlined";
+import SigninIcon from "@mui/icons-material/LoginOutlined";
+import SignupIcon from "@mui/icons-material/HowToRegOutlined";
+import SignoutIcon from "@mui/icons-material/LogoutOutlined";
 
-import MenuButton from './MenuButton';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import MenuButton from "./MenuButton";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const navList = [
   {
-    to: "/dashboard",
-    icon: <Dashboard />,
-    title: "Dashboard",
+    to: "/signin",
+    icon: <SigninIcon />,
+    title: "Sign In",
   },
   {
-    icon: <Sell />,
+    to: "/getstarted",
+    icon: <SignupIcon />,
+    title: "Sign Up",
+  },
+  {
+    to: "/dashboard",
+    icon: <DashboardIcon />,
+    title: "DashboardIcon",
+  },
+  {
+    icon: <SellIcon />,
     title: "Sales",
     subNavList: [
       {
@@ -38,8 +51,8 @@ const navList = [
     ],
   },
   {
-    icon: <Settings />,
-    title: "Settings",
+    icon: <SettingsIcon />,
+    title: "SettingsIcon",
     subNavList: [
       {
         to: "/settings/orgprofile",
@@ -54,6 +67,11 @@ const navList = [
         title: "Users",
       },
     ],
+  },
+  {
+    to: "/signout",
+    icon: <SignoutIcon />,
+    title: "Sign Out",
   },
 ];
 
@@ -78,8 +96,11 @@ const Menu = () => {
 
   return (
     <menu className={collapsed ? styles.collapsed : undefined}>
-      <div className={`${styles.logoWrapper} ${collapsed ? styles.collapsed : ''}`} title='KhataKhat'>
-        <Link to='/dashboard' onClick={expandMenu}>
+      <div
+        className={`${styles.logoWrapper} ${collapsed ? styles.collapsed : ""}`}
+        title="KhataKhat"
+      >
+        <Link to="/dashboard" onClick={expandMenu}>
           <Logo />
           {!collapsed && <span>KhataKhat</span>}
         </Link>
@@ -106,10 +127,10 @@ const Menu = () => {
 
       <div
         className={styles.collapseBtnWrapper}
-        title={collapsed ? 'Show Side Panel' : 'Hide Side Panel'}
+        title={collapsed ? "Show Side Panel" : "Hide Side Panel"}
         onClick={toggleMenu}
       >
-        {collapsed ? <ArrowForward /> : <ArrowBack />}
+        {collapsed ? <ArrowForwardIcon /> : <ArrowBackIcon />}
       </div>
     </menu>
   );

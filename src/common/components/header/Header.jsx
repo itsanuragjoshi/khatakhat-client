@@ -1,13 +1,13 @@
-import styles from './header.module.css';
+import styles from "./header.module.css";
+import ButtonToolbar from "../button/ButtonToolbar";
 
-const Header = (props) => {
-    return (
-        <div className={styles.header}>
-            <h1 className="title">{props.title}</h1>
-            <div className="actions">
-            </div>
-        </div>
-    );
+const Header = ({ title, buttons }) => {
+  return (
+    <div className={styles.header}>
+      <h1>{title}</h1>
+      {buttons && <ButtonToolbar props={buttons} />}
+    </div>
+  );
 };
 
 export default Header;
