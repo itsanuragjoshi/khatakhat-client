@@ -27,7 +27,7 @@ const navList = [
   {
     to: "/dashboard",
     icon: <DashboardIcon />,
-    title: "DashboardIcon",
+    title: "Dashboard",
   },
   {
     icon: <SellIcon />,
@@ -52,7 +52,7 @@ const navList = [
   },
   {
     icon: <SettingsIcon />,
-    title: "SettingsIcon",
+    title: "Settings",
     subNavList: [
       {
         to: "/settings/orgprofile",
