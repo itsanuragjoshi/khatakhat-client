@@ -1,6 +1,6 @@
 import styles from "./form.module.css";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ButtonToolbar from "../button/ButtonToolbar";
 import axios from "axios";
 import validator from "validator";
@@ -36,15 +36,18 @@ const FormUserSignup = ({ formId }) => {
 
     if (!input.userEmail) {
       isValid = false;
-      newErrors.userEmail = "Oops! Looks like you forgot something. The email field is required.";
+      newErrors.userEmail =
+        "Oops! Looks like you forgot something. The email field is required.";
     } else if (!validator.isEmail(input.userEmail)) {
       isValid = false;
-      newErrors.userEmail = "Oh no! This doesn't look like a valid email address. Please double-check.";
+      newErrors.userEmail =
+        "Oh no! This doesn't look like a valid email address. Please double-check.";
     }
 
     if (!input.userPassword) {
       isValid = false;
-      newErrors.userPassword = "Oops! Looks like you forgot something. The password field is required.";
+      newErrors.userPassword =
+        "Oops! Looks like you forgot something. The password field is required.";
     } else if (!validator.isStrongPassword(input.userPassword)) {
       isValid = false;
       newErrors.userPassword = `Uh-oh! Your password needs to be stronger. It must be at least 8 characters long and include at least 1 lowercase letter (a-z), 1 uppercase letter (A-Z), 1 digit (0-9), and 1 special character (!, %, @, #).`;
@@ -52,7 +55,8 @@ const FormUserSignup = ({ formId }) => {
 
     if (!input.userName) {
       isValid = false;
-      newErrors.userName = "Oops! Looks like you forgot something. The name field is required.";
+      newErrors.userName =
+        "Oops! Looks like you forgot something. The name field is required.";
     }
 
     setErrors(newErrors);
@@ -84,7 +88,7 @@ const FormUserSignup = ({ formId }) => {
             },
           }
         );
-        setInput(initialInputValues);
+        // setInput(initialInputValues);
         setErrors(initialErrorValues);
         showToast(response?.data.success, "success");
         navigate("/dashboard", { replace: true });
@@ -107,11 +111,6 @@ const FormUserSignup = ({ formId }) => {
       } finally {
         setLoading(false);
       }
-    } else {
-      showToast(
-        "Hold on! There are a few fields that need your attention.",
-        "error"
-      );
     }
   };
 
@@ -206,6 +205,11 @@ const FormUserSignup = ({ formId }) => {
       </form>
 
       {buttons && <ButtonToolbar props={buttons} />}
+      
+      <div className={styles.signinLink}>
+        <p>Have a Khatakhat Account?</p>
+        <Link to="/signin" className="btnLink">Sign In</Link>
+      </div>
     </>
   );
 };
