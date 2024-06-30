@@ -196,17 +196,17 @@ const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
 
   const buttons = [
     {
-      btnType: "submit",
-      btnClass: "btnPrimary",
-      btnText: "Save",
-      btnClick: handleSubmit,
+      "btnType": "submit",
+      "btnClass": "btnPrimary",
+      "btnText": "Save",
+      "btnClick": handleSubmit
     },
     {
-      btnType: "reset",
-      btnClass: "btnSecondary",
-      btnText: "Cancel",
-      btnClick: handleReset,
-    },
+      "btnType": "reset",
+      "btnClass": "btnSecondary",
+      "btnText": "Cancel",
+      "btnClick": handleReset
+    }
   ];
 
   return (
@@ -291,7 +291,7 @@ const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
           <div className={styles.formGroup}>
             <label htmlFor="customerEmail">Customer Email</label>
             <div className={styles.formInputGroup}>
-              <span>
+              <span data-align="left">
                 <EmailIcon />
               </span>
               <input
@@ -315,7 +315,7 @@ const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
             <label>Customer Phone</label>
             <div className={styles.formGroupInline}>
               <div className={styles.formInputGroup}>
-                <span>
+                <span data-align="left">
                   <PhoneIcon />
                 </span>
                 <input
@@ -331,7 +331,7 @@ const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
                 />
               </div>
               <div className={styles.formInputGroup}>
-                <span>
+                <span data-align="left">
                   <MobileIcon />
                 </span>
                 <input

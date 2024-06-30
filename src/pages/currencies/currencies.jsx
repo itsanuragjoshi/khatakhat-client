@@ -28,12 +28,12 @@ const Currencies = () => {
 
   const buttons = [
     {
-      btnType: "button",
-      btnClass: "btnPrimary",
-      btnText: "New Currency",
-      btnIcon: <AddIcon />,
-      btnClick: () => navigate("/settings/currencies/new"),
-    },
+      "btnType": "button",
+      "btnClass": "btnPrimary",
+      "btnText": "New Currency",
+      "btnIcon": <AddIcon />,
+      "btnClick": () => navigate("/settings/currencies/new")
+    }
   ];
 
   return (

@@ -30,6 +30,13 @@
   min-height: 30px;
 }
 
+.formGroupBlock {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  min-height: 30px;
+}
+
 .formGroup label {
   grid-column: 1;
   align-self: flex-start;
@@ -103,15 +110,31 @@ span.error {
   display: flex;
 }
 
-.formInputGroup span {
+.formInputGroup span[data-align="left"] {
   position: absolute;
   top: 0;
+  left: 0;
   display: flex;
   align-items: center;
   height: 100%;
   padding: 5px;
 }
 
-.formInputGroup span + .formControl {
+.formInputGroup span[data-align="left"] + .formControl {
   padding-left: 30px;
+}
+
+.formInputGroup span[data-align="right"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.formInputGroup span[data-align="right"] + .formControl {
+  padding-right: 30px;
 }

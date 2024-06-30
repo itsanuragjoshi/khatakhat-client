@@ -4,11 +4,11 @@ import Footer from "./common/components/footer/Footer";
 import Menu from "./common/components/menu/Menu";
 import { Outlet } from "react-router-dom";
 
-function App() {
+function Layout() {
   const { toastList } = useToastContext();
 
   return (
-    <main className="app">
+    <main className="layout">
       <Menu />
       <div className="contentContainer">
         <Toast toastList={toastList} />
@@ -19,4 +19,4 @@ function App() {
   );
 }
 
-export default App;
+export default Layout;

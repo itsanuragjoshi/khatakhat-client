@@ -20,7 +20,7 @@ const navList = [
     title: "Sign In",
   },
   {
-    to: "/getstarted",
+    to: "/signup",
     icon: <SignupIcon />,
     title: "Sign Up",
   },

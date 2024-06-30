@@ -179,17 +179,17 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
 
   const buttons = [
     {
-      btnType: "submit",
-      btnClass: "btnPrimary",
-      btnText: "Save",
-      btnClick: handleSubmit,
+      "btnType": "submit",
+      "btnClass": "btnPrimary",
+      "btnText": "Save",
+      "btnClick": handleSubmit
     },
     {
-      btnType: "reset",
-      btnClass: "btnSecondary",
-      btnText: "Cancel",
-      btnClick: handleReset,
-    },
+      "btnType": "reset",
+      "btnClass": "btnSecondary",
+      "btnText": "Cancel",
+      "btnClick": handleReset
+    }
   ];
 
   return (

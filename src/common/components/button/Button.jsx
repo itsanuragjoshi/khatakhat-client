@@ -6,6 +6,7 @@ const Button = ({ props }) => {
       onClick={props.btnClick}
       aria-label={props.btnText}
       title={props.btnText}
+      disabled={props.btnDisabled}
     >
       {props.btnIcon}
       {props.btnText}
