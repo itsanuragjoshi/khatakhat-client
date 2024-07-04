@@ -1,17 +1,17 @@
 import styles from "./form.module.css";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ButtonToolbar from "../button/ButtonToolbar";
-import axios from "axios";
 import validator from "validator";
 import useToastContext from "../../hooks/useToastContext";
 import VisibilityOnIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Loader from "../../components/loader/Loader";
+import useAuth from "../../hooks/useAuth";
 
 const FormUserSignup = ({ formId }) => {
-  const navigate = useNavigate();
   const { showToast } = useToastContext();
+  const { signup } = useAuth();
 
   const initialInputValues = {
     userEmail: "",
@@ -74,43 +74,14 @@ const FormUserSignup = ({ formId }) => {
     e.preventDefault();
     if (handleValidation()) {
       setLoading(true);
-      const formData = new FormData();
-      Object.entries(input).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-      try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_APP_API_URI}/auth/signup`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        // setInput(initialInputValues);
-        setErrors(initialErrorValues);
-        showToast(response?.data.success, "success");
-        navigate("/dashboard", { replace: true });
-      } catch (error) {
-        if (error.response?.data?.errors) {
-          const backendErrors = error.response.data.errors.reduce(
-            (acc, err) => {
-              acc[err.field] = err.error;
-              return acc;
-            },
-            {}
-          );
-          setErrors(backendErrors);
-        } else {
-          showToast(
-            error.response?.data.error || "Something went wrong",
-            "error"
-          );
-        }
-      } finally {
-        setLoading(false);
-      }
+      await signup(
+        input,
+        setInput,
+        setErrors,
+        initialInputValues,
+        initialErrorValues
+      );
+      setLoading(false);
     }
   };
 
@@ -205,10 +176,12 @@ const FormUserSignup = ({ formId }) => {
       </form>
 
       {buttons && <ButtonToolbar props={buttons} />}
-      
+
       <div className={styles.signinLink}>
         <p>Have a Khatakhat Account?</p>
-        <Link to="/signin" className="btnLink">Sign In</Link>
+        <Link to="/signin" className="btnLink">
+          Sign In
+        </Link>
       </div>
     </>
   );
