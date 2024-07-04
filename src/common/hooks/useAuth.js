@@ -1,11 +1,9 @@
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { axiosPublic, axiosPrivate } from "../../api/axios";
 import useToastContext from "./useToastContext";
-import { resetAuthCreds, setAuthCreds } from "../../redux/slices/authSlice";
+import { setAuthCredentials, resetAuthCredentials } from "../../utils/authUtils";
 
 const useAuth = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { showToast } = useToastContext();
 
@@ -28,8 +26,8 @@ const useAuth = () => {
         },
       });
 
-      const { accessToken, userInfo } = response.data;
-      dispatch(setAuthCreds({ accessToken, userInfo }));
+      const { accessToken } = response.data;
+      setAuthCredentials({ accessToken });
 
       setInput(initialInputValues);
       setErrors(initialErrorValues);
@@ -71,7 +69,7 @@ const useAuth = () => {
       });
 
       const { accessToken } = response.data;
-      dispatch(setAuthCreds({ accessToken }));
+      setAuthCredentials({ accessToken });
 
       setInput(initialInputValues);
       setErrors(initialErrorValues);
@@ -96,7 +94,7 @@ const useAuth = () => {
   const signout = async () => {
     try {
       const response = await axiosPrivate.post("/auth/signout");
-      dispatch(resetAuthCreds());
+      resetAuthCredentials();
       showToast(response?.data.success, "success");
       navigate("/signin", { replace: true });
     } catch (error) {
