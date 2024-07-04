@@ -8,12 +8,14 @@ import SellIcon from "@mui/icons-material/SellOutlined";
 import SigninIcon from "@mui/icons-material/LoginOutlined";
 import SignupIcon from "@mui/icons-material/HowToRegOutlined";
 import SignoutIcon from "@mui/icons-material/LogoutOutlined";
+import AccountIcon from "@mui/icons-material/AccountCircleOutlined";
 
 import MenuButton from "./MenuButton";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const navList = [
+const navListPublic = [
   {
     to: "/signin",
     icon: <SigninIcon />,
@@ -24,6 +26,9 @@ const navList = [
     icon: <SignupIcon />,
     title: "Sign Up",
   },
+];
+
+const navListPrivate = [
   {
     to: "/dashboard",
     icon: <DashboardIcon />,
@@ -79,6 +84,8 @@ const Menu = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [openSubNavIndex, setOpenSubNavIndex] = useState(null);
 
+  const { accessToken, userInfo } = useSelector((state) => state.auth);
+
   const toggleMenu = () => {
     setCollapsed(!collapsed);
     if (!collapsed) {
@@ -106,22 +113,63 @@ const Menu = () => {
         </Link>
       </div>
 
+      {userInfo && (
+        <div
+          className={`${styles.userWrapper} ${
+            collapsed ? styles.collapsed : ""
+          }`}
+          title={userInfo.userName}
+        >
+          <div className={styles.innerUserWrapper} onClick={expandMenu}>
+            <AccountIcon />
+            {!collapsed && (
+              <div>
+                <span>{userInfo.userName}</span>
+                <small>{userInfo.userEmail}</small>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <nav className={styles.nav}>
         <ul className={styles.navList}>
-          {navList.map((item, i) => (
-            <li key={i} title={item.title} className={styles.navItem}>
-              <MenuButton
-                to={item.to}
-                icon={item.icon}
-                title={item.title}
-                subNavList={item.subNavList}
-                collapsed={collapsed}
-                open={openSubNavIndex === i}
-                handleSubNav={() => handleSubNav(i)}
-                expandMenu={expandMenu}
-              />
-            </li>
-          ))}
+          {!accessToken ? (
+            <>
+              {navListPublic.map((item, i) => (
+                <li key={i} title={item.title} className={styles.navItem}>
+                  <MenuButton
+                    to={item.to}
+                    icon={item.icon}
+                    title={item.title}
+                    subNavList={item.subNavList}
+                    collapsed={collapsed}
+                    open={openSubNavIndex === i}
+                    handleSubNav={() => handleSubNav(i)}
+                    expandMenu={expandMenu}
+                  />
+                </li>
+              ))}
+              <li></li>
+            </>
+          ) : (
+            <>
+              {navListPrivate.map((item, i) => (
+                <li key={i} title={item.title} className={styles.navItem}>
+                  <MenuButton
+                    to={item.to}
+                    icon={item.icon}
+                    title={item.title}
+                    subNavList={item.subNavList}
+                    collapsed={collapsed}
+                    open={openSubNavIndex === i}
+                    handleSubNav={() => handleSubNav(i)}
+                    expandMenu={expandMenu}
+                  />
+                </li>
+              ))}
+            </>
+          )}
         </ul>
       </nav>
 

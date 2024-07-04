@@ -38,6 +38,26 @@ menu.collapsed {
   color: var(--color-font-light);
 }
 
+.userWrapper {
+  display: flex;
+  align-items: center;
+  padding: 16px 8px;
+}
+
+.innerUserWrapper {
+  display: flex;
+  padding: 8px;
+  width: 100%;
+  border: 1px solid var(--color-border-light);
+  /* background-color: var(--color-background-primary); */
+  gap: 8px;
+}
+
+.innerUserWrapper div {
+  display: flex;
+  flex-direction: column;
+}
+
 .collapseBtnWrapper {
   height: 40px;
   width: inherit;
