@@ -28,8 +28,8 @@ const useAuth = () => {
         },
       });
 
-      const { accessToken } = response.data;
-      dispatch(setAuthCreds({ accessToken }));
+      const { accessToken, userInfo } = response.data;
+      dispatch(setAuthCreds({ accessToken, userInfo }));
 
       setInput(initialInputValues);
       setErrors(initialErrorValues);
@@ -100,10 +100,7 @@ const useAuth = () => {
       showToast(response?.data.success, "success");
       navigate("/signin", { replace: true });
     } catch (error) {
-      showToast(
-        error.response?.data.error || "Something went wrong",
-        "error"
-      );
+      showToast(error.response?.data.error || "Something went wrong", "error");
     }
   };
 
