@@ -1,10 +1,10 @@
 import store from "../redux/store";
 import { setAuthCreds, resetAuthCreds } from "../redux/slices/authSlice";
 
-const authUtils = (accessToken) => {
-  accessToken
-    ? store.dispatch(setAuthCreds({ accessToken }))
-    : store.dispatch(resetAuthCreds());
+export const setAuthCredentials = ({ accessToken, userInfo }) => {
+  store.dispatch(setAuthCreds({ accessToken, userInfo }));
 };
 
-export default authUtils;
+export const resetAuthCredentials = () => {
+  store.dispatch(resetAuthCreds());
+};
