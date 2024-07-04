@@ -76,23 +76,21 @@ const FormCurrenciesAddEdit = ({ initialInputValues, formId }) => {
     setErrors(initialErrorValues);
   };
 
-  const { data: currencies } = useFetchData(
-    `${import.meta.env.VITE_APP_API_URI}/currencies`
-  );
+  const { data: currencies } = useFetchData("/currencies");
 
   const buttons = [
     {
-      "btnType": "submit",
-      "btnClass": "btnPrimary",
-      "btnText": "Save",
-      "btnClick": handleSubmit
+      btnType: "submit",
+      btnClass: "btnPrimary",
+      btnText: "Save",
+      btnClick: handleSubmit,
     },
     {
-      "btnType": "reset",
-      "btnClass": "btnSecondary",
-      "btnText": "Cancel",
-      "btnClick": handleReset
-    }
+      btnType: "reset",
+      btnClass: "btnSecondary",
+      btnText: "Cancel",
+      btnClick: handleReset,
+    },
   ];
 
   return (

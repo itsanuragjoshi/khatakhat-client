@@ -9,9 +9,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 const Currencies = () => {
   const navigate = useNavigate();
-  const { data: currencies } = useFetchData(
-    `${import.meta.env.VITE_APP_API_URI}/currencies/default`
-  );
+  const { data: currencies } = useFetchData("/currencies/default");
 
   const renamedProps = currencies?.map(
     ({ currencyCode, currencyName, currencySymbol }) => ({
@@ -28,12 +26,12 @@ const Currencies = () => {
 
   const buttons = [
     {
-      "btnType": "button",
-      "btnClass": "btnPrimary",
-      "btnText": "New Currency",
-      "btnIcon": <AddIcon />,
-      "btnClick": () => navigate("/settings/currencies/new")
-    }
+      btnType: "button",
+      btnClass: "btnPrimary",
+      btnText: "New Currency",
+      btnIcon: <AddIcon />,
+      btnClick: () => navigate("/settings/currencies/new"),
+    },
   ];
 
   return (

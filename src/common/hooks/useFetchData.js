@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { axiosPrivate } from "../../api/axios";
 
 const useFetchData = (url, params = {}) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       if (!url) {
@@ -14,7 +15,7 @@ const useFetchData = (url, params = {}) => {
       setError(null); // Clear previous errors on each fetch
 
       try {
-        const response = await axios.get(url, { params });
+        const response = await axiosPrivate.get(url, { params });
         setData(response.data);
       } catch (error) {
         setError(error);
