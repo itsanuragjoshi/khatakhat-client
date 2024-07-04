@@ -20,6 +20,12 @@ import SignIn from "./pages/user/signIn.jsx";
 import SignUp from "./pages/user/signUp.jsx";
 import SignOut from "./pages/user/signOut.jsx";
 
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
+
+if (process.env.NODE_ENV === "production") {
+  disableReactDevTools();
+}
+
 const router = createBrowserRouter([
   {
     path: "/",
