@@ -5,9 +5,8 @@ import "./assets/global.css";
 import { ToastProvider } from "./common/context/ToastContext.jsx";
 import store from "./redux/store.js";
 import { Provider } from "react-redux";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ProtectedRoute from "./common/components/protectedRoute/ProtectedRoute.jsx";
+import PrivateRoute from "./common/components/wrapper/PrivateRoute.jsx";
 import Customers from "./pages/customers/customers.jsx";
 import CustomersNew from "./pages/customers/customersNew.jsx";
 import Currencies from "./pages/currencies/currencies.jsx";
@@ -19,8 +18,9 @@ import Error from "./pages/error/error.jsx";
 import SignIn from "./pages/user/signIn.jsx";
 import SignUp from "./pages/user/signUp.jsx";
 import SignOut from "./pages/user/signOut.jsx";
-
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
+import PersistSignIn from "./common/components/wrapper/PersistSignIn.jsx";
+import SignedIn from "./common/components/wrapper/SignedIn.jsx";
 
 if (process.env.NODE_ENV === "production") {
   disableReactDevTools();
@@ -29,66 +29,84 @@ if (process.env.NODE_ENV === "production") {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <PersistSignIn>
+        <Layout />
+      </PersistSignIn>
+    ),
     errorElement: <Error />,
     children: [
-      { path: "/signin", element: <SignIn /> },
-      { path: "/signup", element: <SignUp /> },
+      {
+        path: "/signin",
+        element: (
+          <SignedIn>
+            <SignIn />
+          </SignedIn>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <SignedIn>
+            <SignUp />
+          </SignedIn>
+        ),
+      },
       {
         path: "/signout",
         element: (
-          <ProtectedRoute>
+          <PrivateRoute>
             <SignOut />
-          </ProtectedRoute>
+          </PrivateRoute>
         ),
       },
       { path: "/getstarted", element: <OrgprofileNew /> },
       {
         path: "/customers",
         element: (
-          <ProtectedRoute>
+          <PrivateRoute>
             <Customers />
-          </ProtectedRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/customers/new",
         element: (
-          <ProtectedRoute>
+          <PrivateRoute>
             <CustomersNew />
-          </ProtectedRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/customers/edit",
         element: (
-          <ProtectedRoute>
+          <PrivateRoute>
             <CustomersEdit />
-          </ProtectedRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/settings/orgprofile/:id",
         element: (
-          <ProtectedRoute>
+          <PrivateRoute>
             <Orgprofile />
-          </ProtectedRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/settings/currencies/",
         element: (
-          <ProtectedRoute>
+          <PrivateRoute>
             <Currencies />
-          </ProtectedRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/settings/currencies/new",
         element: (
-          <ProtectedRoute>
+          <PrivateRoute>
             <CurrenciesNew />
-          </ProtectedRoute>
+          </PrivateRoute>
         ),
       },
       { path: "*", element: <Error /> },
@@ -97,11 +115,11 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <ToastProvider>
         <RouterProvider router={router} />
       </ToastProvider>
     </Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
