@@ -1,6 +1,7 @@
 import axios from "axios";
 import store from "../redux/store";
 import { setAuthCredentials, resetAuthCredentials } from "../utils/authUtils";
+import refreshToken from "../utils/refreshToken";
 
 // Define the base URL for the API
 const BASE_URL = import.meta.env.VITE_APP_API_URI;
@@ -37,20 +38,24 @@ axiosPrivate.interceptors.request.use(
 // Response interceptor for private Axios instance
 axiosPrivate.interceptors.response.use(
   (response) => {
-    if (response.data.accessToken) {
-      setAuthCredentials(response.data);
-
-      // Clone the request configuration to retry with the new token
-      const originalRequest = response.config;
-      originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
-
-      // Retry the original request with the updated token
-      return axiosPrivate(originalRequest);
-    }
     return response;
   },
-  (error) => {
-    resetAuthCredentials();
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        await refreshToken();
+        const state = store.getState();
+        const newAccessToken = state.auth.accessToken;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return axiosPrivate(originalRequest);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    }
     return Promise.reject(error);
   }
 );
