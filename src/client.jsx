@@ -58,9 +58,9 @@ const router = createBrowserRouter([
             ],
           },
           { path: "/getstarted", element: <OrgprofileNew /> },
+          { path: "*", element: <Error statusCode={404} /> },
         ],
       },
-      { path: "*", element: <Error /> },
     ],
   },
 ]);

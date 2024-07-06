@@ -3,12 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const RedirectIfAuthenticated = () => {
   const { accessToken } = useSelector((state) => state.auth);
-
-  if (accessToken) {
-    return <Navigate to="/dashboard" />;
-  }
-
-  return <Outlet />;
+  return !accessToken ? <Outlet /> : <Navigate to="/dashboard" />;
 };
 
 export default RedirectIfAuthenticated;
