@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import refreshToken from "../../../utils/refreshToken";
 import { useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
 
-const PersistSignIn = ({ children }) => {
+const KeepAuthenticated = () => {
   const { accessToken } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -14,7 +15,7 @@ const PersistSignIn = ({ children }) => {
     !accessToken ? verifyRefreshToken() : null;
   }, []);
 
-  return children;
+  return <Outlet />;
 };
 
-export default PersistSignIn;
+export default KeepAuthenticated;

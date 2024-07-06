@@ -1,12 +1,18 @@
+import "./assets/global.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Layout from "./Layout.jsx";
-import "./assets/global.css";
-import { ToastProvider } from "./common/context/ToastContext.jsx";
-import store from "./redux/store.js";
 import { Provider } from "react-redux";
+import store from "./redux/store.js";
+
+import { ToastProvider } from "./common/context/ToastContext.jsx";
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import PrivateRoute from "./common/components/wrapper/PrivateRoute.jsx";
+
+import Layout from "./Layout.jsx";
+import RequireAuthentication from "./common/components/wrapper/RequireAuthentication.jsx";
+import KeepAuthenticated from "./common/components/wrapper/KeepAuthenticated.jsx";
+import RedirectIfAuthenticated from "./common/components/wrapper/RedirectIfAuthenticated.jsx";
+
 import Customers from "./pages/customers/customers.jsx";
 import CustomersNew from "./pages/customers/customersNew.jsx";
 import Currencies from "./pages/currencies/currencies.jsx";
@@ -18,9 +24,6 @@ import Error from "./pages/error/error.jsx";
 import SignIn from "./pages/user/signIn.jsx";
 import SignUp from "./pages/user/signUp.jsx";
 import SignOut from "./pages/user/signOut.jsx";
-import { disableReactDevTools } from "@fvilers/disable-react-devtools";
-import PersistSignIn from "./common/components/wrapper/PersistSignIn.jsx";
-import SignedIn from "./common/components/wrapper/SignedIn.jsx";
 
 if (process.env.NODE_ENV === "production") {
   disableReactDevTools();
@@ -28,86 +31,34 @@ if (process.env.NODE_ENV === "production") {
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <PersistSignIn>
-        <Layout />
-      </PersistSignIn>
-    ),
+    element: <KeepAuthenticated />,
     errorElement: <Error />,
     children: [
       {
-        path: "/signin",
-        element: (
-          <SignedIn>
-            <SignIn />
-          </SignedIn>
-        ),
-      },
-      {
-        path: "/signup",
-        element: (
-          <SignedIn>
-            <SignUp />
-          </SignedIn>
-        ),
-      },
-      {
-        path: "/signout",
-        element: (
-          <PrivateRoute>
-            <SignOut />
-          </PrivateRoute>
-        ),
-      },
-      { path: "/getstarted", element: <OrgprofileNew /> },
-      {
-        path: "/customers",
-        element: (
-          <PrivateRoute>
-            <Customers />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/customers/new",
-        element: (
-          <PrivateRoute>
-            <CustomersNew />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/customers/edit",
-        element: (
-          <PrivateRoute>
-            <CustomersEdit />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/settings/orgprofile/:id",
-        element: (
-          <PrivateRoute>
-            <Orgprofile />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/settings/currencies/",
-        element: (
-          <PrivateRoute>
-            <Currencies />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/settings/currencies/new",
-        element: (
-          <PrivateRoute>
-            <CurrenciesNew />
-          </PrivateRoute>
-        ),
+        path: "/",
+        element: <Layout />,
+        children: [
+          {
+            element: <RedirectIfAuthenticated />,
+            children: [
+              { path: "/signin", element: <SignIn /> },
+              { path: "/signup", element: <SignUp /> },
+            ],
+          },
+          {
+            element: <RequireAuthentication />,
+            children: [
+              { path: "/signout", element: <SignOut /> },
+              { path: "/customers", element: <Customers /> },
+              { path: "/customers/new", element: <CustomersNew /> },
+              { path: "/customers/edit", element: <CustomersEdit /> },
+              { path: "/settings/orgprofile/:id", element: <Orgprofile /> },
+              { path: "/settings/currencies", element: <Currencies /> },
+              { path: "/settings/currencies/new", element: <CurrenciesNew /> },
+            ],
+          },
+          { path: "/getstarted", element: <OrgprofileNew /> },
+        ],
       },
       { path: "*", element: <Error /> },
     ],
@@ -116,10 +67,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
-    <Provider store={store}>
-      <ToastProvider>
-        <RouterProvider router={router} />
-      </ToastProvider>
-    </Provider>
+  <Provider store={store}>
+    <ToastProvider>
+      <RouterProvider router={router} />
+    </ToastProvider>
+  </Provider>
   // </React.StrictMode>
 );
