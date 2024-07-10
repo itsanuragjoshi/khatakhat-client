@@ -3,15 +3,17 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ButtonToolbar from "../button/ButtonToolbar";
 import validator from "validator";
-import useToastContext from "../../hooks/useToastContext";
 import VisibilityOnIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Loader from "../../components/loader/Loader";
 import useAuth from "../../hooks/useAuth";
+import { useSelector, useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 
 const FormUserSignup = ({ formId }) => {
-  const { showToast } = useToastContext();
   const { signup } = useAuth();
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.loading.formUserSignUp);
 
   const initialInputValues = {
     userEmail: "",
@@ -28,7 +30,6 @@ const FormUserSignup = ({ formId }) => {
   const [input, setInput] = useState(initialInputValues);
   const [errors, setErrors] = useState(initialErrorValues);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const handleValidation = () => {
     const newErrors = { ...initialErrorValues };
@@ -73,7 +74,7 @@ const FormUserSignup = ({ formId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (handleValidation()) {
-      setLoading(true);
+      dispatch(startLoading("formUserSignUp"));
       await signup(
         input,
         setInput,
@@ -81,7 +82,7 @@ const FormUserSignup = ({ formId }) => {
         initialInputValues,
         initialErrorValues
       );
-      setLoading(false);
+      dispatch(stopLoading("formUserSignUp"));
     }
   };
 

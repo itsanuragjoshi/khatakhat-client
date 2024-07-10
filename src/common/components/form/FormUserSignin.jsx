@@ -7,9 +7,13 @@ import VisibilityOnIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Loader from "../loader/Loader";
 import useAuth from "../../hooks/useAuth";
+import { useSelector, useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 
 const FormUserSignin = ({ formId }) => {
   const { signin } = useAuth();
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.loading.formUserSignIn);
 
   const initialInputValues = {
     userEmail: "",
@@ -24,7 +28,6 @@ const FormUserSignin = ({ formId }) => {
   const [input, setInput] = useState(initialInputValues);
   const [errors, setErrors] = useState(initialErrorValues);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const handleValidation = () => {
     const newErrors = { ...initialErrorValues };
@@ -64,7 +67,7 @@ const FormUserSignin = ({ formId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (handleValidation()) {
-      setLoading(true);
+      dispatch(startLoading("formUserSignIn"));
       await signin(
         input,
         setInput,
@@ -72,7 +75,7 @@ const FormUserSignin = ({ formId }) => {
         initialInputValues,
         initialErrorValues
       );
-      setLoading(false);
+      dispatch(stopLoading("formUserSignIn"));
     }
   };
 
