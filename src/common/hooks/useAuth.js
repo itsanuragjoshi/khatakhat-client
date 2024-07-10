@@ -1,15 +1,24 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { axiosPublic, axiosPrivate } from "../../api/axios";
 import useToastContext from "./useToastContext";
 import {
   setAuthCredentials,
   resetAuthCredentials,
 } from "../../utils/authUtils";
+import { useSelector } from "react-redux";
 
 const useAuth = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { showToast } = useToastContext();
+  const { userRole } = useSelector((state) => state.auth);
+
+  const handleNavigation = () => {
+    if (userRole && userRole.length > 0) {
+      navigate("/selectOrg", { replace: true });
+    } else {
+      navigate("/createOrg", { replace: true });
+    }
+  };
 
   const signin = async (
     input,
@@ -36,9 +45,7 @@ const useAuth = () => {
       setInput(initialInputValues);
       setErrors(initialErrorValues);
       showToast(response?.data.success, "success");
-
-      const from = location.state?.from?.pathname || "/dashboard";
-      navigate(from, { replace: true });
+      handleNavigation();
     } catch (error) {
       if (error.response?.data?.errors) {
         const backendErrors = error.response.data.errors.reduce((acc, err) => {
@@ -80,9 +87,7 @@ const useAuth = () => {
       setInput(initialInputValues);
       setErrors(initialErrorValues);
       showToast(response?.data.success, "success");
-
-      const from = location.state?.from?.pathname || "/dashboard";
-      navigate(from, { replace: true });
+      handleNavigation();
     } catch (error) {
       if (error.response?.data?.errors) {
         const backendErrors = error.response.data.errors.reduce((acc, err) => {
@@ -103,11 +108,11 @@ const useAuth = () => {
     try {
       const response = await axiosPrivate.post("/auth/signout");
       resetAuthCredentials();
-      showToast(response?.data.success, "success");
+      showToast(response?.data?.success, "success");
 
       navigate("/", { replace: true });
     } catch (error) {
-      showToast(error.response?.data.error || "Something went wrong", "error");
+      showToast(error.response?.data?.error || "Something went wrong", "error");
     }
   };
 

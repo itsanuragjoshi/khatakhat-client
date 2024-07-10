@@ -1,17 +1,15 @@
 import { useSelector } from "react-redux";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 const RedirectIfAuthenticated = () => {
-  const location = useLocation();
-  const { accessToken } = useSelector((state) => state.auth);
-  const from = location.state?.from?.pathname || "/dashboard";
+  const { accessToken, userRole } = useSelector((state) => state.auth);
 
   return !accessToken ? (
     <Outlet />
-  ) : location.pathname === "/signout" ? (
-    <Navigate to="/dashboard" replace />
+  ) : userRole && userRole.length > 0 ? (
+    <Navigate to="/selectOrg" replace />
   ) : (
-    <Navigate to={from} state={{ from: location }} replace />
+    <Navigate to="/createOrg" replace />
   );
 };
 

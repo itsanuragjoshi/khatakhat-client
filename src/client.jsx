@@ -24,6 +24,7 @@ import Error from "./pages/error/error.jsx";
 import SignIn from "./pages/user/signIn.jsx";
 import SignUp from "./pages/user/signUp.jsx";
 import SignOut from "./pages/user/signOut.jsx";
+import OrgSelect from "./pages/organisation/orgSelect.jsx";
 
 if (process.env.NODE_ENV === "production") {
   disableReactDevTools();
@@ -48,6 +49,8 @@ const router = createBrowserRouter([
           {
             element: <RequireAuthentication />,
             children: [
+              { path: "/createOrg", element: <OrgprofileNew /> },
+              { path: "/selectOrg", element: <OrgSelect /> },
               { path: "/signout", element: <SignOut /> },
               { path: "/customers", element: <Customers /> },
               { path: "/customers/new", element: <CustomersNew /> },
@@ -57,7 +60,6 @@ const router = createBrowserRouter([
               { path: "/settings/currencies/new", element: <CurrenciesNew /> },
             ],
           },
-          { path: "/getstarted", element: <OrgprofileNew /> },
           { path: "*", element: <Error statusCode={404} /> },
         ],
       },
