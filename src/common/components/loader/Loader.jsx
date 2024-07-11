@@ -4,7 +4,9 @@ import Spinner from "../../../assets/spinner.svg?react";
 const Loader = () => {
   return (
     <>
-      <Spinner />
+      <div className={styles.loader}>
+        <Spinner />
+      </div>
     </>
   );
 };
