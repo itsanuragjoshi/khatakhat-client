@@ -9,8 +9,8 @@ export const setAuthCredentials = ({ accessToken }) => {
     userName: decodedToken.userInfo.userName,
     userEmail: decodedToken.userInfo.userEmail,
   };
-  const userRole = decodedToken.userRole;
-  store.dispatch(setAuthCreds({ accessToken, userInfo, userRole }));
+  const userRoles = decodedToken.userRoles;
+  store.dispatch(setAuthCreds({ accessToken, userInfo, userRoles }));
 };
 
 export const resetAuthCredentials = () => {

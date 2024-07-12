@@ -5,18 +5,18 @@ const authSlice = createSlice({
   initialState: {
     accessToken: null,
     userInfo: null,
-    userRole: null,
+    userRoles: null,
   },
   reducers: {
     setAuthCreds: (state, action) => {
       state.accessToken = action.payload.accessToken;
       state.userInfo = action.payload.userInfo;
-      state.userRole = action.payload.userRole;
+      state.userRoles = action.payload.userRoles;
     },
     resetAuthCreds: (state) => {
       state.accessToken = null;
       state.userInfo = null;
-      state.userRole = null;
+      state.userRoles = null;
     },
   },
 });
