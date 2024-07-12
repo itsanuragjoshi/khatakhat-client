@@ -74,9 +74,13 @@ const FormUserSignup = ({ formId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (handleValidation()) {
+      const formData = new FormData();
+      Object.entries(input).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
       dispatch(startLoading("formUserSignUp"));
       await signup(
-        input,
+        formData,
         setInput,
         setErrors,
         initialInputValues,

@@ -21,17 +21,12 @@ const useAuth = () => {
   };
 
   const signin = async (
-    input,
+    formData,
     setInput,
     setErrors,
     initialInputValues,
     initialErrorValues
   ) => {
-    const formData = new FormData();
-    Object.entries(input).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
     try {
       const response = await axiosPublic.post("/auth/signin", formData, {
         headers: {
@@ -55,7 +50,7 @@ const useAuth = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error || "Something went wrong",
+          error.response?.data.error || "Error! Unable to sign in to your account.",
           "error"
         );
       }
@@ -63,17 +58,12 @@ const useAuth = () => {
   };
 
   const signup = async (
-    input,
+    formData,
     setInput,
     setErrors,
     initialInputValues,
     initialErrorValues
   ) => {
-    const formData = new FormData();
-    Object.entries(input).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
     try {
       const response = await axiosPublic.post("/auth/signup", formData, {
         headers: {
@@ -97,7 +87,7 @@ const useAuth = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error || "Something went wrong",
+          error.response?.data.error || "Error! Unable to sign up for your account.",
           "error"
         );
       }
@@ -112,7 +102,7 @@ const useAuth = () => {
 
       navigate("/", { replace: true });
     } catch (error) {
-      showToast(error.response?.data?.error || "Something went wrong", "error");
+      showToast(error.response?.data?.error || "Error! Unable to sign out of your account.", "error");
     }
   };
 
