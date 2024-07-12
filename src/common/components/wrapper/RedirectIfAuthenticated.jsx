@@ -2,11 +2,11 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
 const RedirectIfAuthenticated = () => {
-  const { accessToken, userRole } = useSelector((state) => state.auth);
+  const { accessToken, userRoles } = useSelector((state) => state.auth);
 
   return !accessToken ? (
     <Outlet />
-  ) : userRole && userRole.length > 0 ? (
+  ) : userRoles && userRoles.length > 0 ? (
     <Navigate to="/selectOrg" replace />
   ) : (
     <Navigate to="/createOrg" replace />

@@ -1,14 +1,16 @@
 import styles from "./form.module.css";
-import useFetchData from "../../hooks/useFetchData";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import ButtonToolbar from "../button/ButtonToolbar";
-import axios from "axios";
-import useToastContext from "../../hooks/useToastContext";
+import useFetchData from "../../hooks/useFetchData";
+import useOrg from "../../hooks/useOrg";
+import Loader from "../loader/Loader";
+import { useSelector, useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 
 const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
-  const navigate = useNavigate();
-  const { showToast } = useToastContext();
+  const { createOrg, updateOrg } = useOrg();
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.loading.formOrgProfileAddEdit);
 
   const initialInputValues = {
     orgName: "",
@@ -114,43 +116,28 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
       Object.entries(input).forEach(([key, value]) => {
         formData.append(key, value);
       });
-      try {
-        let response;
-        if (method === "POST") {
-          response = await axios.post(
-            `${import.meta.env.VITE_APP_API_URI}/org`,
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
-          setInput(initialInputValues);
-          setErrors(initialErrorValues);
-          showToast(response?.data.success, "success");
-          navigate("/dashboard", { replace: true });
-        } else if (method === "PUT") {
-          response = await axios.put(
-            `${import.meta.env.VITE_APP_API_URI}/org/${orgId}`,
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
-          showToast(response?.data.success, "success");
-          navigate(window.location.pathname);
-        }
-      } catch (error) {
-        showToast(error.response?.data.error, "error");
+
+      dispatch(startLoading("formOrgProfileAddEdit"));
+      if (method === "POST") {
+        await createOrg(
+          formData,
+          setInput,
+          setErrors,
+          initialInputValues,
+          initialErrorValues
+        );
+        dispatch(stopLoading("formOrgProfileAddEdit"));
+      } else if (method === "PUT") {
+        await updateOrg(
+          orgId,
+          formData,
+          setInput,
+          setErrors,
+          initialInputValues,
+          initialErrorValues
+        );
+        dispatch(stopLoading("formOrgProfileAddEdit"));
       }
-    } else {
-      showToast(
-        "Hold on! There are a few fields that need your attention.",
-        "error"
-      );
     }
   };
 
@@ -159,42 +146,34 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
     setErrors(initialErrorValues);
   };
 
-  const { data: countries } = useFetchData(
-    `${import.meta.env.VITE_APP_API_URI}/countries`
-  );
-  const { data: industries } = useFetchData(
-    `${import.meta.env.VITE_APP_API_URI}/industries`
-  );
-  const { data: currencies } = useFetchData(
-    `${import.meta.env.VITE_APP_API_URI}/currencies`
-  );
+  const { data: countries } = useFetchData("/countries");
+  const { data: industries } = useFetchData("/industries");
+  const { data: currencies } = useFetchData("/currencies");
 
   const { data: states } = useFetchData(
-    input.orgCountry
-      ? `${import.meta.env.VITE_APP_API_URI}/states/${encodeURIComponent(
-          input.orgCountry
-        )}`
-      : null
+    input.orgCountry ? `/states/${encodeURIComponent(input.orgCountry)}` : null
   );
 
   const buttons = [
     {
-      "btnType": "submit",
-      "btnClass": "btnPrimary",
-      "btnText": "Save",
-      "btnClick": handleSubmit
+      btnIcon: loading ? <Loader /> : null,
+      btnType: "submit",
+      btnClass: "btnPrimary",
+      btnText: loading ? null : "Save",
+      btnClick: handleSubmit,
+      btnDisabled: loading,
     },
     {
-      "btnType": "reset",
-      "btnClass": "btnSecondary",
-      "btnText": "Cancel",
-      "btnClick": handleReset
-    }
+      btnType: "reset",
+      btnClass: "btnSecondary",
+      btnText: "Cancel",
+      btnClick: handleReset,
+    },
   ];
 
   return (
     <>
-      <form id={formId} className={styles.form}>
+      <form id={formId} className={styles.form} onSubmit={handleSubmit}>
         <fieldset className={styles.formFieldset}>
           <div className={styles.formGroup}>
             <label htmlFor="orgName" className={styles.required}>
@@ -331,86 +310,16 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
                 }`}
                 name="orgPincode"
                 id="orgPincode"
-                placeholder="Pincode"
+                maxLength={15}
+                placeholder="Pincode / ZIP / Postal Code"
                 onChange={handleChange}
                 value={input.orgPincode}
               />
+              {errors.orgPincode && (
+                <span className={styles.error}>{errors.orgPincode}</span>
+              )}
             </div>
-            {errors.orgAddress1 && (
-              <span className={styles.error}>{errors.orgAddress1}</span>
-            )}
-            {errors.orgAddress2 && (
-              <span className={styles.error}>{errors.orgAddress2}</span>
-            )}
-            {errors.orgCity && (
-              <span className={styles.error}>{errors.orgCity}</span>
-            )}
-            {errors.orgState && (
-              <span className={styles.error}>{errors.orgState}</span>
-            )}
-            {errors.orgPincode && (
-              <span className={styles.error}>{errors.orgPincode}</span>
-            )}
           </div>
-
-          <div className={styles.formGroup}>
-            <label htmlFor="orgGST" className={styles.required}>
-              Is GST Registered?
-            </label>
-            <div className={styles.formGroupInline}>
-              <div className={styles.formCheck}>
-                <input
-                  type="radio"
-                  name="orgGST"
-                  id="gstTreatmentYes"
-                  value="Yes"
-                  onChange={handleChange}
-                  checked={input.orgGST === "Yes"}
-                  required
-                />
-                <label htmlFor="gstTreatmentYes">Yes</label>
-              </div>
-              <div className={styles.formCheck}>
-                <input
-                  type="radio"
-                  name="orgGST"
-                  id="gstTreatmentNo"
-                  value="No"
-                  onChange={handleChange}
-                  checked={input.orgGST === "No"}
-                />
-                <label htmlFor="gstTreatmentNo">No</label>
-              </div>
-            </div>
-            {errors.orgGST && (
-              <span className={styles.error}>{errors.orgGST}</span>
-            )}
-          </div>
-          {/* Conditionally render GSTIN/UIN and Place of Supply inputs */}
-          {input.orgGST === "Yes" && ( // Hide when 'No' is selected
-            <>
-              <div className={styles.formGroup}>
-                <label htmlFor="orgGSTIN" className={styles.required}>
-                  GSTIN / UIN
-                </label>
-                <input
-                  type="text"
-                  className={`${styles.formControl} ${
-                    errors.orgGSTIN && styles.error
-                  }`}
-                  name="orgGSTIN"
-                  id="orgGSTIN"
-                  maxLength={15}
-                  onChange={handleChange}
-                  value={input.orgGSTIN}
-                  required
-                />
-                {errors.orgGSTIN && (
-                  <span className={styles.error}>{errors.orgGSTIN}</span>
-                )}
-              </div>
-            </>
-          )}
 
           <div className={styles.formGroup}>
             <label htmlFor="orgBaseCurrency" className={styles.required}>
@@ -420,7 +329,7 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
               name="orgBaseCurrency"
               id="orgBaseCurrency"
               className={`${styles.formControl} ${
-                errors.orgName && styles.error
+                errors.orgBaseCurrency && styles.error
               }`}
               onChange={handleChange}
               value={input.orgBaseCurrency}
@@ -430,8 +339,8 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
                 Select Currency
               </option>
               {currencies?.map(({ currencyCode, currencyName }) => (
-                <option key={currencyCode} value={currencyName}>
-                  {`${currencyCode} - ${currencyName}`}
+                <option key={currencyCode} value={currencyCode}>
+                  {currencyName}
                 </option>
               ))}
             </select>
@@ -439,9 +348,59 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
               <span className={styles.error}>{errors.orgBaseCurrency}</span>
             )}
           </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="orgGST" className={styles.required}>
+              GST Registered
+            </label>
+            <div className={styles.radioGroup}>
+              <label className={styles.radioLabel}>
+                <input
+                  type="radio"
+                  name="orgGST"
+                  value="Yes"
+                  checked={input.orgGST === "Yes"}
+                  onChange={handleChange}
+                />
+                Yes
+              </label>
+              <label className={styles.radioLabel}>
+                <input
+                  type="radio"
+                  name="orgGST"
+                  value="No"
+                  checked={input.orgGST === "No"}
+                  onChange={handleChange}
+                />
+                No
+              </label>
+            </div>
+          </div>
+
+          {input.orgGST === "Yes" && (
+            <div className={styles.formGroup}>
+              <label htmlFor="orgGSTIN" className={styles.required}>
+                GSTIN / UIN
+              </label>
+              <input
+                type="text"
+                className={`${styles.formControl} ${
+                  errors.orgGSTIN && styles.error
+                }`}
+                name="orgGSTIN"
+                id="orgGSTIN"
+                placeholder="Enter GSTIN"
+                onChange={handleChange}
+                value={input.orgGSTIN}
+                required
+              />
+              {errors.orgGSTIN && (
+                <span className={styles.error}>{errors.orgGSTIN}</span>
+              )}
+            </div>
+          )}
         </fieldset>
       </form>
-
       {buttons && <ButtonToolbar props={buttons} />}
     </>
   );
