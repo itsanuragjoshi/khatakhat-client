@@ -9,11 +9,12 @@ import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Layout from "./Layout.jsx";
-import RequireAuthentication from "./common/components/wrapper/RequireAuthentication.jsx";
-import KeepAuthenticated from "./common/components/wrapper/KeepAuthenticated.jsx";
-import RedirectIfAuthenticated from "./common/components/wrapper/RedirectIfAuthenticated.jsx";
 import Error from "./pages/error/error.jsx";
 import Loader from "./common/components/loader/Loader";
+import RequireAuthentication from "./common/components/wrapper/RequireAuthentication.jsx";
+import RequireAuthorisation from "./common/components/wrapper/RequireAuthorisation.jsx";
+import PersistAuthentication from "./common/components/wrapper/PersistAuthentication.jsx";
+import RedirectIfAuthenticated from "./common/components/wrapper/RedirectIfAuthenticated.jsx";
 
 // Lazy-loaded components
 const Customers = lazy(() => import("./pages/customers/customers.jsx"));
@@ -36,111 +37,167 @@ if (process.env.NODE_ENV === "production") {
   disableReactDevTools();
 }
 
+const organisationRoutes = [
+  {
+    path: "/org/new",
+    element: (
+      <RequireAuthorisation module="organisation" permission="create">
+        <OrgprofileNew />
+      </RequireAuthorisation>
+    ),
+  },
+  {
+    path: "/org",
+    element: (
+      <RequireAuthorisation module="organisation" permission="read">
+        <OrgSelect />
+      </RequireAuthorisation>
+    ),
+  },
+  // {
+  //   path: "/org/:orgId/dashboard",
+  //   element: (
+  //     <RequireAuthorisation module="organisation" permission="read">
+  //       <Dashboard />
+  //     </RequireAuthorisation>
+  //   ),
+  // },
+  {
+    path: "/org/:orgId/settings/orgProfile",
+    element: (
+      <RequireAuthorisation module="organisation" permission="read">
+        <Orgprofile />
+      </RequireAuthorisation>
+    ),
+  },
+];
+
+// const userRoutes = [
+//   {
+//     path: "/org/:orgId/settings/users",
+//     element: (
+//       <RequireAuthorisation module="user" permission="read">
+//         <Users />
+//       </RequireAuthorisation>
+//     ),
+//   },
+//   {
+//     path: "/org/:orgId/settings/users/new",
+//     element: (
+//       <RequireAuthorisation module="user" permission="create">
+//         <UsersNew />
+//       </RequireAuthorisation>
+//     ),
+//   },
+//   {
+//     path: "/org/:orgId/settings/users/:userId",
+//     element: (
+//       <RequireAuthorisation module="user" permission="read">
+//         <UserDetails />
+//       </RequireAuthorisation>
+//     ),
+//   },
+//   {
+//     path: "/org/:orgId/settings/users/:userId/edit",
+//     element: (
+//       <RequireAuthorisation module="user" permission="update">
+//         <UserEdit />
+//       </RequireAuthorisation>
+//     ),
+//   },
+// ];
+
+const currencyRoutes = [
+  {
+    path: "/org/:orgId/settings/currencies",
+    element: (
+      <RequireAuthorisation module="currency" permission="read">
+        <Currencies />
+      </RequireAuthorisation>
+    ),
+  },
+  {
+    path: "/org/:orgId/settings/currencies/new",
+    element: (
+      <RequireAuthorisation module="currency" permission="create">
+        <CurrenciesNew />
+      </RequireAuthorisation>
+    ),
+  },
+  // {
+  //   path: "/org/:orgId/settings/currencies/:currencyId/edit",
+  //   element: (
+  //     <RequireAuthorisation module="currency" permission="update">
+  //       <CurrenciesEdit />
+  //     </RequireAuthorisation>
+  //   ),
+  // },
+];
+
+const customerRoutes = [
+  {
+    path: "/org/:orgId/customers",
+    element: (
+      <RequireAuthorisation module="customer" permission="read">
+        <Customers />
+      </RequireAuthorisation>
+    ),
+  },
+  {
+    path: "/org/:orgId/customers/new",
+    element: (
+      <RequireAuthorisation module="customer" permission="create">
+        <CustomersNew />
+      </RequireAuthorisation>
+    ),
+  },
+  // {
+  //   path: "/org/:orgId/customers/:customerId",
+  //   element: (
+  //     <RequireAuthorisation module="customer" permission="read">
+  //       <CustomerDetails />
+  //     </RequireAuthorisation>
+  //   ),
+  // },
+  {
+    path: "/org/:orgId/customers/:customerId/edit",
+    element: (
+      <RequireAuthorisation module="customer" permission="update">
+        <CustomersEdit />
+      </RequireAuthorisation>
+    ),
+  },
+];
+
+// Combine all routes
 const router = createBrowserRouter([
   {
-    element: <KeepAuthenticated />,
+    element: <PersistAuthentication />,
     errorElement: <Error />,
     children: [
       {
         path: "/",
-        element: <Layout />,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Layout />
+          </Suspense>
+        ),
         children: [
           {
             element: <RedirectIfAuthenticated />,
             children: [
-              {
-                path: "/signin",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <SignIn />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "/signup",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <SignUp />
-                  </Suspense>
-                ),
-              },
+              { path: "/signin", element: <SignIn /> },
+              { path: "/signup", element: <SignUp /> },
             ],
           },
           {
             element: <RequireAuthentication />,
             children: [
-              {
-                path: "/createOrg",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <OrgprofileNew />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "/selectOrg",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <OrgSelect />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "/signout",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <SignOut />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "/customers",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <Customers />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "/customers/new",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <CustomersNew />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "/customers/edit",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <CustomersEdit />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "/settings/orgprofile/:id",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <Orgprofile />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "/settings/currencies",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <Currencies />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "/settings/currencies/new",
-                element: (
-                  <Suspense fallback={<Loader />}>
-                    <CurrenciesNew />
-                  </Suspense>
-                ),
-              },
+              { path: "/signout", element: <SignOut /> },
+              ...organisationRoutes,
+              // ...userRoutes,
+              ...currencyRoutes,
+              ...customerRoutes,
             ],
           },
           { path: "*", element: <Error statusCode={404} /> },
@@ -151,11 +208,11 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
-  <Provider store={store}>
-    <ToastProvider>
-      <RouterProvider router={router} />
-    </ToastProvider>
-  </Provider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
+    </Provider>
+  </React.StrictMode>
 );

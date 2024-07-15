@@ -14,9 +14,9 @@ const useAuth = () => {
 
   const handleNavigation = () => {
     if (userRole && userRole.length > 0) {
-      navigate("/selectOrg", { replace: true });
+      navigate("/org/select", { replace: true });
     } else {
-      navigate("/createOrg", { replace: true });
+      navigate("/org/new", { replace: true });
     }
   };
 
@@ -34,8 +34,8 @@ const useAuth = () => {
         },
       });
 
-      const { accessToken } = response.data;
-      setAuthCredentials({ accessToken });
+      const { accessToken, permissionToken } = response.data;
+      setAuthCredentials({ accessToken, permissionToken });
 
       setInput(initialInputValues);
       setErrors(initialErrorValues);
@@ -50,7 +50,8 @@ const useAuth = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error || "Error! Unable to sign in to your account.",
+          error.response?.data.error ||
+            "Error! Unable to sign in to your account.",
           "error"
         );
       }
@@ -71,8 +72,8 @@ const useAuth = () => {
         },
       });
 
-      const { accessToken } = response.data;
-      setAuthCredentials({ accessToken });
+      const { accessToken, permissionToken } = response.data;
+      setAuthCredentials({ accessToken, permissionToken });
 
       setInput(initialInputValues);
       setErrors(initialErrorValues);
@@ -87,7 +88,8 @@ const useAuth = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error || "Error! Unable to sign up for your account.",
+          error.response?.data.error ||
+            "Error! Unable to sign up for your account.",
           "error"
         );
       }
@@ -102,7 +104,11 @@ const useAuth = () => {
 
       navigate("/", { replace: true });
     } catch (error) {
-      showToast(error.response?.data?.error || "Error! Unable to sign out of your account.", "error");
+      showToast(
+        error.response?.data?.error ||
+          "Error! Unable to sign out of your account.",
+        "error"
+      );
     }
   };
 
