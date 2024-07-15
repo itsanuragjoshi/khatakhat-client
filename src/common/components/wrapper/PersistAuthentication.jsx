@@ -10,6 +10,7 @@ import Loader from "../loader/Loader";
 
 const PersistAuthentication = () => {
   const dispatch = useDispatch();
+  const { accessToken } = useSelector((state) => state.auth);
   const isLoading = useSelector((state) => state.loading.keepAuthenticated);
 
   useEffect(() => {
@@ -23,8 +24,10 @@ const PersistAuthentication = () => {
         dispatch(stopLoading("keepAuthenticated"));
       }
     };
-    verifyRefreshToken();
-  }, []);
+    if (!accessToken) {
+      verifyRefreshToken();
+    }
+  }, [accessToken]);
 
   return isLoading ? <Loader /> : <Outlet />;
 };
