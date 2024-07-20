@@ -108,6 +108,7 @@ span.error {
 .formInputGroup {
   position: relative;
   display: flex;
+  gap: 10px;
 }
 
 .formInputGroup span[data-align="left"] {
@@ -144,4 +145,8 @@ span.error {
   display: flex;
   gap: 10px;
   padding: 20px;
+}
+
+.alignSelfEnd {
+  align-self: flex-end;
 }

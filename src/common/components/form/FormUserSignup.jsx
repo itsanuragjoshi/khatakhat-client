@@ -9,6 +9,7 @@ import Loader from "../../components/loader/Loader";
 import useAuth from "../../hooks/useAuth";
 import { useSelector, useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
+import generatePassword from "../../../utils/generatePassword";
 
 const FormUserSignup = ({ formId }) => {
   const { signup } = useAuth();
@@ -94,6 +95,11 @@ const FormUserSignup = ({ formId }) => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+  const handleGeneratePassword = () => {
+    const password = generatePassword();
+    setInput((prevInput) => ({ ...prevInput, userPassword: password }));
+  };
+
   const buttons = [
     {
       btnIcon: loading ? <Loader /> : null,
@@ -109,6 +115,26 @@ const FormUserSignup = ({ formId }) => {
     <>
       <form id={formId} className={styles.form} onSubmit={handleSubmit}>
         <fieldset className={styles.formFieldset}>
+          <div className={styles.formGroupBlock}>
+            <label htmlFor="userName" className={styles.required}>
+              Name
+            </label>
+            <input
+              type="text"
+              className={`${styles.formControl} ${
+                errors.userName && styles.error
+              }`}
+              name="userName"
+              id="userName"
+              onChange={handleChange}
+              value={input.userName}
+              required
+            />
+            {errors.userName && (
+              <span className={styles.error}>{errors.userName}</span>
+            )}
+          </div>
+
           <div className={styles.formGroupBlock}>
             <label htmlFor="userEmail" className={styles.required}>
               Email
@@ -153,28 +179,15 @@ const FormUserSignup = ({ formId }) => {
                 required
               />
             </div>
+            <button
+              type="button"
+              onClick={handleGeneratePassword}
+              className={`btnLink ${styles.alignSelfEnd}`}
+            >
+              Generate Password
+            </button>
             {errors.userPassword && (
               <span className={styles.error}>{errors.userPassword}</span>
-            )}
-          </div>
-
-          <div className={styles.formGroupBlock}>
-            <label htmlFor="userName" className={styles.required}>
-              Name
-            </label>
-            <input
-              type="text"
-              className={`${styles.formControl} ${
-                errors.userName && styles.error
-              }`}
-              name="userName"
-              id="userName"
-              onChange={handleChange}
-              value={input.userName}
-              required
-            />
-            {errors.userName && (
-              <span className={styles.error}>{errors.userName}</span>
             )}
           </div>
         </fieldset>
