@@ -1,12 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { axiosPrivate } from "../../api/axios";
 import useToastContext from "./useToastContext";
-import { useSelector } from "react-redux";
 
 const useOrg = () => {
   const navigate = useNavigate();
   const { showToast } = useToastContext();
-//   const { userRole } = useSelector((state) => state.auth);
 
   const createOrg = async (
     formData,
@@ -35,29 +33,22 @@ const useOrg = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error || "Error! Unable to create your organisation.",
+          error.response?.data.error ||
+            "Error! Unable to create your organisation.",
           "error"
         );
       }
     }
   };
 
-  const updateOrg = async (
-    orgId,
-    formData,
-    setInput,
-    setErrors,
-    initialInputValues,
-    initialErrorValues
-  ) => {
+  const updateOrg = async (orgId, formData, setErrors, initialErrorValues) => {
     try {
-      const res = await axiosPrivate.put(`/org/${orgId}`, formData, {
+      const response = await axiosPrivate.put(`/org/${orgId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      setInput(initialInputValues);
       setErrors(initialErrorValues);
       showToast(response?.data.success, "success");
       navigate(window.location.pathname);
@@ -70,7 +61,8 @@ const useOrg = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error || "Error! Unable to update your organisation.",
+          error.response?.data.error ||
+            "Error! Unable to update your organisation.",
           "error"
         );
       }

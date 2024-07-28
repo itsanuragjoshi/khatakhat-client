@@ -1,22 +1,17 @@
 import Header from "../../common/components/header/Header";
-import FormOrgProfileAddEdit from "../../common/components/form/FormOrgProfileAddEdit";
+import FormOrgAddEdit from "../../common/components/form/FormOrgAddEdit";
 import useFetchData from "../../common/hooks/useFetchData";
 import { useParams } from "react-router-dom";
 
-const Orgprofile = () => {
-  const { id } = useParams();
-  const orgId = id;
-  const {
-    data: orgData,
-    loading,
-    error,
-  } = useFetchData(`${import.meta.env.VITE_APP_API_URI}/org/${orgId}`);
+const OrgEdit = () => {
+  const { orgId } = useParams();
+  const { data: orgData } = useFetchData(`/org/${orgId}`);
 
   return (
     <>
       <Header title="Organisation Profile" />
       <main className="orgEdit">
-        <FormOrgProfileAddEdit
+        <FormOrgAddEdit
           data={orgData}
           formId="formOrgProfile"
           method="PUT"
@@ -27,4 +22,4 @@ const Orgprofile = () => {
   );
 };
 
-export default Orgprofile;
+export default OrgEdit;

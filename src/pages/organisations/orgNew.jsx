@@ -1,8 +1,8 @@
 import Header from "../../common/components/header/Header";
-import FormOrgProfileAddEdit from "../../common/components/form/FormOrgProfileAddEdit";
+import FormOrgAddEdit from "../../common/components/form/FormOrgAddEdit";
 import Alert from "../../common/components/alert/Alert";
 
-const OrgprofileNew = () => {
+const OrgNew = () => {
   return (
     <>
       <Header title="Organisation Profile Set Up" />
@@ -11,14 +11,10 @@ const OrgprofileNew = () => {
           type="info"
           message="You can change these details later in Settings, if needed."
         />
-        <FormOrgProfileAddEdit
-          data=""
-          formId="formOrgProfileNew"
-          method="POST"
-        />
+        <FormOrgAddEdit data="" formId="formOrgProfileNew" method="POST" />
       </main>
     </>
   );
 };
 
-export default OrgprofileNew;
+export default OrgNew;
