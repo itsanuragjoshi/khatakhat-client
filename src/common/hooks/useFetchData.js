@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
 import { axiosPrivate } from "../../api/axios";
+import { useSelector, useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../../redux/slices/loadingSlice";
 
 const useFetchData = (url, params = {}) => {
+  const dispatch = useDispatch();
+
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const isLoading = useSelector((state) => state.loading.fetchData);
+
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -11,7 +16,7 @@ const useFetchData = (url, params = {}) => {
       if (!url) {
         return;
       }
-      setLoading(true);
+      dispatch(startLoading("fetchData"));
       setError(null); // Clear previous errors on each fetch
 
       try {
@@ -20,14 +25,14 @@ const useFetchData = (url, params = {}) => {
       } catch (error) {
         setError(error);
       } finally {
-        setLoading(false);
+        dispatch(stopLoading("fetchData"));
       }
     };
 
     fetchData();
-  }, [url, JSON.stringify(params)]); // Refetch on URL, params, or trigger change
+  }, [url, JSON.stringify(params), dispatch]);
 
-  return { data, loading, error };
+  return { data, isLoading, error };
 };
 
 export default useFetchData;
