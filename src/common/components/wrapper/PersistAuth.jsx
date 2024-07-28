@@ -1,35 +1,34 @@
 import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 import {
   refreshAccessToken,
   refreshPermissionToken,
 } from "../../../utils/refreshToken";
-import { useSelector, useDispatch } from "react-redux";
-import { Outlet } from "react-router-dom";
-import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 import Loader from "../loader/Loader";
 
-const PersistAuthentication = () => {
+const PersistAuth = ({ children }) => {
   const dispatch = useDispatch();
   const { accessToken } = useSelector((state) => state.auth);
-  const isLoading = useSelector((state) => state.loading.keepAuthenticated);
+  const isLoading = useSelector((state) => state.loading.persistAuth);
 
   useEffect(() => {
     const verifyRefreshToken = async () => {
-      dispatch(startLoading("keepAuthenticated"));
+      dispatch(startLoading("persistAuth"));
       try {
         await refreshAccessToken();
         await refreshPermissionToken();
       } catch (error) {
       } finally {
-        dispatch(stopLoading("keepAuthenticated"));
+        dispatch(stopLoading("persistAuth"));
       }
     };
     if (!accessToken) {
       verifyRefreshToken();
     }
-  }, [accessToken]);
+  }, [accessToken, dispatch]);
 
-  return isLoading ? <Loader /> : <Outlet />;
+  return isLoading ? <Loader /> : children;
 };
 
-export default PersistAuthentication;
+export default PersistAuth;

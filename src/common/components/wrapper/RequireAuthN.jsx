@@ -1,12 +1,14 @@
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import Loader from "../loader/Loader";
 
-const RequireAuthentication = () => {
+const RequireAuthN = () => {
   const location = useLocation();
   const { accessToken } = useSelector((state) => state.auth);
+  const isLoading = useSelector((state) => state.loading.persistAuth);
 
-  return location.pathname === "/signout" ? (
-    <Outlet />
+  return isLoading ? (
+    <Loader />
   ) : accessToken ? (
     <Outlet />
   ) : (
@@ -14,4 +16,4 @@ const RequireAuthentication = () => {
   );
 };
 
-export default RequireAuthentication;
+export default RequireAuthN;

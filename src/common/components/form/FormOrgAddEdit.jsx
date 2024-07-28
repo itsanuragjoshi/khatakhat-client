@@ -7,10 +7,10 @@ import Loader from "../loader/Loader";
 import { useSelector, useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 
-const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
+const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
   const { createOrg, updateOrg } = useOrg();
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.loading.formOrgProfileAddEdit);
+  const loading = useSelector((state) => state.loading.formOrgAddEdit);
 
   const initialInputValues = {
     orgName: "",
@@ -117,7 +117,7 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
         formData.append(key, value);
       });
 
-      dispatch(startLoading("formOrgProfileAddEdit"));
+      dispatch(startLoading("formOrgAddEdit"));
       if (method === "POST") {
         await createOrg(
           formData,
@@ -126,17 +126,10 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
           initialInputValues,
           initialErrorValues
         );
-        dispatch(stopLoading("formOrgProfileAddEdit"));
+        dispatch(stopLoading("formOrgAddEdit"));
       } else if (method === "PUT") {
-        await updateOrg(
-          orgId,
-          formData,
-          setInput,
-          setErrors,
-          initialInputValues,
-          initialErrorValues
-        );
-        dispatch(stopLoading("formOrgProfileAddEdit"));
+        await updateOrg(orgId, formData, setErrors, initialErrorValues);
+        dispatch(stopLoading("formOrgAddEdit"));
       }
     }
   };
@@ -231,7 +224,7 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
               name="orgCountry"
               id="orgCountry"
               className={`${styles.formControl} ${
-                errors.orgName && styles.error
+                errors.orgCountry && styles.error
               }`}
               onChange={handleChange}
               value={input.orgCountry}
@@ -400,10 +393,10 @@ const FormOrgProfileAddEdit = ({ data, formId, method, orgId }) => {
             </div>
           )}
         </fieldset>
+        {buttons && <ButtonToolbar props={buttons} />}
       </form>
-      {buttons && <ButtonToolbar props={buttons} />}
     </>
   );
 };
 
-export default FormOrgProfileAddEdit;
+export default FormOrgAddEdit;
