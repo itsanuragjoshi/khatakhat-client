@@ -165,9 +165,8 @@ const FormCurrenciesAddEdit = ({ initialInputValues, formId }) => {
             )}
           </div>
         </fieldset>
+        {buttons && <ButtonToolbar props={buttons} />}
       </form>
-
-      {buttons && <ButtonToolbar props={buttons} />}
     </>
   );
 };

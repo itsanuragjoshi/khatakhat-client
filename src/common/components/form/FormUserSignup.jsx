@@ -191,9 +191,8 @@ const FormUserSignup = ({ formId }) => {
             )}
           </div>
         </fieldset>
+        {buttons && <ButtonToolbar props={buttons} />}
       </form>
-
-      {buttons && <ButtonToolbar props={buttons} />}
 
       <div className={styles.signinLink}>
         <p>Have a Khatakhat Account?</p>

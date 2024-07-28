@@ -196,17 +196,17 @@ const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
 
   const buttons = [
     {
-      "btnType": "submit",
-      "btnClass": "btnPrimary",
-      "btnText": "Save",
-      "btnClick": handleSubmit
+      btnType: "submit",
+      btnClass: "btnPrimary",
+      btnText: "Save",
+      btnClick: handleSubmit,
     },
     {
-      "btnType": "reset",
-      "btnClass": "btnSecondary",
-      "btnText": "Cancel",
-      "btnClick": handleReset
-    }
+      btnType: "reset",
+      btnClass: "btnSecondary",
+      btnText: "Cancel",
+      btnClick: handleReset,
+    },
   ];
 
   return (
@@ -740,9 +740,8 @@ const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
             )}
           </div>
         </fieldset>
+        {buttons && <ButtonToolbar props={buttons} />}
       </form>
-
-      {buttons && <ButtonToolbar props={buttons} />}
     </>
   );
 };
