@@ -5,20 +5,10 @@ import {
   setAuthCredentials,
   resetAuthCredentials,
 } from "../../utils/authUtils";
-import { useSelector } from "react-redux";
 
 const useAuth = () => {
   const navigate = useNavigate();
   const { showToast } = useToastContext();
-  const { userRole } = useSelector((state) => state.auth);
-
-  const handleNavigation = () => {
-    if (userRole && userRole.length > 0) {
-      navigate("/org/select", { replace: true });
-    } else {
-      navigate("/org/new", { replace: true });
-    }
-  };
 
   const signin = async (
     formData,
@@ -40,7 +30,7 @@ const useAuth = () => {
       setInput(initialInputValues);
       setErrors(initialErrorValues);
       showToast(response?.data.success, "success");
-      handleNavigation();
+      navigate("/org/select", { replace: true });
     } catch (error) {
       if (error.response?.data?.errors) {
         const backendErrors = error.response.data.errors.reduce((acc, err) => {
@@ -78,7 +68,7 @@ const useAuth = () => {
       setInput(initialInputValues);
       setErrors(initialErrorValues);
       showToast(response?.data.success, "success");
-      handleNavigation();
+      navigate("/org/select", { replace: true });
     } catch (error) {
       if (error.response?.data?.errors) {
         const backendErrors = error.response.data.errors.reduce((acc, err) => {
