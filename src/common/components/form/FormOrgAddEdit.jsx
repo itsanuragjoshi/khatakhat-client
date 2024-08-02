@@ -139,12 +139,13 @@ const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
     setErrors(initialErrorValues);
   };
 
-  const { data: countries } = useFetchData("/countries");
-  const { data: industries } = useFetchData("/industries");
-  const { data: currencies } = useFetchData("/currencies");
-
+  const { data: countries } = useFetchData("/countries", {}, "authN");
+  const { data: industries } = useFetchData("/industries", {}, "authN");
+  const { data: currencies } = useFetchData("/currencies", {}, "authZ");
   const { data: states } = useFetchData(
-    input.orgCountry ? `/states/${encodeURIComponent(input.orgCountry)}` : null
+    input.orgCountry ? `/states/${encodeURIComponent(input.orgCountry)}` : null,
+    {},
+    "authN"
   );
 
   const buttons = [

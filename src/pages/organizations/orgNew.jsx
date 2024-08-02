@@ -5,13 +5,13 @@ import Alert from "../../common/components/alert/Alert";
 const OrgNew = () => {
   return (
     <>
-      <Header title="Organisation Profile Set Up" />
+      <Header title="Organization Profile Set Up" />
       <main className="orgNew">
         <Alert
           type="info"
           message="You can change these details later in Settings, if needed."
         />
-        <FormOrgAddEdit data="" formId="formOrgProfileNew" method="POST" />
+        <FormOrgAddEdit data="" formId="formOrgNew" method="POST" />
       </main>
     </>
   );

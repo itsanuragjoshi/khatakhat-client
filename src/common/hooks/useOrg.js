@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { axiosPrivate } from "../../api/axios";
+import { axiosAuthN, axiosAuthZ } from "../../api/axios";
 import useToastContext from "./useToastContext";
+import { refreshPermissionToken } from "../../utils/refreshToken";
 
 const useOrg = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const useOrg = () => {
     initialErrorValues
   ) => {
     try {
-      const response = await axiosPrivate.post("/org", formData, {
+      const response = await axiosAuthN.post("/org", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -34,7 +35,7 @@ const useOrg = () => {
       } else {
         showToast(
           error.response?.data.error ||
-            "Error! Unable to create your organisation.",
+            "Error! Unable to create your organization.",
           "error"
         );
       }
@@ -43,7 +44,7 @@ const useOrg = () => {
 
   const updateOrg = async (orgId, formData, setErrors, initialErrorValues) => {
     try {
-      const response = await axiosPrivate.put(`/org/${orgId}`, formData, {
+      const response = await axiosAuthZ.put(`/org/${orgId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -51,6 +52,7 @@ const useOrg = () => {
 
       setErrors(initialErrorValues);
       showToast(response?.data.success, "success");
+      await refreshPermissionToken();
       navigate(window.location.pathname);
     } catch (error) {
       if (error.response?.data?.errors) {
@@ -62,7 +64,7 @@ const useOrg = () => {
       } else {
         showToast(
           error.response?.data.error ||
-            "Error! Unable to update your organisation.",
+            "Error! Unable to update your organization.",
           "error"
         );
       }
