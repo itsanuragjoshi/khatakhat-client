@@ -5,6 +5,12 @@ import {
   refreshPermissionToken,
 } from "../utils/refreshToken";
 
+/*
+  axiosPublic - for unauthenticated requests
+  axiosAuthN - for requests requiring only authentication (access token)
+  axiosAuthZ - for requests requiring both authentication and authorization (access token and permission token)
+*/
+
 // Define the base URL for the API
 const BASE_URL = import.meta.env.VITE_APP_API_URI;
 
@@ -14,14 +20,37 @@ const axiosPublic = axios.create({
   withCredentials: true,
 });
 
-// Create the private Axios instance with interceptors for authorization
-const axiosPrivate = axios.create({
+// Create the authentication Axios instance
+const axiosAuthN = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
 });
 
-// Request interceptor for private Axios instance
-axiosPrivate.interceptors.request.use(
+// Create the authorization Axios instance
+const axiosAuthZ = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
+});
+
+// Request interceptor for authentication Axios instance
+axiosAuthN.interceptors.request.use(
+  (config) => {
+    const state = store.getState();
+    const accessToken = state.auth.accessToken;
+
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Request interceptor for authorization Axios instance
+axiosAuthZ.interceptors.request.use(
   (config) => {
     const state = store.getState();
     const accessToken = state.auth.accessToken;
@@ -42,8 +71,35 @@ axiosPrivate.interceptors.request.use(
   }
 );
 
-// Response interceptor for private Axios instance
-axiosPrivate.interceptors.response.use(
+// Response interceptor for authentication Axios instance
+axiosAuthN.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // Refresh access token
+        await refreshAccessToken();
+        const state = store.getState();
+        const newAccessToken = state.auth.accessToken;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        return axiosAuthN(originalRequest);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor for authorization Axios instance
+axiosAuthZ.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -67,7 +123,7 @@ axiosPrivate.interceptors.response.use(
           "Authorization-Role"
         ] = `Bearer ${newPermissionToken}`;
 
-        return axiosPrivate(originalRequest);
+        return axiosAuthZ(originalRequest);
       } catch (error) {
         return Promise.reject(error);
       }
@@ -76,4 +132,4 @@ axiosPrivate.interceptors.response.use(
   }
 );
 
-export { axiosPublic, axiosPrivate };
+export { axiosPublic, axiosAuthN, axiosAuthZ };
