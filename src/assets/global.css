@@ -1,48 +1,38 @@
 :root {
-  --color-tone-1: #1a1a1a;
-  --color-tone-2: #707382;
-  --color-tone-3: #c4c4c4;
-  --color-tone-4: #dbdce0;
-  --color-tone-5: #efefef;
-  --color-tone-6: #ffffff;
-  --color-tone-7: #1463f3;
-  --color-tone-8: #ff0000;
+  --color-tone-black: #1a1a1a;
+  --color-tone-dark: #d3d3d3;
+  --color-tone-light: #efefef;
+  --color-tone-white: #ffffff;
+  --color-tone-red: #ff0000;
 
-  --color-background: var(--color-tone-6);
-  --color-background-reverse: var(--color-tone-1);
-  --color-background-light: var(--color-tone-5);
-  --color-background-primary: var(--color-tone-7);
+  --color-background-black: var(--color-tone-black);
+  --color-background-white: var(--color-tone-white);
+  --color-background-light: var(--color-tone-light);
+  --color-background-dark: var(--color-tone-dark);
 
-  --color-font: var(--color-tone-1);
-  --color-font-reverse: var(--color-tone-6);
-  --color-font-light: var(--color-tone-6);
-  --color-font-dark: var(--color-tone-1);
-  --color-font-primary: var(--color-tone-7);
-  --color-font-error: var(--color-tone-8);
+  --color-font-black: var(--color-tone-black);
+  --color-font-white: var(--color-tone-white);
+  --color-font-error: var(--color-tone-red);
 
-  --color-border-dark: var(--color-tone-1);
-  --color-border-light: var(--color-tone-4);
-  --color-border-primary: var(--color-tone-7);
-  --color-border-error: var(--color-tone-8);
+  --color-border-black: var(--color-tone-black);
+  --color-border-dark: var(--color-tone-dark);
+  --color-border-light: var(--color-tone-light);
+  --color-border-error: var(--color-tone-red);
 
-  --color-switch: var(--color-tone-2);
-  --color-switch-knob: var(--color-tone-6);
+  --color-btn-primary-background: var(--color-background-black);
+  --color-btn-primary-border: var(--color-border-black);
 
-  --color-btn-primary-background: var(--color-tone-7);
-  --color-btn-primary-border: var(--color-tone-7);
+  --color-btn-secondary-background: var(--color-background-light);
+  --color-btn-secondary-border: var(--color-border-dark);
 
-  --color-btn-secondary-background: var(--color-tone-4);
-  --color-btn-secondary-border: var(--color-tone-3);
-
-  --font-family-primary: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  --font-family-primary: "Trebuchet MS", sans-serif, monospace;
 
   --form-input-focus-box-shadow: 0 0 0 2px rgba(20, 99, 243, 0.1);
   --form-input-error-box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.1);
 }
 
 html {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 * {
@@ -56,8 +46,8 @@ html {
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-font);
+  background-color: var(--color-background-white);
+  color: var(--color-font-black);
   font-size: 1rem;
   min-height: 100vh;
   display: flex;
@@ -84,7 +74,7 @@ main {
 button {
   background: none;
   white-space: nowrap;
-  color: var(--color-font);
+  color: var(--color-font-black);
   cursor: pointer;
 }
 
@@ -108,7 +98,7 @@ svg
     polyline,
     polygon
   )[fill="currentColor"]:not([fill="none"]) {
-  fill: var(--color-font);
+  fill: var(--color-font-black);
 }
 
 svg[stroke="currentColor"]:not([stroke="none"]),
@@ -122,12 +112,12 @@ svg
     polyline,
     polygon
   )[stroke="currentColor"]:not([stroke="none"]) {
-  stroke: var(--color-font);
+  stroke: var(--color-font-black);
 }
 
 a {
   text-decoration: none;
-  color: var(--color-font);
+  color: var(--color-font-black);
   cursor: pointer !important;
 }
 
@@ -158,7 +148,7 @@ h3 {
 
 ::placeholder,
 input {
-  color: var(--color-font);
+  color: var(--color-font-black);
 }
 
 .actionWrapper {
@@ -166,45 +156,21 @@ input {
   gap: 10px;
 }
 
-.button {
-  border-radius: 0;
-  width: max-content;
-  padding: 10px 20px;
-  height: 40px;
+menu {
+  width: 200px;
+  border-right: 1px solid var(--color-border-dark);
+  background: var(--color-background-light);
+  color: var(--color-font-black);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.button:disabled {
-  background-color: var(--color-tone-2);
-  border: 2px solid var(--color-tone-2);
-  color: var(--color-tone-6);
-}
-
-.button:disabled svg {
-  height: 24px !important;
-  width: 24px !important;
-  stroke: var(--color-tone-6) !important;
-}
-
-.buttonPrimary {
-  background-color: var(--color-background-reverse);
-  border: 2px solid var(--color-border-dark);
-  color: var(--color-font-reverse);
-}
-
-.buttonSecondary {
-  background-color: var(--color-background);
-  border: 2px solid var(--color-border-dark);
-  color: var(--color-font);
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 menu a.active,
 menu a.active:hover {
-  background-color: var(--color-background-primary);
-  color: var(--color-font-reverse);
+  background-color: var(--color-background-black);
+  color: var(--color-font-white);
 }
 
 .btn {
@@ -224,16 +190,16 @@ menu a.active:hover {
 .btnPrimary {
   background: var(--color-btn-primary-background);
   border: 1px solid var(--color-btn-primary-border);
-  color: var(--color-font-light);
+  color: var(--color-font-white);
 }
 
 .btnSecondary {
   background: var(--color-btn-secondary-background);
   border: 1px solid var(--color-btn-secondary-border);
+  color: var(--color-font-black);
 }
 
 .btnLink {
-  color: var(--color-font-primary);
   text-decoration: underline;
   font-weight: 800;
 }
@@ -241,7 +207,7 @@ menu a.active:hover {
 .btnToolbar {
   display: flex;
   gap: 10px;
-  padding: 10px 20px;
+  align-items: center;
 }
 
 .btn svg {
@@ -252,9 +218,39 @@ menu a.active:hover {
 .btn:disabled {
   background: var(--color-btn-secondary-background);
   border: 1px solid var(--color-btn-secondary-border);
-  cursor: auto;
+  color: var(--color-font-black);
+}
+
+.btn:disabled,
+.btn:disabled:hover {
+  opacity: 1;
+  cursor: not-allowed;
 }
 
 .relative {
   position: relative;
+}
+
+.p-20 {
+  padding: 20px;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+input {
+  accent-color: var(--color-background-black);
 }

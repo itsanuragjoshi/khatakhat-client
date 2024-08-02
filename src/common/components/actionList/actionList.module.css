@@ -5,7 +5,7 @@
 }
 
 .actionList small:hover {
-  color: var(--color-font-primary);
+  opacity: 0.6;
 }
 
 .actionList small svg {

@@ -1,0 +1,15 @@
+.listHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.listItemWrapper {
+  padding: 20px 0;
+  border-top: 1px solid var(--color-border-dark);
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+}

@@ -15,8 +15,8 @@
   align-items: center;
   gap: 10px;
   width: 300px;
-  background-color: var(--color-background-reverse);
-  color: var(--color-font-reverse);
+  background-color: var(--color-background-black);
+  color: var(--color-font-white);
   padding: 10px;
   font-weight: bold;
   transition: visibility 0.5s, transform 0.5s;
