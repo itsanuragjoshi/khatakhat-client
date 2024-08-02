@@ -1,5 +1,5 @@
 import "./assets/global.css";
-import React, { Suspense, lazy } from "react";
+import React, { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
@@ -10,161 +10,110 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Layout from "./Layout.jsx";
 import Error from "./pages/error/error.jsx";
-import Loader from "./common/components/loader/Loader";
-import RequireAuthentication from "./common/components/wrapper/RequireAuthentication.jsx";
-import RequireAuthorisation from "./common/components/wrapper/RequireAuthorisation.jsx";
-import PersistAuthentication from "./common/components/wrapper/PersistAuthentication.jsx";
+import PersistAuth from "./common/components/wrapper/PersistAuth.jsx";
+import RequireAuthN from "./common/components/wrapper/RequireAuthN.jsx";
+import RequireAuthZ from "./common/components/wrapper/RequireAuthZ.jsx";
 import RedirectIfAuthenticated from "./common/components/wrapper/RedirectIfAuthenticated.jsx";
 
 // Lazy-loaded components
+const SignIn = lazy(() => import("./pages/auth/signIn.jsx"));
+const SignUp = lazy(() => import("./pages/auth/signUp.jsx"));
+const SignOut = lazy(() => import("./pages/auth/signOut.jsx"));
+
+const OrgSelect = lazy(() => import("./pages/organizations/orgSelect.jsx"));
+const OrgNew = lazy(() => import("./pages/organizations/orgNew.jsx"));
+const OrgEdit = lazy(() => import("./pages/organizations/orgEdit.jsx"));
+
+const Users = lazy(() => import("./pages/users/users.jsx"));
+const UsersNew = lazy(() => import("./pages/users/usersNew.jsx"));
+
 const Customers = lazy(() => import("./pages/customers/customers.jsx"));
 const CustomersNew = lazy(() => import("./pages/customers/customersNew.jsx"));
-const Currencies = lazy(() => import("./pages/currencies/currencies.jsx"));
 const CustomersEdit = lazy(() => import("./pages/customers/customersEdit.jsx"));
+
+const Currencies = lazy(() => import("./pages/currencies/currencies.jsx"));
 const CurrenciesNew = lazy(() =>
   import("./pages/currencies/currenciesNew.jsx")
 );
-const Orgprofile = lazy(() => import("./pages/organisation/orgprofile.jsx"));
-const OrgprofileNew = lazy(() =>
-  import("./pages/organisation/orgprofileNew.jsx")
-);
-const SignIn = lazy(() => import("./pages/user/signIn.jsx"));
-const SignUp = lazy(() => import("./pages/user/signUp.jsx"));
-const SignOut = lazy(() => import("./pages/user/signOut.jsx"));
-const OrgSelect = lazy(() => import("./pages/organisation/orgSelect.jsx"));
 
 if (process.env.NODE_ENV === "production") {
   disableReactDevTools();
 }
 
-const organisationRoutes = [
+const organizationRoutes = [
+  { path: "/org/select", element: <OrgSelect /> },
+  { path: "/org/new", element: <OrgNew /> },
   {
-    path: "/org/new",
+    path: "/settings/orgprofile",
     element: (
-      <RequireAuthorisation module="organisation" permission="create">
-        <OrgprofileNew />
-      </RequireAuthorisation>
-    ),
-  },
-  {
-    path: "/org",
-    element: (
-      <RequireAuthorisation module="organisation" permission="read">
-        <OrgSelect />
-      </RequireAuthorisation>
-    ),
-  },
-  // {
-  //   path: "/org/:orgId/dashboard",
-  //   element: (
-  //     <RequireAuthorisation module="organisation" permission="read">
-  //       <Dashboard />
-  //     </RequireAuthorisation>
-  //   ),
-  // },
-  {
-    path: "/org/:orgId/settings/orgProfile",
-    element: (
-      <RequireAuthorisation module="organisation" permission="read">
-        <Orgprofile />
-      </RequireAuthorisation>
+      <RequireAuthZ module="organizations" permission="read">
+        <OrgEdit />
+      </RequireAuthZ>
     ),
   },
 ];
 
-// const userRoutes = [
-//   {
-//     path: "/org/:orgId/settings/users",
-//     element: (
-//       <RequireAuthorisation module="user" permission="read">
-//         <Users />
-//       </RequireAuthorisation>
-//     ),
-//   },
-//   {
-//     path: "/org/:orgId/settings/users/new",
-//     element: (
-//       <RequireAuthorisation module="user" permission="create">
-//         <UsersNew />
-//       </RequireAuthorisation>
-//     ),
-//   },
-//   {
-//     path: "/org/:orgId/settings/users/:userId",
-//     element: (
-//       <RequireAuthorisation module="user" permission="read">
-//         <UserDetails />
-//       </RequireAuthorisation>
-//     ),
-//   },
-//   {
-//     path: "/org/:orgId/settings/users/:userId/edit",
-//     element: (
-//       <RequireAuthorisation module="user" permission="update">
-//         <UserEdit />
-//       </RequireAuthorisation>
-//     ),
-//   },
-// ];
+const userRoutes = [
+  {
+    path: "/settings/users/new",
+    element: (
+      <RequireAuthZ module="users" permission="create">
+        <UsersNew />
+      </RequireAuthZ>
+    ),
+  },
+  {
+    path: "/settings/users",
+    element: (
+      <RequireAuthZ module="users" permission="read">
+        <Users />
+      </RequireAuthZ>
+    ),
+  },
+];
 
 const currencyRoutes = [
   {
     path: "/org/:orgId/settings/currencies",
     element: (
-      <RequireAuthorisation module="currency" permission="read">
+      <RequireAuthZ module="currencies" permission="read">
         <Currencies />
-      </RequireAuthorisation>
+      </RequireAuthZ>
     ),
   },
   {
     path: "/org/:orgId/settings/currencies/new",
     element: (
-      <RequireAuthorisation module="currency" permission="create">
+      <RequireAuthZ module="currencies" permission="create">
         <CurrenciesNew />
-      </RequireAuthorisation>
+      </RequireAuthZ>
     ),
   },
-  // {
-  //   path: "/org/:orgId/settings/currencies/:currencyId/edit",
-  //   element: (
-  //     <RequireAuthorisation module="currency" permission="update">
-  //       <CurrenciesEdit />
-  //     </RequireAuthorisation>
-  //   ),
-  // },
 ];
 
 const customerRoutes = [
   {
     path: "/org/:orgId/customers",
     element: (
-      <RequireAuthorisation module="customer" permission="read">
+      <RequireAuthZ module="customers" permission="read">
         <Customers />
-      </RequireAuthorisation>
+      </RequireAuthZ>
     ),
   },
   {
     path: "/org/:orgId/customers/new",
     element: (
-      <RequireAuthorisation module="customer" permission="create">
+      <RequireAuthZ module="customers" permission="create">
         <CustomersNew />
-      </RequireAuthorisation>
+      </RequireAuthZ>
     ),
   },
-  // {
-  //   path: "/org/:orgId/customers/:customerId",
-  //   element: (
-  //     <RequireAuthorisation module="customer" permission="read">
-  //       <CustomerDetails />
-  //     </RequireAuthorisation>
-  //   ),
-  // },
   {
     path: "/org/:orgId/customers/:customerId/edit",
     element: (
-      <RequireAuthorisation module="customer" permission="update">
+      <RequireAuthZ module="customers" permission="update">
         <CustomersEdit />
-      </RequireAuthorisation>
+      </RequireAuthZ>
     ),
   },
 ];
@@ -172,37 +121,27 @@ const customerRoutes = [
 // Combine all routes
 const router = createBrowserRouter([
   {
-    element: <PersistAuthentication />,
-    errorElement: <Error />,
+    path: "/",
+    element: (
+      <PersistAuth>
+        <Layout />
+      </PersistAuth>
+    ),
     children: [
+      { path: "/signin", element: <SignIn /> },
+      { path: "/signup", element: <SignUp /> },
+      { path: "/error403", element: <Error statusCode={403} /> },
       {
-        path: "/",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Layout />
-          </Suspense>
-        ),
+        element: <RequireAuthN />,
         children: [
-          {
-            element: <RedirectIfAuthenticated />,
-            children: [
-              { path: "/signin", element: <SignIn /> },
-              { path: "/signup", element: <SignUp /> },
-            ],
-          },
-          {
-            element: <RequireAuthentication />,
-            children: [
-              { path: "/signout", element: <SignOut /> },
-              ...organisationRoutes,
-              // ...userRoutes,
-              ...currencyRoutes,
-              ...customerRoutes,
-            ],
-          },
-          { path: "*", element: <Error statusCode={404} /> },
+          { path: "/signout", element: <SignOut /> },
+          ...organizationRoutes,
+          ...userRoutes,
+          ...currencyRoutes,
+          ...customerRoutes,
         ],
       },
+      { path: "*", element: <Error statusCode={404} /> },
     ],
   },
 ]);
