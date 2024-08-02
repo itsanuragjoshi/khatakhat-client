@@ -6,10 +6,10 @@ const RedirectIfAuthenticated = () => {
 
   return !accessToken ? (
     <Outlet />
-  ) : userRoles && userRoles.length > 0 ? (
-    <Navigate to="/selectOrg" replace />
+  ) : !userRoles ? (
+    <Navigate to="/org/select" replace />
   ) : (
-    <Navigate to="/createOrg" replace />
+    <Navigate to="/dashboard" replace />
   );
 };
 

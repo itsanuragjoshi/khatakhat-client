@@ -128,8 +128,13 @@ const router = createBrowserRouter([
       </PersistAuth>
     ),
     children: [
-      { path: "/signin", element: <SignIn /> },
-      { path: "/signup", element: <SignUp /> },
+      {
+        element: <RedirectIfAuthenticated />,
+        children: [
+          { path: "/signin", element: <SignIn /> },
+          { path: "/signup", element: <SignUp /> },
+        ],
+      },
       { path: "/error403", element: <Error statusCode={403} /> },
       {
         element: <RequireAuthN />,
