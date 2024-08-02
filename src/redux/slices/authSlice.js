@@ -9,20 +9,29 @@ const authSlice = createSlice({
     userRoles: null,
   },
   reducers: {
-    setAuthCreds: (state, action) => {
+    setAuthentication: (state, action) => {
       state.accessToken = action.payload.accessToken;
-      state.permissionToken = action.payload.permissionToken;
       state.userInfo = action.payload.userInfo;
+    },
+    resetAuthentication: (state) => {
+      state.accessToken = null;
+      state.userInfo = null;
+    },
+    setAuthorization: (state, action) => {
+      state.permissionToken = action.payload.permissionToken;
       state.userRoles = action.payload.userRoles;
     },
-    resetAuthCreds: (state) => {
-      state.accessToken = null;
+    resetAuthorization: (state) => {
       state.permissionToken = null;
-      state.userInfo = null;
       state.userRoles = null;
     },
   },
 });
 
-export const { setAuthCreds, resetAuthCreds } = authSlice.actions;
+export const {
+  setAuthentication,
+  resetAuthentication,
+  setAuthorization,
+  resetAuthorization,
+} = authSlice.actions;
 export default authSlice.reducer;

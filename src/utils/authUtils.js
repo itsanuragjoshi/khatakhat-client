@@ -1,12 +1,15 @@
 import store from "../redux/store";
 import { jwtDecode } from "jwt-decode";
-import { setAuthCreds, resetAuthCreds } from "../redux/slices/authSlice";
+import {
+  setAuthentication,
+  resetAuthentication,
+  setAuthorization,
+  resetAuthorization,
+} from "../redux/slices/authSlice";
 
-export const setAuthCredentials = ({ accessToken, permissionToken }) => {
+export const setAuthN = ({ accessToken }) => {
   const currentState = store.getState().auth;
-
   let userInfo = currentState.userInfo || null;
-  let userRoles = currentState.userRoles || null;
 
   if (accessToken) {
     const decodedAccessToken = jwtDecode(accessToken);
@@ -17,21 +20,35 @@ export const setAuthCredentials = ({ accessToken, permissionToken }) => {
     };
   }
 
+  store.dispatch(
+    setAuthentication({
+      accessToken: accessToken || currentState.accessToken,
+      userInfo,
+    })
+  );
+};
+
+export const setAuthZ = ({ permissionToken }) => {
+  const currentState = store.getState().auth;
+  let userRoles = currentState.userRoles || null;
+
   if (permissionToken) {
     const decodedPermissionToken = jwtDecode(permissionToken);
     userRoles = decodedPermissionToken.userRoles;
   }
 
   store.dispatch(
-    setAuthCreds({
-      accessToken: accessToken || currentState.accessToken,
-      userInfo,
+    setAuthorization({
       permissionToken: permissionToken || currentState.permissionToken,
       userRoles,
     })
   );
 };
 
-export const resetAuthCredentials = () => {
-  store.dispatch(resetAuthCreds());
+export const resetAuthN = () => {
+  store.dispatch(resetAuthentication());
+};
+
+export const resetAuthZ = () => {
+  store.dispatch(resetAuthorization());
 };

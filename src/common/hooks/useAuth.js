@@ -1,10 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { axiosPublic, axiosPrivate } from "../../api/axios";
+import { axiosPublic, axiosAuthN } from "../../api/axios";
 import useToastContext from "./useToastContext";
-import {
-  setAuthCredentials,
-  resetAuthCredentials,
-} from "../../utils/authUtils";
+import { setAuthN, resetAuthN, resetAuthZ } from "../../utils/authUtils";
 
 const useAuth = () => {
   const navigate = useNavigate();
@@ -24,8 +21,9 @@ const useAuth = () => {
         },
       });
 
-      const { accessToken, permissionToken } = response.data;
-      setAuthCredentials({ accessToken, permissionToken });
+      const { accessToken } = response.data;
+
+      setAuthN({ accessToken });
 
       setInput(initialInputValues);
       setErrors(initialErrorValues);
@@ -62,8 +60,9 @@ const useAuth = () => {
         },
       });
 
-      const { accessToken, permissionToken } = response.data;
-      setAuthCredentials({ accessToken, permissionToken });
+      const { accessToken } = response.data;
+
+      setAuthN({ accessToken });
 
       setInput(initialInputValues);
       setErrors(initialErrorValues);
@@ -88,10 +87,12 @@ const useAuth = () => {
 
   const signout = async () => {
     try {
-      const response = await axiosPrivate.post("/auth/signout");
-      resetAuthCredentials();
-      showToast(response?.data?.success, "success");
+      const response = await axiosAuthN.post("/auth/signout");
 
+      resetAuthN();
+      resetAuthZ();
+
+      showToast(response?.data?.success, "success");
       navigate("/", { replace: true });
     } catch (error) {
       showToast(

@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { axiosPrivate } from "../../api/axios";
+import { axiosPublic, axiosAuthN, axiosAuthZ } from "../../api/axios";
 import { useSelector, useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../../redux/slices/loadingSlice";
 
-const useFetchData = (url, params = {}) => {
+const useFetchData = (url, params = {}, level = "public") => {
   const dispatch = useDispatch();
-
   const [data, setData] = useState([]);
   const isLoading = useSelector((state) => state.loading.fetchData);
 
@@ -16,11 +15,24 @@ const useFetchData = (url, params = {}) => {
       if (!url) {
         return;
       }
+
+      let axiosInstance;
+      switch (level) {
+        case "authN":
+          axiosInstance = axiosAuthN;
+          break;
+        case "authZ":
+          axiosInstance = axiosAuthZ;
+          break;
+        case "public":
+        default:
+          axiosInstance = axiosPublic;
+      }
       dispatch(startLoading("fetchData"));
       setError(null); // Clear previous errors on each fetch
 
       try {
-        const response = await axiosPrivate.get(url, { params });
+        const response = await axiosInstance.get(url, { params });
         setData(response.data);
       } catch (error) {
         setError(error);
@@ -30,7 +42,7 @@ const useFetchData = (url, params = {}) => {
     };
 
     fetchData();
-  }, [url, JSON.stringify(params), dispatch]);
+  }, [url, JSON.stringify(params), dispatch, level]);
 
   return { data, isLoading, error };
 };
