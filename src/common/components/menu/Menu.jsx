@@ -9,6 +9,7 @@ import SigninIcon from "@mui/icons-material/LoginOutlined";
 import SignupIcon from "@mui/icons-material/HowToRegOutlined";
 import SignoutIcon from "@mui/icons-material/LogoutOutlined";
 import AccountIcon from "@mui/icons-material/AccountCircleOutlined";
+import OrgIcon from "@mui/icons-material/BusinessOutlined";
 
 import MenuButton from "./MenuButton";
 import { useState } from "react";
@@ -64,6 +65,10 @@ const navListPrivate = [
         title: "Profile",
       },
       {
+        to: "/org/select",
+        title: "Select Org",
+      },
+      {
         to: "/settings/currencies",
         title: "Currencies",
       },
@@ -80,11 +85,20 @@ const navListPrivate = [
   },
 ];
 
+const signOutItem = {
+  to: "/signout",
+  icon: <SignoutIcon />,
+  title: "Sign Out",
+};
+
 const Menu = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [openSubNavIndex, setOpenSubNavIndex] = useState(null);
 
-  const { accessToken, userInfo } = useSelector((state) => state.auth);
+  // Redux state selector
+  const { accessToken, userInfo, userRoles } = useSelector(
+    (state) => state.auth
+  );
 
   const toggleMenu = () => {
     setCollapsed(!collapsed);
@@ -114,21 +128,37 @@ const Menu = () => {
       </div>
 
       {userInfo && (
-        <div
-          className={`${styles.userWrapper} ${
-            collapsed ? styles.collapsed : ""
-          }`}
-          title={userInfo.userName}
-        >
-          <div className={styles.innerUserWrapper} onClick={expandMenu}>
-            <AccountIcon />
-            {!collapsed && (
-              <div>
-                <span>{userInfo.userName}</span>
-                <small>{userInfo.userEmail}</small>
-              </div>
-            )}
+        <div className={styles.wrapper}>
+          <div
+            className={`${collapsed ? styles.collapsed : ""}`}
+            title={userInfo.userName}
+          >
+            <div className={styles.innerWrapper} onClick={expandMenu}>
+              <AccountIcon />
+              {!collapsed && (
+                <div>
+                  <span>{userInfo.userName}</span>
+                  <small>{userInfo.userEmail}</small>
+                </div>
+              )}
+            </div>
           </div>
+          {userRoles && (
+            <div
+              className={`${collapsed ? styles.collapsed : ""}`}
+              title={userRoles?.orgId?.orgName}
+            >
+              <div className={styles.innerWrapper} onClick={expandMenu}>
+                <OrgIcon />
+                {!collapsed && (
+                  <div>
+                    <span>{userRoles?.orgId?.orgName}</span>
+                    <small>Role: {userRoles?.roleId?.roleName}</small>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -152,7 +182,7 @@ const Menu = () => {
               ))}
               <li></li>
             </>
-          ) : (
+          ) : userRoles ? (
             <>
               {navListPrivate.map((item, i) => (
                 <li key={i} title={item.title} className={styles.navItem}>
@@ -169,6 +199,16 @@ const Menu = () => {
                 </li>
               ))}
             </>
+          ) : (
+            <li title={signOutItem.title} className={styles.navItem}>
+              <MenuButton
+                to={signOutItem.to}
+                icon={signOutItem.icon}
+                title={signOutItem.title}
+                collapsed={collapsed}
+                expandMenu={expandMenu}
+              />
+            </li>
           )}
         </ul>
       </nav>
