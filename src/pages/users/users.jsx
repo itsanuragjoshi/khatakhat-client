@@ -13,18 +13,36 @@ const Users = () => {
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
 
-  const { data: userRolesByOrg } = useFetchData("/users/byOrg", { orgId }, "authZ");
+  const { data: userRolesByOrg } = useFetchData(
+    "/users/byOrg",
+    { orgId },
+    "authZ"
+  );
 
-  const renamedProps = userRolesByOrg?.map(({ userId, roleId }) => ({
+  // Define actions for each user role
+  const createActions = (userRoleId) => [
+    {
+      btnType: "button",
+      btnClass: "btnSecondary",
+      btnText: "Edit",
+      btnIcon: <EditIcon />,
+      btnClick: () => navigate(`/settings/users/${userRoleId}/edit`),
+    },
+    {
+      btnType: "button",
+      btnClass: "btnSecondary",
+      btnText: "Delete",
+      btnIcon: <DeleteIcon />,
+      btnClick: () => {},
+    },
+  ];
+
+  const formatData = userRolesByOrg?.map(({ _id, userId, roleId }) => ({
     User: userId.userName,
     Email: userId.userEmail,
     Role: roleId.roleName,
+    actions: createActions(_id),
   }));
-
-  const actionList = [
-    { to: "#", icon: <EditIcon />, title: "Edit" },
-    { to: "#", icon: <DeleteIcon />, title: "Delete" },
-  ];
 
   const buttons = [
     {
@@ -40,7 +58,7 @@ const Users = () => {
     <>
       <Header title="All Users" buttons={buttons} />
       <main className="users relative">
-        <Table data={renamedProps} actionList={actionList} />
+        <Table data={formatData} />
       </main>
     </>
   );

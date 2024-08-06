@@ -1,14 +1,16 @@
-import ActionList from "../actionList/ActionList";
+import ButtonToolbar from "../button/ButtonToolbar";
 import styles from "./table.module.css";
 
-const Table = ({ data, actionList }) => {
+const Table = ({ data }) => {
   // Handle potential errors or empty data
   if (!data || data.length === 0) {
     return <p>No data to display.</p>;
   }
 
-  // Extract property names dynamically from the first object in data
-  const propertyNames = Object.keys(data[0]);
+  // Extract property names dynamically from the first object in data, excluding 'actions'
+  const propertyNames = Object.keys(data[0]).filter(
+    (propName) => propName !== "actions"
+  );
 
   return (
     <table className={styles.table}>
@@ -31,7 +33,7 @@ const Table = ({ data, actionList }) => {
               </td>
             ))}
             <td className={styles.td}>
-              <ActionList actionList={actionList} />
+              <ButtonToolbar props={row.actions} />
             </td>
           </tr>
         ))}
