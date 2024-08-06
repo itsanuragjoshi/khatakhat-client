@@ -26,6 +26,7 @@ const OrgEdit = lazy(() => import("./pages/organizations/orgEdit.jsx"));
 
 const Users = lazy(() => import("./pages/users/users.jsx"));
 const UsersNew = lazy(() => import("./pages/users/usersNew.jsx"));
+const UsersEdit = lazy(() => import("./pages/users/usersEdit.jsx"));
 
 const Customers = lazy(() => import("./pages/customers/customers.jsx"));
 const CustomersNew = lazy(() => import("./pages/customers/customersNew.jsx"));
@@ -67,6 +68,14 @@ const userRoutes = [
     element: (
       <RequireAuthZ module="users" permission="read">
         <Users />
+      </RequireAuthZ>
+    ),
+  },
+  {
+    path: "/settings/users/:userRoleId/edit",
+    element: (
+      <RequireAuthZ module="users" permission="update">
+        <UsersEdit />
       </RequireAuthZ>
     ),
   },

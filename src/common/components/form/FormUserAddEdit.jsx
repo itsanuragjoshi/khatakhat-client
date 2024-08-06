@@ -1,20 +1,20 @@
 import styles from "./form.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonToolbar from "../button/ButtonToolbar";
 import validator from "validator";
 import VisibilityOnIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Loader from "../loader/Loader";
-import { useSelector, useDispatch } from "react-redux";
-import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 import generatePassword from "../../../utils/generatePassword";
 import useFetchData from "../../hooks/useFetchData";
 import useUsers from "../../hooks/useUsers";
+import { useSelector } from "react-redux";
 
-const FormUserAddEdit = ({ formId }) => {
-  const { createUsers } = useUsers();
-  const dispatch = useDispatch();
-  const loading = useSelector((state) => state.loading.formUserAddEdit);
+const FormUserAddEdit = ({ data, formId, method, userRoleId }) => {
+  const { createUsers, updateUsers } = useUsers();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isEditMode = method === "PUT";
 
   const initialInputValues = {
     roleName: "Staff",
@@ -34,6 +34,15 @@ const FormUserAddEdit = ({ formId }) => {
   const [errors, setErrors] = useState(initialErrorValues);
   const [showPassword, setShowPassword] = useState(false);
 
+  useEffect(() => {
+    if (data) {
+      setInput((prevInput) => ({
+        ...prevInput,
+        ...data,
+      }));
+    }
+  }, [data, formId]);
+
   const handleValidation = () => {
     const newErrors = { ...initialErrorValues };
     let isValid = true;
@@ -51,11 +60,11 @@ const FormUserAddEdit = ({ formId }) => {
         "Oh no! This doesn't look like a valid email address. Please double-check.";
     }
 
-    if (!input.userPassword) {
+    if (!input.userPassword && !isEditMode) {
       isValid = false;
       newErrors.userPassword =
         "Oops! Looks like you forgot something. The password field is required.";
-    } else if (!validator.isStrongPassword(input.userPassword)) {
+    } else if (!validator.isStrongPassword(input.userPassword) && !isEditMode) {
       isValid = false;
       newErrors.userPassword = `Uh-oh! Your password needs to be stronger. It must be at least 8 characters long and include at least 1 lowercase letter (a-z), 1 uppercase letter (A-Z), 1 digit (0-9), and 1 special character (!, %, @, #).`;
     }
@@ -81,18 +90,28 @@ const FormUserAddEdit = ({ formId }) => {
     e.preventDefault();
     if (handleValidation()) {
       const formData = new FormData();
-      Object.entries(input).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-      dispatch(startLoading("formUserAddEdit"));
-      await createUsers(
-        formData,
-        setInput,
-        setErrors,
-        initialInputValues,
-        initialErrorValues
-      );
-      dispatch(stopLoading("formUserAddEdit"));
+      // Conditionally append data based on mode
+      formData.append("roleName", input.roleName);
+      formData.append("userEmail", input.userEmail);
+      formData.append("userName", input.userName);
+
+      if (!isEditMode) {
+        formData.append("userPassword", input.userPassword);
+      }
+
+      setIsLoading(true);
+      if (method === "POST") {
+        await createUsers(
+          formData,
+          setInput,
+          setErrors,
+          initialInputValues,
+          initialErrorValues
+        );
+      } else if (method === "PUT") {
+        await updateUsers(userRoleId, formData, setErrors, initialErrorValues);
+      }
+      setIsLoading(false);
     }
   };
 
@@ -105,16 +124,19 @@ const FormUserAddEdit = ({ formId }) => {
     setInput((prevInput) => ({ ...prevInput, userPassword: password }));
   };
 
-  const { data: roles } = useFetchData("/roles", {}, "authZ");
+  const { userRoles } = useSelector((state) => state.auth);
+  const orgId = userRoles?.orgId?._id;
+
+  const { data: roles } = useFetchData("/roles", { orgId }, "authZ");
 
   const buttons = [
     {
-      btnIcon: loading ? <Loader /> : null,
+      btnIcon: isLoading ? <Loader /> : null,
       btnType: "submit",
       btnClass: "btnPrimary",
-      btnText: loading ? null : "Add User",
+      btnText: isLoading ? null : isEditMode ? "Save Changes" : "Add User",
       btnClick: handleSubmit,
-      btnDisabled: loading,
+      btnDisabled: isLoading,
     },
   ];
 
@@ -163,6 +185,7 @@ const FormUserAddEdit = ({ formId }) => {
               id="userEmail"
               onChange={handleChange}
               value={input.userEmail}
+              disabled={isEditMode}
               required
             />
             {errors.userEmail && (
@@ -183,6 +206,7 @@ const FormUserAddEdit = ({ formId }) => {
               id="userName"
               onChange={handleChange}
               value={input.userName}
+              disabled={isEditMode}
               required
             />
             {errors.userName && (
@@ -190,41 +214,43 @@ const FormUserAddEdit = ({ formId }) => {
             )}
           </div>
 
-          <div className={styles.formGroupBlock}>
-            <label htmlFor="userPassword" className={styles.required}>
-              Password
-            </label>
-            <div className={styles.formInputGroup}>
-              <span
-                data-align="right"
-                className={styles.visibilityToggle}
-                onClick={handleToggleVisibility}
+          {!isEditMode && (
+            <div className={styles.formGroupBlock}>
+              <label htmlFor="userPassword" className={styles.required}>
+                Password
+              </label>
+              <div className={styles.formInputGroup}>
+                <span
+                  data-align="right"
+                  className={styles.visibilityToggle}
+                  onClick={handleToggleVisibility}
+                >
+                  {showPassword ? <VisibilityOnIcon /> : <VisibilityOffIcon />}
+                </span>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className={`${styles.formControl} ${
+                    errors.userPassword && styles.error
+                  }`}
+                  name="userPassword"
+                  id="userPassword"
+                  onChange={handleChange}
+                  value={input.userPassword}
+                  required
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleGeneratePassword}
+                className={`btnLink ${styles.alignSelfEnd}`}
               >
-                {showPassword ? <VisibilityOnIcon /> : <VisibilityOffIcon />}
-              </span>
-              <input
-                type={showPassword ? "text" : "password"}
-                className={`${styles.formControl} ${
-                  errors.userPassword && styles.error
-                }`}
-                name="userPassword"
-                id="userPassword"
-                onChange={handleChange}
-                value={input.userPassword}
-                required
-              />
+                Generate Password
+              </button>
+              {errors.userPassword && (
+                <span className={styles.error}>{errors.userPassword}</span>
+              )}
             </div>
-            <button
-              type="button"
-              onClick={handleGeneratePassword}
-              className={`btnLink ${styles.alignSelfEnd}`}
-            >
-              Generate Password
-            </button>
-            {errors.userPassword && (
-              <span className={styles.error}>{errors.userPassword}</span>
-            )}
-          </div>
+          )}
         </fieldset>
         {buttons && <ButtonToolbar props={buttons} />}
       </form>
