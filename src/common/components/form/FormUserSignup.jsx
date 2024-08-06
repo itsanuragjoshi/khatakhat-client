@@ -7,14 +7,11 @@ import VisibilityOnIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Loader from "../../components/loader/Loader";
 import useAuth from "../../hooks/useAuth";
-import { useSelector, useDispatch } from "react-redux";
-import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 import generatePassword from "../../../utils/generatePassword";
 
 const FormUserSignup = ({ formId }) => {
   const { signup } = useAuth();
-  const dispatch = useDispatch();
-  const loading = useSelector((state) => state.loading.formUserSignUp);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialInputValues = {
     userEmail: "",
@@ -79,7 +76,7 @@ const FormUserSignup = ({ formId }) => {
       Object.entries(input).forEach(([key, value]) => {
         formData.append(key, value);
       });
-      dispatch(startLoading("formUserSignUp"));
+      setIsLoading(true);
       await signup(
         formData,
         setInput,
@@ -87,7 +84,7 @@ const FormUserSignup = ({ formId }) => {
         initialInputValues,
         initialErrorValues
       );
-      dispatch(stopLoading("formUserSignUp"));
+      setIsLoading(false);
     }
   };
 
@@ -102,12 +99,12 @@ const FormUserSignup = ({ formId }) => {
 
   const buttons = [
     {
-      btnIcon: loading ? <Loader /> : null,
+      btnIcon: isLoading ? <Loader /> : null,
       btnType: "submit",
       btnClass: "btnPrimary",
-      btnText: loading ? null : "Sign Up",
+      btnText: isLoading ? null : "Sign Up",
       btnClick: handleSubmit,
-      btnDisabled: loading,
+      btnDisabled: isLoading,
     },
   ];
 

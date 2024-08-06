@@ -7,13 +7,10 @@ import VisibilityOnIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Loader from "../loader/Loader";
 import useAuth from "../../hooks/useAuth";
-import { useSelector, useDispatch } from "react-redux";
-import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 
 const FormUserSignin = ({ formId }) => {
   const { signin } = useAuth();
-  const dispatch = useDispatch();
-  const loading = useSelector((state) => state.loading.formUserSignIn);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialInputValues = {
     userEmail: "",
@@ -71,8 +68,7 @@ const FormUserSignin = ({ formId }) => {
       Object.entries(input).forEach(([key, value]) => {
         formData.append(key, value);
       });
-
-      dispatch(startLoading("formUserSignIn"));
+      setIsLoading(true);
       await signin(
         formData,
         setInput,
@@ -80,7 +76,7 @@ const FormUserSignin = ({ formId }) => {
         initialInputValues,
         initialErrorValues
       );
-      dispatch(stopLoading("formUserSignIn"));
+      setIsLoading(false);
     }
   };
 
@@ -90,12 +86,12 @@ const FormUserSignin = ({ formId }) => {
 
   const buttons = [
     {
-      btnIcon: loading ? <Loader /> : null,
+      btnIcon: isLoading ? <Loader /> : null,
       btnType: "submit",
       btnClass: "btnPrimary",
-      btnText: loading ? null : "Sign In",
+      btnText: isLoading ? null : "Sign In",
       btnClick: handleSubmit,
-      btnDisabled: loading,
+      btnDisabled: isLoading,
     },
   ];
 

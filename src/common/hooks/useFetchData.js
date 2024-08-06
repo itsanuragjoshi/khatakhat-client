@@ -1,13 +1,9 @@
 import { useState, useEffect } from "react";
 import { axiosPublic, axiosAuthN, axiosAuthZ } from "../../api/axios";
-import { useSelector, useDispatch } from "react-redux";
-import { startLoading, stopLoading } from "../../redux/slices/loadingSlice";
 
 const useFetchData = (url, params = {}, level = "public") => {
-  const dispatch = useDispatch();
   const [data, setData] = useState([]);
-  const isLoading = useSelector((state) => state.loading.fetchData);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -28,7 +24,8 @@ const useFetchData = (url, params = {}, level = "public") => {
         default:
           axiosInstance = axiosPublic;
       }
-      dispatch(startLoading("fetchData"));
+
+      setIsLoading(true);
       setError(null); // Clear previous errors on each fetch
 
       try {
@@ -37,12 +34,12 @@ const useFetchData = (url, params = {}, level = "public") => {
       } catch (error) {
         setError(error);
       } finally {
-        dispatch(stopLoading("fetchData"));
+        setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [url, JSON.stringify(params), dispatch, level]);
+  }, [url, JSON.stringify(params), level]);
 
   return { data, isLoading, error };
 };

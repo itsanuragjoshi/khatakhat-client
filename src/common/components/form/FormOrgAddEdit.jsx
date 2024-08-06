@@ -4,13 +4,10 @@ import ButtonToolbar from "../button/ButtonToolbar";
 import useFetchData from "../../hooks/useFetchData";
 import useOrg from "../../hooks/useOrg";
 import Loader from "../loader/Loader";
-import { useSelector, useDispatch } from "react-redux";
-import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
 
 const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
   const { createOrg, updateOrg } = useOrg();
-  const dispatch = useDispatch();
-  const loading = useSelector((state) => state.loading.formOrgAddEdit);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialInputValues = {
     orgName: "",
@@ -116,8 +113,7 @@ const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
       Object.entries(input).forEach(([key, value]) => {
         formData.append(key, value);
       });
-
-      dispatch(startLoading("formOrgAddEdit"));
+      setIsLoading(true);
       if (method === "POST") {
         await createOrg(
           formData,
@@ -126,10 +122,10 @@ const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
           initialInputValues,
           initialErrorValues
         );
-        dispatch(stopLoading("formOrgAddEdit"));
+        setIsLoading(false);
       } else if (method === "PUT") {
         await updateOrg(orgId, formData, setErrors, initialErrorValues);
-        dispatch(stopLoading("formOrgAddEdit"));
+        setIsLoading(false);
       }
     }
   };
@@ -141,7 +137,7 @@ const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
 
   const { data: countries } = useFetchData("/countries", {}, "authN");
   const { data: industries } = useFetchData("/industries", {}, "authN");
-  const { data: currencies } = useFetchData("/currencies", {}, "authZ");
+  const { data: currencies } = useFetchData("/currencies", {}, "authN");
   const { data: states } = useFetchData(
     input.orgCountry ? `/states/${encodeURIComponent(input.orgCountry)}` : null,
     {},
@@ -150,12 +146,12 @@ const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
 
   const buttons = [
     {
-      btnIcon: loading ? <Loader /> : null,
+      btnIcon: isLoading ? <Loader /> : null,
       btnType: "submit",
       btnClass: "btnPrimary",
-      btnText: loading ? null : "Save",
+      btnText: isLoading ? null : "Save",
       btnClick: handleSubmit,
-      btnDisabled: loading,
+      btnDisabled: isLoading,
     },
     {
       btnType: "reset",
