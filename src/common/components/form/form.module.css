@@ -75,9 +75,19 @@
   flex: 1;
 }
 
+.formControl:disabled {
+  background: var(--color-background-light);
+  cursor: not-allowed;
+}
+
 .formControl:hover,
 .formGroup select:hover {
   border-color: var(--color-border-black);
+}
+
+.formControl:hover:disabled {
+  border-color: var(--color-border-dark);
+  box-shadow: none;
 }
 
 .formControl:focus {
@@ -156,7 +166,7 @@ span.error {
   gap: 10px;
 }
 
-.radioLabel{
+.radioLabel {
   display: flex;
   gap: 2px;
 }

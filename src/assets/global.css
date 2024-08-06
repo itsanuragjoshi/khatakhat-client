@@ -151,11 +151,6 @@ input {
   color: var(--color-font-black);
 }
 
-.actionWrapper {
-  display: flex;
-  gap: 10px;
-}
-
 menu {
   width: 200px;
   border-right: 1px solid var(--color-border-dark);
@@ -181,6 +176,7 @@ menu a.active:hover {
   align-items: center;
   justify-content: center;
   gap: 4px;
+  font-size: 1rem;
 }
 
 .btn:hover {
