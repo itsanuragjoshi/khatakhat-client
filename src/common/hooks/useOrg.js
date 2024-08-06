@@ -26,11 +26,14 @@ const useOrg = () => {
       showToast(response?.data.success, "success");
       navigate("/dashboard", { replace: true });
     } catch (error) {
-      if (error.response?.data?.errors) {
-        const backendErrors = error.response.data.errors.reduce((acc, err) => {
-          acc[err.field] = err.error;
-          return acc;
-        }, {});
+      if (error?.response?.data?.errors) {
+        const backendErrors = error?.response?.data?.errors?.reduce(
+          (acc, err) => {
+            acc[err.field] = err.error;
+            return acc;
+          },
+          {}
+        );
         setErrors(backendErrors);
       } else {
         showToast(
@@ -55,11 +58,14 @@ const useOrg = () => {
       await refreshPermissionToken();
       navigate(window.location.pathname);
     } catch (error) {
-      if (error.response?.data?.errors) {
-        const backendErrors = error.response.data.errors.reduce((acc, err) => {
-          acc[err.field] = err.error;
-          return acc;
-        }, {});
+      if (error?.response?.data?.errors) {
+        const backendErrors = error?.response?.data?.errors?.reduce(
+          (acc, err) => {
+            acc[err.field] = err.error;
+            return acc;
+          },
+          {}
+        );
         setErrors(backendErrors);
       } else {
         showToast(

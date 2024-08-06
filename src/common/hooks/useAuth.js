@@ -69,15 +69,15 @@ const useAuth = () => {
       showToast(response?.data.success, "success");
       navigate("/org/select", { replace: true });
     } catch (error) {
-      if (error.response?.data?.errors) {
-        const backendErrors = error.response.data.errors.reduce((acc, err) => {
+      if (error?.response?.data?.errors) {
+        const backendErrors = error?.response?.data?.errors?.reduce((acc, err) => {
           acc[err.field] = err.error;
           return acc;
         }, {});
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error ||
+          error?.response?.data.error ||
             "Error! Unable to sign up for your account.",
           "error"
         );
