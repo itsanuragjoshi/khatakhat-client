@@ -7,7 +7,7 @@ import Button from "../../common/components/button/Button";
 import useFetchData from "../../common/hooks/useFetchData";
 import { generatePermissionToken } from "../../utils/refreshToken";
 
-const OrgSelect = () => {
+const Org = () => {
   const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -101,4 +101,4 @@ const OrgSelect = () => {
   );
 };
 
-export default OrgSelect;
+export default Org;

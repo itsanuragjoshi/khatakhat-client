@@ -20,7 +20,7 @@ const SignIn = lazy(() => import("./pages/auth/signIn.jsx"));
 const SignUp = lazy(() => import("./pages/auth/signUp.jsx"));
 const SignOut = lazy(() => import("./pages/auth/signOut.jsx"));
 
-const OrgSelect = lazy(() => import("./pages/organizations/orgSelect.jsx"));
+const Org = lazy(() => import("./pages/organizations/org.jsx"));
 const OrgNew = lazy(() => import("./pages/organizations/orgNew.jsx"));
 const OrgEdit = lazy(() => import("./pages/organizations/orgEdit.jsx"));
 
@@ -42,7 +42,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const organizationRoutes = [
-  { path: "/org/select", element: <OrgSelect /> },
+  { path: "/org/select", element: <Org /> },
   { path: "/org/new", element: <OrgNew /> },
   {
     path: "/settings/orgprofile",
@@ -102,7 +102,7 @@ const currencyRoutes = [
 
 const customerRoutes = [
   {
-    path: "/org/:orgId/customers",
+    path: "/customers",
     element: (
       <RequireAuthZ module="customers" permission="read">
         <Customers />
@@ -110,7 +110,7 @@ const customerRoutes = [
     ),
   },
   {
-    path: "/org/:orgId/customers/new",
+    path: "/customers/new",
     element: (
       <RequireAuthZ module="customers" permission="create">
         <CustomersNew />
@@ -118,7 +118,7 @@ const customerRoutes = [
     ),
   },
   {
-    path: "/org/:orgId/customers/:customerId/edit",
+    path: "/customers/:customerId/edit",
     element: (
       <RequireAuthZ module="customers" permission="update">
         <CustomersEdit />
