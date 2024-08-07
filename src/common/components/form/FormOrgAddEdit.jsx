@@ -127,6 +127,8 @@ const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
         await updateOrg(orgId, formData, setErrors, initialErrorValues);
         setIsLoading(false);
       }
+    } else {
+      showToast("Validation failed: Invalid or missing data");
     }
   };
 

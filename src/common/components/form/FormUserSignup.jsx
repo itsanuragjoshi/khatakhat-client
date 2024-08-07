@@ -85,6 +85,8 @@ const FormUserSignup = ({ formId }) => {
         initialErrorValues
       );
       setIsLoading(false);
+    } else {
+      showToast("Validation failed: Invalid or missing data");
     }
   };
 
