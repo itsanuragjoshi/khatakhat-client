@@ -16,7 +16,7 @@ const Toast = ({ toastList }) => {
   // Render the toast messages
   return (
     <div className={styles.toastContainer}>
-      {toastList.map((toast, index) => (
+      {toastList?.map((toast, index) => (
         <div
           key={index}
           className={`${styles.toast} ${styles.show} ${styles[toast.type]}`}

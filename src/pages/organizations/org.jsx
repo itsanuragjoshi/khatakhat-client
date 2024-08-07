@@ -58,7 +58,7 @@ const Org = () => {
           </div>
 
           {hasRoles &&
-            userRoles.map((userRole) => (
+            userRoles?.map((userRole) => (
               <div className={styles.listItemWrapper} key={userRole.orgId._id}>
                 <div className={styles.listItem}>
                   <div>

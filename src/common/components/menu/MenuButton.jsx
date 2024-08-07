@@ -36,7 +36,7 @@ const MenuButton = ({
           </div>
           {open && (
             <ul className={styles.subNavList}>
-              {subNavList.map((subItem, j) => (
+              {subNavList?.map((subItem, j) => (
                 <li key={j} title={subItem.title} className={styles.subNavItem}>
                   <NavLink
                     to={subItem.to}

@@ -16,7 +16,7 @@ const Table = ({ data }) => {
     <table className={styles.table}>
       <thead className={styles.thead}>
         <tr className={styles.tr}>
-          {propertyNames.map((propName) => (
+          {propertyNames?.map((propName) => (
             <th className={styles.th} key={propName}>
               {propName}
             </th>
@@ -25,9 +25,9 @@ const Table = ({ data }) => {
         </tr>
       </thead>
       <tbody className={styles.tbody}>
-        {data.map((row, index) => (
+        {data?.map((row, index) => (
           <tr key={index} className={styles.tr}>
-            {propertyNames.map((propName) => (
+            {propertyNames?.map((propName) => (
               <td className={styles.td} key={`${propName}-${index}`}>
                 {row[propName]}
               </td>

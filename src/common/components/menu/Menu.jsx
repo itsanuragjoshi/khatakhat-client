@@ -166,7 +166,7 @@ const Menu = () => {
         <ul className={styles.navList}>
           {!accessToken ? (
             <>
-              {navListPublic.map((item, i) => (
+              {navListPublic?.map((item, i) => (
                 <li key={i} title={item.title} className={styles.navItem}>
                   <MenuButton
                     to={item.to}
@@ -184,7 +184,7 @@ const Menu = () => {
             </>
           ) : userRoles ? (
             <>
-              {navListPrivate.map((item, i) => (
+              {navListPrivate?.map((item, i) => (
                 <li key={i} title={item.title} className={styles.navItem}>
                   <MenuButton
                     to={item.to}
