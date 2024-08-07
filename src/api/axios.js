@@ -55,6 +55,7 @@ axiosAuthZ.interceptors.request.use(
     const state = store.getState();
     const accessToken = state.auth.accessToken;
     const permissionToken = state.auth.permissionToken;
+    const orgId = state.auth.userRoles?.orgId?._id;
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -62,6 +63,13 @@ axiosAuthZ.interceptors.request.use(
 
     if (permissionToken) {
       config.headers["Authorization-Role"] = `Bearer ${permissionToken}`;
+    }
+
+    if (orgId) {
+      config.params = {
+        ...config.params,
+        orgId: orgId,
+      };
     }
 
     return config;

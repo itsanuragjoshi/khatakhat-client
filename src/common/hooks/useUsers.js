@@ -1,13 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { axiosAuthZ } from "../../api/axios";
 import useToastContext from "./useToastContext";
-import { useSelector } from "react-redux";
 
 const useUsers = () => {
   const navigate = useNavigate();
-  const { userRoles } = useSelector((state) => state.auth);
-  const orgId = userRoles?.orgId?._id;
-
   const { showToast } = useToastContext();
 
   const createUsers = async (
@@ -21,9 +17,6 @@ const useUsers = () => {
       const response = await axiosAuthZ.post("/users", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-        },
-        params: {
-          orgId: orgId,
         },
       });
 
@@ -43,7 +36,7 @@ const useUsers = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error || "Error! Unable to create the user.",
+          error.response?.data.error || "Failed to create user.",
           "error"
         );
       }
@@ -60,9 +53,6 @@ const useUsers = () => {
       const response = await axiosAuthZ.put(`/users/${userRoleId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-        },
-        params: {
-          orgId: orgId,
         },
       });
 
@@ -81,7 +71,7 @@ const useUsers = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error || "Error! Unable to update the user.",
+          error.response?.data.error || "Failed to update user.",
           "error"
         );
       }
