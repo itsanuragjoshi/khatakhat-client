@@ -1,15 +1,46 @@
 import styles from "./form.module.css";
+import { useState, useEffect } from "react";
+import useFetchData from "../../hooks/useFetchData";
+import ButtonToolbar from "../button/ButtonToolbar";
 import Button from "../button/Button";
 import EmailIcon from "@mui/icons-material/EmailOutlined";
 import PhoneIcon from "@mui/icons-material/PhoneOutlined";
 import MobileIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import CopyIcon from "@mui/icons-material/ArrowDownwardOutlined";
+import useToastContext from "../../hooks/useToastContext";
+import useCustomers from "../../hooks/useCustomers";
+import Loader from "../loader/Loader";
 
-import useFetchData from "../../hooks/useFetchData";
-import { useState } from "react";
-import ButtonToolbar from "../button/ButtonToolbar";
+const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
+  const { createCustomers, updateCustomers } = useCustomers();
+  const [isLoading, setIsLoading] = useState(false);
+  const { showToast } = useToastContext();
 
-const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
+  const initialInputValues = {
+    customerType: "Business",
+    customerName: "",
+    customerDisplayName: "",
+    customerEmail: "",
+    customerWorkPhone: "",
+    customerMobile: "",
+    customerCurrency: "",
+    customerGST: "No",
+    customerGSTIN: "",
+    customerPlaceOfSupply: "",
+    customerBillingCountry: "",
+    customerBillingAddress1: "",
+    customerBillingAddress2: "",
+    customerBillingCity: "",
+    customerBillingState: "",
+    customerBillingPincode: "",
+    customerShippingCountry: "",
+    customerShippingAddress1: "",
+    customerShippingAddress2: "",
+    customerShippingCity: "",
+    customerShippingState: "",
+    customerShippingPincode: "",
+  };
+
   const initialErrorValues = {
     customerType: "",
     customerName: "",
@@ -37,6 +68,17 @@ const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
 
   const [input, setInput] = useState(initialInputValues);
   const [errors, setErrors] = useState(initialErrorValues);
+
+  useEffect(() => {
+    if (data) {
+      setInput((prevInput) => ({
+        ...prevInput,
+        ...data,
+        customerType: data.customerType || "Business",
+        customerGST: data.customerGST || "No",
+      }));
+    }
+  }, [data, formId]);
 
   const handleValidation = () => {
     const newErrors = { ...initialErrorValues };
@@ -134,18 +176,35 @@ const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
     setInput((prevInput) => ({ ...prevInput, [name]: finalValue }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (handleValidation()) {
       const formData = new FormData();
       Object.entries(input).forEach(([key, value]) => {
         formData.append(key, value);
       });
+      setIsLoading(true);
       console.log("FormData:", Object.fromEntries(formData.entries()));
-      setInput(initialInputValues);
-      setErrors(initialErrorValues);
+      if (method === "POST") {
+        await createCustomers(
+          formData,
+          setInput,
+          setErrors,
+          initialInputValues,
+          initialErrorValues
+        );
+        setIsLoading(false);
+      } else if (method === "PUT") {
+        await updateCustomers(
+          customerId,
+          formData,
+          setErrors,
+          initialErrorValues
+        );
+        setIsLoading(false);
+      }
     } else {
-      console.log("Validation failed");
+      showToast("Validation failed: Invalid or missing data");
     }
   };
 
@@ -166,40 +225,35 @@ const FormCustomersAddEdit = ({ initialInputValues, formId }) => {
     }));
   };
 
-  const { data: countries } = useFetchData(
-    `${import.meta.env.VITE_APP_API_URI}/countries`
-  );
-
-  const { data: currencies } = useFetchData(
-    `${import.meta.env.VITE_APP_API_URI}/currencies/default`
-  );
+  const { data: countries } = useFetchData("/countries", {}, "authN");
+  const { data: currencies } = useFetchData("/currencies/default", {}, "authN");
 
   const { data: billingStates } = useFetchData(
     input.customerBillingCountry
-      ? `${import.meta.env.VITE_APP_API_URI}/states/${encodeURIComponent(
-          input.customerBillingCountry
-        )}`
-      : null
+      ? `/states/${encodeURIComponent(input.customerBillingCountry)}`
+      : null,
+    {},
+    "authN"
   );
 
   const { data: shippingStates } = useFetchData(
     input.customerShippingCountry
-      ? `${import.meta.env.VITE_APP_API_URI}/states/${encodeURIComponent(
-          input.customerShippingCountry
-        )}`
-      : null
+      ? `/states/${encodeURIComponent(input.customerShippingCountry)}`
+      : null,
+    {},
+    "authN"
   );
 
-  const { data: gstStates } = useFetchData(
-    `${import.meta.env.VITE_APP_API_URI}/gstCodes`
-  );
+  const { data: gstStates } = useFetchData("/gstCodes", {}, "authN");
 
   const buttons = [
     {
+      btnIcon: isLoading ? <Loader /> : null,
       btnType: "submit",
       btnClass: "btnPrimary",
-      btnText: "Save",
+      btnText: isLoading ? null : "Save",
       btnClick: handleSubmit,
+      btnDisabled: isLoading,
     },
     {
       btnType: "reset",

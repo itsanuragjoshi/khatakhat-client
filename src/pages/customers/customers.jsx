@@ -2,44 +2,68 @@ import Header from "../../common/components/header/Header";
 import Table from "../../common/components/table/table";
 import useFetchData from "../../common/hooks/useFetchData";
 import { useNavigate } from "react-router-dom";
-
 import AddIcon from "@mui/icons-material/AddOutlined";
 import EditIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import { useSelector } from "react-redux";
 
-const Currencies = () => {
+const Customers = () => {
   const navigate = useNavigate();
-  // const { data: currencies } = useFetchData(`${import.meta.env.VITE_APP_API_URI}/currencies/default`);
+  const { userRoles } = useSelector((state) => state.auth);
+  const orgId = userRoles?.orgId?._id;
 
-  // const renamedProps = currencies?.map(({ currencyCode, currencyName, currencySymbol }) => ({
-  //     Code: currencyCode,
-  //     Name: currencyName,
-  //     Symbol: currencySymbol
-  // }));
+  const { data: customersByOrg } = useFetchData(
+    "/customers/byOrg",
+    { orgId },
+    "authZ"
+  );
 
-  // const actionList = [
-  //     { to: "#", icon: <EditIcon />, title: "Edit" },
-  //     { to: "#", icon: <DeleteIcon />, title: "Delete" },
-  // ];
+  // Define actions for each user role
+  const createActions = (customerId) => [
+    {
+      btnType: "button",
+      btnClass: "btnSecondary",
+      btnText: "Edit",
+      btnIcon: <EditIcon />,
+      btnClick: () => navigate(`/customers/${customerId}/edit`),
+    },
+    {
+      btnType: "button",
+      btnClass: "btnSecondary",
+      btnText: "Delete",
+      btnIcon: <DeleteIcon />,
+      btnClick: () => {},
+    },
+  ];
+
+  console.log(customersByOrg);
+  const formatData = customersByOrg?.map(
+    ({ _id, customerName, customerDisplayName, customerEmail }) => ({
+      Name: customerName,
+      "Display Name": customerDisplayName,
+      Email: customerEmail,
+      actions: createActions(_id),
+    })
+  );
 
   const buttons = [
     {
-      "btnType": "button",
-      "btnClass": "btnPrimary",
-      "btnText": "New Customer",
-      "btnIcon": <AddIcon />,
-      "btnClick": () => navigate("/customers/new")
-    }
+      btnType: "button",
+      btnClass: "btnPrimary",
+      btnText: "New Customer",
+      btnIcon: <AddIcon />,
+      btnClick: () => navigate("/customers/new"),
+    },
   ];
 
   return (
     <>
       <Header title="Customers" buttons={buttons} />
       <main className="customers relative">
-        {/* <Table data={renamedProps} actionList={actionList} /> */}
+        <Table data={formatData} />
       </main>
     </>
   );
 };
 
-export default Currencies;
+export default Customers;
