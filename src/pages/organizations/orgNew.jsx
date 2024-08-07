@@ -5,7 +5,7 @@ import Alert from "../../common/components/alert/Alert";
 const OrgNew = () => {
   return (
     <>
-      <Header title="Organization Profile Set Up" />
+      <Header title="New Organization" />
       <main className="orgNew">
         <Alert
           type="info"

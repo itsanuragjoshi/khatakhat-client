@@ -37,8 +37,7 @@ const useOrg = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error ||
-            "Error! Unable to create your organization.",
+          error.response?.data.error || "Failed to create organization.",
           "error"
         );
       }
@@ -69,8 +68,7 @@ const useOrg = () => {
         setErrors(backendErrors);
       } else {
         showToast(
-          error.response?.data.error ||
-            "Error! Unable to update your organization.",
+          error.response?.data.error || "Failed to update organization.",
           "error"
         );
       }
