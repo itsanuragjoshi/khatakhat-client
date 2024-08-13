@@ -5,7 +5,7 @@ const UsersNew = () => {
   return (
     <>
       <Header title="New User" />
-      <main className="usersNew">
+      <main className="userNew">
         <FormUserAddEdit data="" formId="formUserAdd" />
       </main>
     </>

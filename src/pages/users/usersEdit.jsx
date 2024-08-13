@@ -30,7 +30,7 @@ const UsersEdit = () => {
   ) : (
     <>
       <Header title="Edit User" />
-      <main className="usersEdit">
+      <main className="userEdit">
         <FormUserAddEdit
           data={userRoleInfo}
           formId="formUserEdit"

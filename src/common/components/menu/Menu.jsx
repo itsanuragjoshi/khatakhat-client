@@ -66,7 +66,7 @@ const navListPrivate = [
       },
       {
         to: "/org/select",
-        title: "Select Org",
+        title: "Select Organization",
       },
       {
         to: "/settings/currencies",

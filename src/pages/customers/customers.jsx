@@ -36,7 +36,6 @@ const Customers = () => {
     },
   ];
 
-  console.log(customersByOrg);
   const formatData = customersByOrg?.map(
     ({ _id, customerName, customerDisplayName, customerEmail }) => ({
       Name: customerName,

@@ -1,5 +1,5 @@
 import Header from "../../common/components/header/Header";
-import FormCurrenciesAddEdit from "../../common/components/form/FormCurrenciesAddEdit";
+import FormCurrencyAddEdit from "../../common/components/form/FormCurrencyAddEdit";
 
 const CurrenciesNew = () => {
   const initialInputValues = {
@@ -12,7 +12,7 @@ const CurrenciesNew = () => {
     <>
       <Header title="New Currency" />
       <main className="currenciesNew">
-        <FormCurrenciesAddEdit
+        <FormCurrencyAddEdit
           initialInputValues={initialInputValues}
           formId="formCurrenciesAdd"
         />

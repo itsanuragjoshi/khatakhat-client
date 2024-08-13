@@ -1,12 +1,12 @@
 import Header from "../../common/components/header/Header";
-import FormCustomersAddEdit from "../../common/components/form/FormCustomersAddEdit";
+import FormCustomerAddEdit from "../../common/components/form/FormCustomerAddEdit";
 
 const CustomersNew = () => {
   return (
     <>
       <Header title="New Customer" />
       <main className="customersNew">
-        <FormCustomersAddEdit data="" formId="formCustomersAdd" method="POST" />
+        <FormCustomerAddEdit data="" formId="formCustomerAdd" method="POST" />
       </main>
     </>
   );

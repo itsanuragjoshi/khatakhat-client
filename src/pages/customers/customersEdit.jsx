@@ -1,5 +1,5 @@
 import Header from "../../common/components/header/Header";
-import FormCustomersAddEdit from "../../common/components/form/FormCustomersAddEdit";
+import FormCustomerAddEdit from "../../common/components/form/FormCustomerAddEdit";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import useFetchData from "../../common/hooks/useFetchData";
@@ -23,7 +23,7 @@ const CustomersEdit = () => {
     <>
       <Header title="Edit Customer" />
       <main className="customersEdit">
-        <FormCustomersAddEdit
+        <FormCustomerAddEdit
           data={customerData}
           formId="formCustomerEdit"
           method="PUT"
