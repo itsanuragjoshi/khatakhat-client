@@ -1,0 +1,80 @@
+.table {
+  border-bottom: 1px solid var(--color-border-dark);
+  overflow-y: auto;
+  /* table-layout: fixed; */
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.thead {
+  background-color: var(--color-background-light);
+  text-transform: uppercase;
+}
+
+.tr {
+  border-bottom: 1px solid var(--color-border-dark);
+}
+
+.th {
+  padding: 5px 10px;
+  font-size: 0.875rem;
+  text-align: left;
+  border: 1px solid var(--color-border-dark);
+}
+
+.td {
+  border: 1px solid var(--color-border-dark);
+  padding: 2px;
+}
+
+.th:first-of-type,
+.td:first-of-type {
+  border-left: none;
+}
+
+.th:last-of-type,
+.td:last-of-type {
+  border-right: none;
+}
+
+.textarea {
+  resize: none;
+  overflow: hidden;
+  outline: none;
+}
+
+.input,
+.textarea,
+.text {
+  padding: 5px 10px;
+  min-height: 30px;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+}
+.select {
+  padding: 5px 10px;
+  background: var(--color-btn-secondary-background);
+  border: 1px solid var(--color-btn-secondary-border);
+  color: var(--color-font-black);
+}
+
+.input:hover,
+.textarea:hover,
+.input:focus,
+.textarea:focus {
+  outline: 1px solid var(--color-border-black);
+}
+
+.td:has(.textarea) {
+  min-width: 300px;
+}
+
+.discountContainer {
+  display: flex;
+  gap: 2px;
+}

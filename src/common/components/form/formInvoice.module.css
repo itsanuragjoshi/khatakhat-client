@@ -1,0 +1,24 @@
+.customerInfo {
+  display: flex;
+  gap: 20px;
+}
+
+h4 {
+  text-transform: uppercase;
+  padding-bottom: 10px;
+}
+
+.row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.column {
+  width: 100%;
+}
+
+fieldset.total {
+  background-color: var(--color-background-light);
+  padding: 20px;
+}

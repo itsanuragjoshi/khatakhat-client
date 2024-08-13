@@ -20,9 +20,9 @@ const SignIn = lazy(() => import("./pages/auth/signIn.jsx"));
 const SignUp = lazy(() => import("./pages/auth/signUp.jsx"));
 const SignOut = lazy(() => import("./pages/auth/signOut.jsx"));
 
-const Org = lazy(() => import("./pages/organizations/org.jsx"));
-const OrgNew = lazy(() => import("./pages/organizations/orgNew.jsx"));
-const OrgEdit = lazy(() => import("./pages/organizations/orgEdit.jsx"));
+const Organizations = lazy(() => import("./pages/organizations/organizations.jsx"));
+const OrganizationNew = lazy(() => import("./pages/organizations/organizationNew.jsx"));
+const OrganizationEdit = lazy(() => import("./pages/organizations/organizationEdit.jsx"));
 
 const Users = lazy(() => import("./pages/users/users.jsx"));
 const UsersNew = lazy(() => import("./pages/users/usersNew.jsx"));
@@ -31,6 +31,10 @@ const UsersEdit = lazy(() => import("./pages/users/usersEdit.jsx"));
 const Customers = lazy(() => import("./pages/customers/customers.jsx"));
 const CustomersNew = lazy(() => import("./pages/customers/customersNew.jsx"));
 const CustomersEdit = lazy(() => import("./pages/customers/customersEdit.jsx"));
+
+const Invoices = lazy(() => import("./pages/invoices/invoices.jsx"));
+const InvoicesNew = lazy(() => import("./pages/invoices/invoicesNew.jsx"));
+const InvoicesEdit = lazy(() => import("./pages/invoices/invoicesEdit.jsx"));
 
 const Currencies = lazy(() => import("./pages/currencies/currencies.jsx"));
 const CurrenciesNew = lazy(() =>
@@ -42,13 +46,13 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const organizationRoutes = [
-  { path: "/org/select", element: <Org /> },
-  { path: "/org/new", element: <OrgNew /> },
+  { path: "/org/select", element: <Organizations /> },
+  { path: "/org/new", element: <OrganizationNew /> },
   {
     path: "/settings/orgprofile",
     element: (
       <RequireAuthZ module="organizations" permission="read">
-        <OrgEdit />
+        <OrganizationEdit />
       </RequireAuthZ>
     ),
   },
@@ -127,6 +131,33 @@ const customerRoutes = [
   },
 ];
 
+const invoiceRoutes = [
+  {
+    path: "/invoices",
+    element: (
+      <RequireAuthZ module="invoices" permission="read">
+        <Invoices />
+      </RequireAuthZ>
+    ),
+  },
+  {
+    path: "/invoices/new",
+    element: (
+      <RequireAuthZ module="invoices" permission="create">
+        <InvoicesNew />
+      </RequireAuthZ>
+    ),
+  },
+  {
+    path: "/invoices/:customerId/edit",
+    element: (
+      <RequireAuthZ module="invoices" permission="update">
+        <InvoicesEdit />
+      </RequireAuthZ>
+    ),
+  },
+];
+
 // Combine all routes
 const router = createBrowserRouter([
   {
@@ -153,6 +184,7 @@ const router = createBrowserRouter([
           ...userRoutes,
           ...currencyRoutes,
           ...customerRoutes,
+          ...invoiceRoutes,
         ],
       },
       { path: "*", element: <Error statusCode={404} /> },
