@@ -227,26 +227,50 @@ menu a.active:hover {
   position: relative;
 }
 
-.p-20 {
+.p20 {
   padding: 20px;
 }
 
-.text-lg {
+.fontLG {
   font-size: 1.125rem;
 }
 
-.text-xl {
+.fontXL {
   font-size: 1.25rem;
 }
 
-.text-2xl {
+.font2XL {
   font-size: 1.5rem;
 }
 
-.font-bold {
+.fontBold {
   font-weight: 700;
 }
 
 input {
   accent-color: var(--color-background-black);
+}
+
+.textRight {
+  text-align: right !important;
+  justify-content: end;
+}
+
+.textCenter {
+  text-align: center !important;
+  justify-content: center;
+}
+
+hr {
+  border-top: 1px solid var(--color-border-dark);
+}
+
+input,
+textarea,
+select {
+  font-size: 1rem;
+}
+
+small {
+  font-size: 0.875rem;
 }
