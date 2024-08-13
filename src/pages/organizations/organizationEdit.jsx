@@ -4,7 +4,7 @@ import useFetchData from "../../common/hooks/useFetchData";
 import { useSelector } from "react-redux";
 import Loader from "../../common/components/loader/Loader";
 
-const OrgEdit = () => {
+const OrganizationEdit = () => {
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
 
@@ -19,10 +19,10 @@ const OrgEdit = () => {
   ) : (
     <>
       <Header title="Organization Profile" />
-      <main className="orgEdit">
+      <main className="organizationEdit">
         <FormOrgAddEdit
           data={orgData}
-          formId="formOrgEdit"
+          formId="formOrganizationEdit"
           method="PUT"
           orgId={orgId}
         />
@@ -31,4 +31,4 @@ const OrgEdit = () => {
   );
 };
 
-export default OrgEdit;
+export default OrganizationEdit;

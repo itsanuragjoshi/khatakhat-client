@@ -11,7 +11,7 @@ import useToastContext from "../../hooks/useToastContext";
 import useCustomers from "../../hooks/useCustomers";
 import Loader from "../loader/Loader";
 
-const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
+const FormCustomerAddEdit = ({ data, formId, method, customerId }) => {
   const { createCustomers, updateCustomers } = useCustomers();
   const [isLoading, setIsLoading] = useState(false);
   const { showToast } = useToastContext();
@@ -23,7 +23,11 @@ const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
     customerEmail: "",
     customerWorkPhone: "",
     customerMobile: "",
-    customerCurrency: "",
+    customerCurrency: {
+      currencyCode: "",
+      currencyName: "",
+      currencySymbol: "",
+    },
     customerGST: "No",
     customerGSTIN: "",
     customerPlaceOfSupply: "",
@@ -68,6 +72,26 @@ const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
 
   const [input, setInput] = useState(initialInputValues);
   const [errors, setErrors] = useState(initialErrorValues);
+  const { data: countries } = useFetchData("/countries", {}, "authN");
+  const { data: currencies } = useFetchData("/currencies", {}, "authN");
+
+  const { data: billingStates } = useFetchData(
+    input.customerBillingCountry
+      ? `/states/${encodeURIComponent(input.customerBillingCountry)}`
+      : null,
+    {},
+    "authN"
+  );
+
+  const { data: shippingStates } = useFetchData(
+    input.customerShippingCountry
+      ? `/states/${encodeURIComponent(input.customerShippingCountry)}`
+      : null,
+    {},
+    "authN"
+  );
+
+  const { data: gstStates } = useFetchData("/gstCodes", {}, "authN");
 
   useEffect(() => {
     if (data) {
@@ -76,6 +100,11 @@ const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
         ...data,
         customerType: data.customerType || "Business",
         customerGST: data.customerGST || "No",
+        customerCurrency: {
+          currencyCode: data.customerCurrency?.currencyCode || "",
+          currencyName: data.customerCurrency?.currencyName || "",
+          currencySymbol: data.customerCurrency?.currencySymbol || "",
+        },
       }));
     }
   }, [data, formId]);
@@ -173,7 +202,21 @@ const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
     const { name, value, type, checked } = event.target;
     const finalValue = type === "checkbox" ? checked : value;
 
-    setInput((prevInput) => ({ ...prevInput, [name]: finalValue }));
+    if (name === "customerCurrency") {
+      const selectedCurrency = currencies?.find(
+        (currency) => currency.currencyCode === value
+      );
+      setInput((prevInput) => ({
+        ...prevInput,
+        customerCurrency: {
+          currencyCode: selectedCurrency?.currencyCode,
+          currencyName: selectedCurrency?.currencyName,
+          currencySymbol: selectedCurrency?.currencySymbol,
+        },
+      }));
+    } else {
+      setInput((prevInput) => ({ ...prevInput, [name]: finalValue }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -181,10 +224,21 @@ const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
     if (handleValidation()) {
       const formData = new FormData();
       Object.entries(input).forEach(([key, value]) => {
-        formData.append(key, value);
+        if (key === "customerCurrency") {
+          formData.append(
+            "customerCurrency",
+            JSON.stringify({
+              currencyCode: input.customerCurrency.currencyCode,
+              currencyName: input.customerCurrency.currencyName,
+              currencySymbol: input.customerCurrency.currencySymbol,
+            })
+          );
+        } else {
+          formData.append(key, value);
+        }
       });
+
       setIsLoading(true);
-      console.log("FormData:", Object.fromEntries(formData.entries()));
       if (method === "POST") {
         await createCustomers(
           formData,
@@ -224,27 +278,6 @@ const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
       customerShippingPincode: prevInput.customerBillingPincode,
     }));
   };
-
-  const { data: countries } = useFetchData("/countries", {}, "authN");
-  const { data: currencies } = useFetchData("/currencies/default", {}, "authN");
-
-  const { data: billingStates } = useFetchData(
-    input.customerBillingCountry
-      ? `/states/${encodeURIComponent(input.customerBillingCountry)}`
-      : null,
-    {},
-    "authN"
-  );
-
-  const { data: shippingStates } = useFetchData(
-    input.customerShippingCountry
-      ? `/states/${encodeURIComponent(input.customerShippingCountry)}`
-      : null,
-    {},
-    "authN"
-  );
-
-  const { data: gstStates } = useFetchData("/gstCodes", {}, "authN");
 
   const buttons = [
     {
@@ -410,18 +443,24 @@ const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="customerCurrency">Currency</label>
+            <label htmlFor="customerCurrency" className={styles.required}>
+              Currency
+            </label>
             <select
               name="customerCurrency"
               id="customerCurrency"
+              className={`${styles.formControl} ${
+                errors.customerCurrency && styles.error
+              }`}
               onChange={handleChange}
-              value={input.customerCurrency}
+              value={input.customerCurrency.currencyCode}
+              required
             >
               <option value="" disabled>
                 Select Currency
               </option>
               {currencies?.map(({ currencyCode, currencyName }) => (
-                <option key={currencyCode} value={currencyName}>
+                <option key={currencyCode} value={currencyCode}>
                   {`${currencyCode} - ${currencyName}`}
                 </option>
               ))}
@@ -800,4 +839,4 @@ const FormCustomersAddEdit = ({ data, formId, method, customerId }) => {
   );
 };
 
-export default FormCustomersAddEdit;
+export default FormCustomerAddEdit;

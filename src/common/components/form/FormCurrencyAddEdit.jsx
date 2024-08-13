@@ -3,7 +3,7 @@ import useFetchData from "../../hooks/useFetchData";
 import { useState } from "react";
 import ButtonToolbar from "../button/ButtonToolbar";
 
-const FormCurrenciesAddEdit = ({ initialInputValues, formId }) => {
+const FormCurrencyAddEdit = ({ initialInputValues, formId }) => {
   const initialErrorValues = {
     currencyCode: "",
     currencyName: "",
@@ -63,11 +63,10 @@ const FormCurrenciesAddEdit = ({ initialInputValues, formId }) => {
       Object.entries(input).forEach(([key, value]) => {
         formData.append(key, value);
       });
-      console.log("FormData:", Object.fromEntries(formData.entries()));
       setInput(initialInputValues);
       setErrors(initialErrorValues);
     } else {
-      console.log("Validation failed");
+      // console.log("Validation failed");
     }
   };
 
@@ -171,4 +170,4 @@ const FormCurrenciesAddEdit = ({ initialInputValues, formId }) => {
   );
 };
 
-export default FormCurrenciesAddEdit;
+export default FormCurrencyAddEdit;
