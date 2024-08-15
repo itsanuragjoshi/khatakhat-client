@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/AddOutlined";
 import EditIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { useSelector } from "react-redux";
+import { formatDate } from "../../utils/dateUtils";
 
 const Invoices = () => {
   const navigate = useNavigate();
@@ -19,13 +20,13 @@ const Invoices = () => {
   );
 
   // Define actions for each user role
-  const createActions = (customerId) => [
+  const createActions = (invoiceId) => [
     {
       btnType: "button",
       btnClass: "btnSecondary",
       btnText: "Edit",
       btnIcon: <EditIcon />,
-      btnClick: () => navigate(`/invoices/${customerId}/edit`),
+      btnClick: () => navigate(`/invoices/${invoiceId}/edit`),
     },
     {
       btnType: "button",
@@ -37,11 +38,22 @@ const Invoices = () => {
   ];
 
   const formatData = invoicesByOrg?.map(
-    ({ _id, customerName, customerDisplayName, customerEmail }) => ({
-      Name: customerName,
-      "Display Name": customerDisplayName,
-      Email: customerEmail,
-      actions: createActions(_id),
+    ({
+      _id,
+      customerId,
+      invoiceNumber,
+      invoiceDate,
+      invoiceDueDate,
+      invoiceTotalAmount,
+      invoiceStatus,
+    }) => ({
+      Date: { value: formatDate(invoiceDate) },
+      "Invoice#": { value: invoiceNumber },
+      "Customer Name": { value: customerId.customerName },
+      Status: { value: invoiceStatus },
+      "Due Date": { value: formatDate(invoiceDueDate) },
+      Amount: { value: invoiceTotalAmount, align: "textRight" },
+      actions: { value: createActions(_id) },
     })
   );
 

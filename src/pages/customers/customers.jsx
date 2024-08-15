@@ -38,10 +38,10 @@ const Customers = () => {
 
   const formatData = customersByOrg?.map(
     ({ _id, customerName, customerDisplayName, customerEmail }) => ({
-      Name: customerName,
-      "Display Name": customerDisplayName,
-      Email: customerEmail,
-      actions: createActions(_id),
+      Name: { value: customerName },
+      "Display Name": { value: customerDisplayName },
+      Email: { value: customerEmail },
+      actions: { value: createActions(_id) },
     })
   );
 

@@ -38,10 +38,10 @@ const Users = () => {
   ];
 
   const formatData = userRolesByOrg?.map(({ _id, userId, roleId }) => ({
-    User: userId.userName,
-    Email: userId.userEmail,
-    Role: roleId.roleName,
-    actions: createActions(_id),
+    User: { value: userId.userName },
+    Email: { value: userId.userEmail },
+    Role: { value: roleId.roleName },
+    actions: { value: createActions(_id) },
   }));
 
   const buttons = [

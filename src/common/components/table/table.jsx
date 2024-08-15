@@ -17,23 +17,31 @@ const Table = ({ data }) => {
       <thead className={styles.thead}>
         <tr className={styles.tr}>
           {propertyNames?.map((propName) => (
-            <th className={styles.th} key={propName}>
+            <th
+              key={propName}
+              className={`${styles.th} ${data[0][propName]?.align || ""}`}
+            >
               {propName}
             </th>
           ))}
-          <th className={styles.th}>Actions</th>
+          <th className={`${styles.th} ${data[0].actions?.align || ""}`}>
+            Actions
+          </th>
         </tr>
       </thead>
       <tbody className={styles.tbody}>
         {data?.map((row, index) => (
           <tr key={index} className={styles.tr}>
             {propertyNames?.map((propName) => (
-              <td className={styles.td} key={`${propName}-${index}`}>
-                {row[propName]}
+              <td
+                key={`${propName}-${index}`}
+                className={`${styles.td} ${row[propName]?.align || ""}`}
+              >
+                {row[propName]?.value}
               </td>
             ))}
-            <td className={styles.td}>
-              <ButtonToolbar props={row.actions} />
+            <td className={`${styles.td} ${row.actions?.align || ""}`}>
+              <ButtonToolbar props={row.actions?.value} />
             </td>
           </tr>
         ))}
