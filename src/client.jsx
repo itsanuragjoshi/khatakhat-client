@@ -149,7 +149,7 @@ const invoiceRoutes = [
     ),
   },
   {
-    path: "/invoices/:customerId/edit",
+    path: "/invoices/:invoiceId/edit",
     element: (
       <RequireAuthZ module="invoices" permission="update">
         <InvoicesEdit />
