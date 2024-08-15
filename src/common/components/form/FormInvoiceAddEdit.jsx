@@ -161,7 +161,7 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
         setIsLoading(false);
       } else if (method === "PUT") {
         await updateInvoices(
-          customerId,
+          invoiceId,
           formData,
           setErrors,
           initialErrorValues

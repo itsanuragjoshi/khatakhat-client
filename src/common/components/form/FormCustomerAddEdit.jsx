@@ -10,9 +10,13 @@ import CopyIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import useToastContext from "../../hooks/useToastContext";
 import useCustomers from "../../hooks/useCustomers";
 import Loader from "../loader/Loader";
+import { useSelector } from "react-redux";
 
 const FormCustomerAddEdit = ({ data, formId, method, customerId }) => {
   const { createCustomers, updateCustomers } = useCustomers();
+  const { userRoles } = useSelector((state) => state.auth);
+  const orgId = userRoles?.orgId?._id;
+
   const [isLoading, setIsLoading] = useState(false);
   const { showToast } = useToastContext();
 
@@ -223,6 +227,7 @@ const FormCustomerAddEdit = ({ data, formId, method, customerId }) => {
     e.preventDefault();
     if (handleValidation()) {
       const formData = new FormData();
+      formData.append("orgId", orgId);
       Object.entries(input).forEach(([key, value]) => {
         if (key === "customerCurrency") {
           formData.append(
