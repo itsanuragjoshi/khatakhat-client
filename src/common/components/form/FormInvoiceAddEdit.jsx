@@ -8,8 +8,10 @@ import Loader from "../loader/Loader";
 import { useSelector } from "react-redux";
 import { getCurrentDate } from "../../../utils/dateUtils";
 import TableInvoice from "../table/tableInvoice";
+import useInvoices from "../../hooks/useInvoices";
 
 const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
+  const { createInvoices, updateInvoices } = useInvoices();
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
 
@@ -28,7 +30,7 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
   };
 
   const initialInputValues = {
-    customerName: "",
+    customerId: "",
     invoiceNumber: "",
     invoiceDate: getCurrentDate(),
     invoiceDueDate: getCurrentDate(),
@@ -40,15 +42,24 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
   };
 
   const initialErrorValues = {
-    customerName: "",
+    customerId: "",
     invoiceNumber: "",
   };
 
   const [input, setInput] = useState(initialInputValues);
   const [errors, setErrors] = useState(initialErrorValues);
-
-  // State to keep track of the selected customer's ID
   const [selectedCustomerId, setSelectedCustomerId] = useState("");
+
+  useEffect(() => {
+    if (data) {
+      setInput((prevInput) => ({
+        ...prevInput,
+        ...data,
+        invoiceItems: data.invoiceItems || [invoiceItemsDefault],
+      }));
+      setSelectedCustomerId(data.customerId || "");
+    }
+  }, [data, formId]);
 
   const handleItemChange = (index, field, value) => {
     const newInvoiceItems = [...input.invoiceItems];
@@ -74,10 +85,41 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
     const newErrors = { ...initialErrorValues };
     let isValid = true;
 
+    if (!input.customerId) {
+      isValid = false;
+      newErrors.customerId = "Customer selection is required.";
+    }
+
     if (!input.invoiceNumber) {
       isValid = false;
       newErrors.invoiceNumber = "Invoice Number is required.";
     }
+
+    if (!input.invoiceDate) {
+      isValid = false;
+      newErrors.invoiceDate = "Invoice Date is required.";
+    } else if (isNaN(new Date(input.invoiceDate).getTime())) {
+      isValid = false;
+      newErrors.invoiceDate = "Invalid Invoice Date.";
+    }
+
+    if (!input.invoiceDueDate) {
+      isValid = false;
+      newErrors.invoiceDueDate = "Due Date is required.";
+    } else if (isNaN(new Date(input.invoiceDueDate).getTime())) {
+      isValid = false;
+      newErrors.invoiceDueDate = "Invalid Due Date.";
+    }
+
+    input.invoiceItems.forEach((item, index) => {
+      if (!item.item) {
+        isValid = false;
+        if (!newErrors.invoiceItems) {
+          newErrors.invoiceItems = [];
+        }
+        newErrors.invoiceItems[index] = "Item is required.";
+      }
+    });
 
     setErrors(newErrors);
     return isValid;
@@ -89,14 +131,9 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
 
     setInput((prevInput) => ({ ...prevInput, [name]: finalValue }));
 
-    // If customerName is changed, update selectedCustomerId
-    if (name === "customerName") {
-      const selectedCustomer = customersByOrg.find(
-        (item) => item.customerName === value
-      );
-      if (selectedCustomer) {
-        setSelectedCustomerId(selectedCustomer._id);
-      }
+    if (name === "customerId") {
+      setInput((prevInput) => ({ ...prevInput, customerId: value }));
+      setSelectedCustomerId(value);
     }
   };
 
@@ -104,6 +141,7 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
     e.preventDefault();
     if (handleValidation()) {
       const formData = new FormData();
+      formData.append("orgId", orgId);
       Object.entries(input).forEach(([key, value]) => {
         if (key === "invoiceItems") {
           formData.append(key, JSON.stringify(value));
@@ -113,7 +151,7 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
       });
       setIsLoading(true);
       if (method === "POST") {
-        await createCustomers(
+        await createInvoices(
           formData,
           setInput,
           setErrors,
@@ -122,7 +160,7 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
         );
         setIsLoading(false);
       } else if (method === "PUT") {
-        await updateCustomers(
+        await updateInvoices(
           customerId,
           formData,
           setErrors,
@@ -147,31 +185,22 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
   );
 
   const { data: customerData } = useFetchData(
-    `/customers/${selectedCustomerId}`,
+    selectedCustomerId ? `/customers/${selectedCustomerId}` : null,
     { orgId },
     "authZ"
   );
 
   useEffect(() => {
-    if (customerData) {
-      console.log("Selected Customer Data:", customerData);
-    }
-  }, [customerData]);
-
-  useEffect(() => {
     const calculateTotals = () => {
       let sum = 0;
 
-      // Calculate the sum total of all item amounts
       input.invoiceItems.forEach((item) => {
         sum += parseFloat(item.amount) || 0;
       });
 
-      // Calculate round off
       const roundedSum = Math.round(sum);
       const roundOffValue = (roundedSum - sum).toFixed(2);
 
-      // Update the input state with calculated values
       setInput((prevInput) => ({
         ...prevInput,
         invoiceSubTotal: sum.toFixed(2),
@@ -208,30 +237,30 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
             <legend>Customer Information</legend>
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="customerName" className={styles.required}>
+            <label htmlFor="customerId" className={styles.required}>
               Customer Name
             </label>
             <select
-              name="customerName"
-              id="customerName"
+              name="customerId"
+              id="customerId"
               className={`${styles.formControl} ${
-                errors.customerName && styles.error
+                errors.customerId && styles.error
               }`}
               onChange={handleChange}
-              value={input.customerName}
+              value={input.customerId}
               required
             >
               <option value="" disabled>
                 Select a Customer
               </option>
-              {customersByOrg?.map((item, index) => (
-                <option key={index} value={item.customerName}>
+              {customersByOrg?.map((item) => (
+                <option key={item._id} value={item._id}>
                   {item.customerName}
                 </option>
               ))}
             </select>
-            {errors.customerName && (
-              <span className={styles.error}>{errors.customerName}</span>
+            {errors.customerId && (
+              <span className={styles.error}>{errors.customerId}</span>
             )}
           </div>
           {customerData?.customerName && (
