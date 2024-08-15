@@ -1,18 +1,18 @@
 import Header from "../../common/components/header/Header";
-import FormCustomerAddEdit from "../../common/components/form/FormCustomerAddEdit";
+import FormInvoice from "../../common/components/form/FormInvoice";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import useFetchData from "../../common/hooks/useFetchData";
 import Loader from "../../common/components/loader/Loader";
 
-const CustomersEdit = () => {
+const InvoiceEdit = () => {
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
 
-  const { customerId } = useParams();
+  const { invoiceId } = useParams();
 
-  const { data: customerData, isLoading } = useFetchData(
-    `/customers/${customerId}`,
+  const { data: invoiceData, isLoading } = useFetchData(
+    `/invoices/${invoiceId}`,
     { orgId },
     "authZ"
   );
@@ -21,17 +21,17 @@ const CustomersEdit = () => {
     <Loader />
   ) : (
     <>
-      <Header title="Edit Customer" />
-      <main className="customersEdit">
-        <FormCustomerAddEdit
-          data={customerData}
-          formId="formCustomerEdit"
+      <Header title="Edit Invoice" />
+      <main className="invoiceEdit">
+        <FormInvoice
+          data={invoiceData}
+          formId="formInvoiceEdit"
           method="PUT"
-          customerId={customerId}
+          invoiceId={invoiceId}
         />
       </main>
     </>
   );
 };
 
-export default CustomersEdit;
+export default InvoiceEdit;

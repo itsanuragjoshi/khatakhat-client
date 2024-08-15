@@ -1,20 +1,20 @@
 import Header from "../../common/components/header/Header";
-import FormOrgAddEdit from "../../common/components/form/FormOrgAddEdit";
+import FormOrg from "../../common/components/form/FormOrg";
 import Alert from "../../common/components/alert/Alert";
 
-const OrganizationNew = () => {
+const OrgNew = () => {
   return (
     <>
       <Header title="New Organization" />
-      <main className="organizationNew">
+      <main className="orgNew">
         <Alert
           type="info"
           message="You can change these details later in Settings, if needed."
         />
-        <FormOrgAddEdit data="" formId="formOrganizationNew" method="POST" />
+        <FormOrg data="" formId="formOrgNew" method="POST" />
       </main>
     </>
   );
 };
 
-export default OrganizationNew;
+export default OrgNew;

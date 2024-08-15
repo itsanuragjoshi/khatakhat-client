@@ -1,12 +1,12 @@
 import Header from "../../common/components/header/Header";
-import FormUserSignup from "../../common/components/form/FormUserSignup";
+import FormSignup from "../../common/components/form/FormSignup";
 
 const SignUp = () => {
   return (
     <>
       <Header title="Create your account on Khatakhat" />
-      <main className="formUserSignUp">
-        <FormUserSignup data="" formId="formUserSignUp" />
+      <main className="formSignup">
+        <FormSignup data="" formId="formSignup" />
       </main>
     </>
   );

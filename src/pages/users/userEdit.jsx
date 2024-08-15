@@ -1,11 +1,11 @@
 import Header from "../../common/components/header/Header";
-import FormUserAddEdit from "../../common/components/form/FormUserAddEdit";
+import FormUser from "../../common/components/form/FormUser";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import useFetchData from "../../common/hooks/useFetchData";
 import Loader from "../../common/components/loader/Loader";
 
-const UsersEdit = () => {
+const UserEdit = () => {
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
 
@@ -31,7 +31,7 @@ const UsersEdit = () => {
     <>
       <Header title="Edit User" />
       <main className="userEdit">
-        <FormUserAddEdit
+        <FormUser
           data={userRoleInfo}
           formId="formUserEdit"
           method="PUT"
@@ -42,4 +42,4 @@ const UsersEdit = () => {
   );
 };
 
-export default UsersEdit;
+export default UserEdit;

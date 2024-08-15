@@ -1,5 +1,5 @@
 import Header from "../../common/components/header/Header";
-import Table from "../../common/components/table/table";
+import Table from "../../common/components/table/Table";
 import useFetchData from "../../common/hooks/useFetchData";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/AddOutlined";

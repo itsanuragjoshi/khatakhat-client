@@ -7,11 +7,11 @@ import useToastContext from "../../hooks/useToastContext";
 import Loader from "../loader/Loader";
 import { useSelector } from "react-redux";
 import { getCurrentDate } from "../../../utils/dateUtils";
-import TableInvoice from "../table/tableInvoice";
-import useInvoices from "../../hooks/useInvoices";
+import TableInvoice from "../table/TableInvoice";
+import useInvoice from "../../hooks/useInvoice";
 
-const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
-  const { createInvoices, updateInvoices } = useInvoices();
+const FormInvoice = ({ data, formId, method, customerId }) => {
+  const { createInvoice, updateInvoice } = useInvoice();
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
 
@@ -151,7 +151,7 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
       });
       setIsLoading(true);
       if (method === "POST") {
-        await createInvoices(
+        await createInvoice(
           formData,
           setInput,
           setErrors,
@@ -160,7 +160,7 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
         );
         setIsLoading(false);
       } else if (method === "PUT") {
-        await updateInvoices(
+        await updateInvoice(
           invoiceId,
           formData,
           setErrors,
@@ -464,4 +464,4 @@ const FormInvoiceAddEdit = ({ data, formId, method, customerId }) => {
   );
 };
 
-export default FormInvoiceAddEdit;
+export default FormInvoice;

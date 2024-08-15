@@ -2,11 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { axiosAuthZ } from "../../api/axios";
 import useToastContext from "./useToastContext";
 
-const useInvoices = () => {
+const useInvoice = () => {
   const navigate = useNavigate();
   const { showToast } = useToastContext();
 
-  const createInvoices = async (
+  const createInvoice = async (
     formData,
     setInput,
     setErrors,
@@ -43,7 +43,7 @@ const useInvoices = () => {
     }
   };
 
-  const updateInvoices = async (
+  const updateInvoice = async (
     invoiceId,
     formData,
     setErrors,
@@ -82,7 +82,7 @@ const useInvoices = () => {
     }
   };
 
-  return { createInvoices, updateInvoices };
+  return { createInvoice, updateInvoice };
 };
 
-export default useInvoices;
+export default useInvoice;

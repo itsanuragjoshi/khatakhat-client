@@ -7,7 +7,7 @@ import Button from "../../common/components/button/Button";
 import useFetchData from "../../common/hooks/useFetchData";
 import { generatePermissionToken } from "../../utils/refreshToken";
 
-const Organizations = () => {
+const Orgs = () => {
   const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -40,7 +40,7 @@ const Organizations = () => {
   return (
     <>
       <Header title="Select an Organization" buttons={buttons} />
-      <main className="organizations">
+      <main className="orgs">
         <div className="container">
           <div className={styles.listHeader}>
             <p className="fontXL fontBold">Hi {userInfo.userName},</p>
@@ -101,4 +101,4 @@ const Organizations = () => {
   );
 };
 
-export default Organizations;
+export default Orgs;

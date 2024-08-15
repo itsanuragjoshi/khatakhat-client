@@ -2,11 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { axiosAuthZ } from "../../api/axios";
 import useToastContext from "./useToastContext";
 
-const useCustomers = () => {
+const useCustomer = () => {
   const navigate = useNavigate();
   const { showToast } = useToastContext();
 
-  const createCustomers = async (
+  const createCustomer = async (
     formData,
     setInput,
     setErrors,
@@ -43,7 +43,7 @@ const useCustomers = () => {
     }
   };
 
-  const updateCustomers = async (
+  const updateCustomer = async (
     customerId,
     formData,
     setErrors,
@@ -82,7 +82,7 @@ const useCustomers = () => {
     }
   };
 
-  return { createCustomers, updateCustomers };
+  return { createCustomer, updateCustomer };
 };
 
-export default useCustomers;
+export default useCustomer;

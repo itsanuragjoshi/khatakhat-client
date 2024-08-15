@@ -8,12 +8,12 @@ import PhoneIcon from "@mui/icons-material/PhoneOutlined";
 import MobileIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import CopyIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import useToastContext from "../../hooks/useToastContext";
-import useCustomers from "../../hooks/useCustomers";
+import useCustomer from "../../hooks/useCustomer";
 import Loader from "../loader/Loader";
 import { useSelector } from "react-redux";
 
-const FormCustomerAddEdit = ({ data, formId, method, customerId }) => {
-  const { createCustomers, updateCustomers } = useCustomers();
+const FormCustomer = ({ data, formId, method, customerId }) => {
+  const { createCustomer, updateCustomer } = useCustomer();
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
 
@@ -245,7 +245,7 @@ const FormCustomerAddEdit = ({ data, formId, method, customerId }) => {
 
       setIsLoading(true);
       if (method === "POST") {
-        await createCustomers(
+        await createCustomer(
           formData,
           setInput,
           setErrors,
@@ -254,7 +254,7 @@ const FormCustomerAddEdit = ({ data, formId, method, customerId }) => {
         );
         setIsLoading(false);
       } else if (method === "PUT") {
-        await updateCustomers(
+        await updateCustomer(
           customerId,
           formData,
           setErrors,
@@ -844,4 +844,4 @@ const FormCustomerAddEdit = ({ data, formId, method, customerId }) => {
   );
 };
 
-export default FormCustomerAddEdit;
+export default FormCustomer;

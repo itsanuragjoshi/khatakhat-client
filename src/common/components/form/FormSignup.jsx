@@ -7,19 +7,22 @@ import VisibilityOnIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Loader from "../loader/Loader";
 import useAuth from "../../hooks/useAuth";
+import generatePassword from "../../../utils/generatePassword";
 
-const FormUserSignin = ({ formId }) => {
-  const { signin } = useAuth();
+const FormSignup = ({ formId }) => {
+  const { signup } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const initialInputValues = {
     userEmail: "",
     userPassword: "",
+    userName: "",
   };
 
   const initialErrorValues = {
     userEmail: "",
     userPassword: "",
+    userName: "",
   };
 
   const [input, setInput] = useState(initialInputValues);
@@ -46,8 +49,13 @@ const FormUserSignin = ({ formId }) => {
         "Oops! Looks like you forgot something. The password field is required.";
     } else if (!validator.isStrongPassword(input.userPassword)) {
       isValid = false;
-      newErrors.userPassword =
-        "Oops! It seems your email and password are in a disagreement. Give it another shot!";
+      newErrors.userPassword = `Uh-oh! Your password needs to be stronger. It must be at least 8 characters long and include at least 1 lowercase letter (a-z), 1 uppercase letter (A-Z), 1 digit (0-9), and 1 special character (!, %, @, #).`;
+    }
+
+    if (!input.userName) {
+      isValid = false;
+      newErrors.userName =
+        "Oops! Looks like you forgot something. The name field is required.";
     }
 
     setErrors(newErrors);
@@ -69,7 +77,7 @@ const FormUserSignin = ({ formId }) => {
         formData.append(key, value);
       });
       setIsLoading(true);
-      await signin(
+      await signup(
         formData,
         setInput,
         setErrors,
@@ -86,12 +94,17 @@ const FormUserSignin = ({ formId }) => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+  const handleGeneratePassword = () => {
+    const password = generatePassword();
+    setInput((prevInput) => ({ ...prevInput, userPassword: password }));
+  };
+
   const buttons = [
     {
       btnIcon: isLoading ? <Loader /> : null,
       btnType: "submit",
       btnClass: "btnPrimary",
-      btnText: isLoading ? null : "Sign In",
+      btnText: isLoading ? null : "Sign Up",
       btnClick: handleSubmit,
       btnDisabled: isLoading,
     },
@@ -101,6 +114,26 @@ const FormUserSignin = ({ formId }) => {
     <>
       <form id={formId} className={styles.form} onSubmit={handleSubmit}>
         <fieldset className={styles.formFieldset}>
+          <div className={styles.formGroupBlock}>
+            <label htmlFor="userName" className={styles.required}>
+              Name
+            </label>
+            <input
+              type="text"
+              className={`${styles.formControl} ${
+                errors.userName && styles.error
+              }`}
+              name="userName"
+              id="userName"
+              onChange={handleChange}
+              value={input.userName}
+              required
+            />
+            {errors.userName && (
+              <span className={styles.error}>{errors.userName}</span>
+            )}
+          </div>
+
           <div className={styles.formGroupBlock}>
             <label htmlFor="userEmail" className={styles.required}>
               Email
@@ -145,6 +178,13 @@ const FormUserSignin = ({ formId }) => {
                 required
               />
             </div>
+            <button
+              type="button"
+              onClick={handleGeneratePassword}
+              className={`btnLink ${styles.alignSelfEnd}`}
+            >
+              Generate Password
+            </button>
             {errors.userPassword && (
               <span className={styles.error}>{errors.userPassword}</span>
             )}
@@ -154,13 +194,13 @@ const FormUserSignin = ({ formId }) => {
       </form>
 
       <div className={styles.signinLink}>
-        <p>Don&apos;t have a Khatakhat Account?</p>
-        <Link to="/signup" className="btnLink">
-          Sign Up
+        <p>Have a Khatakhat Account?</p>
+        <Link to="/signin" className="btnLink">
+          Sign In
         </Link>
       </div>
     </>
   );
 };
 
-export default FormUserSignin;
+export default FormSignup;

@@ -7,11 +7,11 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
 import Loader from "../loader/Loader";
 import generatePassword from "../../../utils/generatePassword";
 import useFetchData from "../../hooks/useFetchData";
-import useUsers from "../../hooks/useUsers";
+import useUser from "../../hooks/useUser";
 import { useSelector } from "react-redux";
 
-const FormUserAddEdit = ({ data, formId, method, userRoleId }) => {
-  const { createUsers, updateUsers } = useUsers();
+const FormUser = ({ data, formId, method, userRoleId }) => {
+  const { createUser, updateUser } = useUser();
   const [isLoading, setIsLoading] = useState(false);
 
   const isEditMode = method === "PUT";
@@ -101,7 +101,7 @@ const FormUserAddEdit = ({ data, formId, method, userRoleId }) => {
 
       setIsLoading(true);
       if (method === "POST") {
-        await createUsers(
+        await createUser(
           formData,
           setInput,
           setErrors,
@@ -109,7 +109,7 @@ const FormUserAddEdit = ({ data, formId, method, userRoleId }) => {
           initialErrorValues
         );
       } else if (method === "PUT") {
-        await updateUsers(userRoleId, formData, setErrors, initialErrorValues);
+        await updateUser(userRoleId, formData, setErrors, initialErrorValues);
       }
       setIsLoading(false);
     } else {
@@ -260,4 +260,4 @@ const FormUserAddEdit = ({ data, formId, method, userRoleId }) => {
   );
 };
 
-export default FormUserAddEdit;
+export default FormUser;

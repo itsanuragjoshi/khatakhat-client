@@ -5,7 +5,7 @@ import useFetchData from "../../hooks/useFetchData";
 import useOrg from "../../hooks/useOrg";
 import Loader from "../loader/Loader";
 
-const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
+const FormOrg = ({ data, formId, method, orgId }) => {
   const { createOrg, updateOrg } = useOrg();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -398,4 +398,4 @@ const FormOrgAddEdit = ({ data, formId, method, orgId }) => {
   );
 };
 
-export default FormOrgAddEdit;
+export default FormOrg;

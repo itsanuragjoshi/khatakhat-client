@@ -20,21 +20,21 @@ const SignIn = lazy(() => import("./pages/auth/signIn.jsx"));
 const SignUp = lazy(() => import("./pages/auth/signUp.jsx"));
 const SignOut = lazy(() => import("./pages/auth/signOut.jsx"));
 
-const Organizations = lazy(() => import("./pages/organizations/organizations.jsx"));
-const OrganizationNew = lazy(() => import("./pages/organizations/organizationNew.jsx"));
-const OrganizationEdit = lazy(() => import("./pages/organizations/organizationEdit.jsx"));
+const Orgs = lazy(() => import("./pages/organizations/orgs.jsx"));
+const OrgNew = lazy(() => import("./pages/organizations/orgNew.jsx"));
+const OrgEdit = lazy(() => import("./pages/organizations/orgEdit.jsx"));
 
 const Users = lazy(() => import("./pages/users/users.jsx"));
-const UsersNew = lazy(() => import("./pages/users/usersNew.jsx"));
-const UsersEdit = lazy(() => import("./pages/users/usersEdit.jsx"));
+const UserNew = lazy(() => import("./pages/users/userNew.jsx"));
+const UserEdit = lazy(() => import("./pages/users/userEdit.jsx"));
 
 const Customers = lazy(() => import("./pages/customers/customers.jsx"));
-const CustomersNew = lazy(() => import("./pages/customers/customersNew.jsx"));
-const CustomersEdit = lazy(() => import("./pages/customers/customersEdit.jsx"));
+const CustomerNew = lazy(() => import("./pages/customers/customerNew.jsx"));
+const CustomerEdit = lazy(() => import("./pages/customers/customerEdit.jsx"));
 
 const Invoices = lazy(() => import("./pages/invoices/invoices.jsx"));
-const InvoicesNew = lazy(() => import("./pages/invoices/invoicesNew.jsx"));
-const InvoicesEdit = lazy(() => import("./pages/invoices/invoicesEdit.jsx"));
+const InvoiceNew = lazy(() => import("./pages/invoices/invoiceNew.jsx"));
+const InvoiceEdit = lazy(() => import("./pages/invoices/invoiceEdit.jsx"));
 
 const Currencies = lazy(() => import("./pages/currencies/currencies.jsx"));
 const CurrenciesNew = lazy(() =>
@@ -46,13 +46,13 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const organizationRoutes = [
-  { path: "/org/select", element: <Organizations /> },
-  { path: "/org/new", element: <OrganizationNew /> },
+  { path: "/org/select", element: <Orgs /> },
+  { path: "/org/new", element: <OrgNew /> },
   {
     path: "/settings/orgprofile",
     element: (
       <RequireAuthZ module="organizations" permission="read">
-        <OrganizationEdit />
+        <OrgEdit />
       </RequireAuthZ>
     ),
   },
@@ -63,7 +63,7 @@ const userRoutes = [
     path: "/settings/users/new",
     element: (
       <RequireAuthZ module="users" permission="create">
-        <UsersNew />
+        <UserNew />
       </RequireAuthZ>
     ),
   },
@@ -79,7 +79,7 @@ const userRoutes = [
     path: "/settings/users/:userRoleId/edit",
     element: (
       <RequireAuthZ module="users" permission="update">
-        <UsersEdit />
+        <UserEdit />
       </RequireAuthZ>
     ),
   },
@@ -117,7 +117,7 @@ const customerRoutes = [
     path: "/customers/new",
     element: (
       <RequireAuthZ module="customers" permission="create">
-        <CustomersNew />
+        <CustomerNew />
       </RequireAuthZ>
     ),
   },
@@ -125,7 +125,7 @@ const customerRoutes = [
     path: "/customers/:customerId/edit",
     element: (
       <RequireAuthZ module="customers" permission="update">
-        <CustomersEdit />
+        <CustomerEdit />
       </RequireAuthZ>
     ),
   },
@@ -144,7 +144,7 @@ const invoiceRoutes = [
     path: "/invoices/new",
     element: (
       <RequireAuthZ module="invoices" permission="create">
-        <InvoicesNew />
+        <InvoiceNew />
       </RequireAuthZ>
     ),
   },
@@ -152,7 +152,7 @@ const invoiceRoutes = [
     path: "/invoices/:invoiceId/edit",
     element: (
       <RequireAuthZ module="invoices" permission="update">
-        <InvoicesEdit />
+        <InvoiceEdit />
       </RequireAuthZ>
     ),
   },
