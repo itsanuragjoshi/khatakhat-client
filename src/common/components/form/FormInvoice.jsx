@@ -9,8 +9,10 @@ import { useSelector } from "react-redux";
 import { getCurrentDate } from "../../../utils/dateUtils";
 import TableInvoice from "../table/TableInvoice";
 import useInvoice from "../../hooks/useInvoice";
+import { useNavigate } from "react-router-dom";
 
 const FormInvoice = ({ data, formId, method, customerId }) => {
+  const navigate = useNavigate();
   const { createInvoice, updateInvoice } = useInvoice();
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
@@ -159,14 +161,11 @@ const FormInvoice = ({ data, formId, method, customerId }) => {
           initialErrorValues
         );
         setIsLoading(false);
+        navigate("/invoices", { replace: true });
       } else if (method === "PUT") {
-        await updateInvoice(
-          invoiceId,
-          formData,
-          setErrors,
-          initialErrorValues
-        );
+        await updateInvoice(invoiceId, formData, setErrors, initialErrorValues);
         setIsLoading(false);
+        navigate("/invoices", { replace: true });
       }
     } else {
       showToast("Validation failed: Invalid or missing data");
@@ -176,6 +175,7 @@ const FormInvoice = ({ data, formId, method, customerId }) => {
   const handleReset = () => {
     setInput(initialInputValues);
     setErrors(initialErrorValues);
+    navigate(-1);
   };
 
   const { data: customersByOrg } = useFetchData(

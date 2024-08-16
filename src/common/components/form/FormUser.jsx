@@ -9,8 +9,10 @@ import generatePassword from "../../../utils/generatePassword";
 import useFetchData from "../../hooks/useFetchData";
 import useUser from "../../hooks/useUser";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const FormUser = ({ data, formId, method, userRoleId }) => {
+  const navigate = useNavigate();
   const { createUser, updateUser } = useUser();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -100,6 +102,7 @@ const FormUser = ({ data, formId, method, userRoleId }) => {
       }
 
       setIsLoading(true);
+      navigate("/settings/users", { replace: true });
       if (method === "POST") {
         await createUser(
           formData,
@@ -112,9 +115,16 @@ const FormUser = ({ data, formId, method, userRoleId }) => {
         await updateUser(userRoleId, formData, setErrors, initialErrorValues);
       }
       setIsLoading(false);
+      navigate("/settings/users", { replace: true });
     } else {
       showToast("Validation failed: Invalid or missing data");
     }
+  };
+
+  const handleReset = () => {
+    setInput(initialInputValues);
+    setErrors(initialErrorValues);
+    navigate(-1);
   };
 
   const handleToggleVisibility = () => {
@@ -136,9 +146,15 @@ const FormUser = ({ data, formId, method, userRoleId }) => {
       btnIcon: isLoading ? <Loader /> : null,
       btnType: "submit",
       btnClass: "btnPrimary",
-      btnText: isLoading ? null : isEditMode ? "Save Changes" : "Add User",
+      btnText: isLoading ? null : "Save",
       btnClick: handleSubmit,
       btnDisabled: isLoading,
+    },
+    {
+      btnType: "reset",
+      btnClass: "btnSecondary",
+      btnText: "Cancel",
+      btnClick: handleReset,
     },
   ];
 

@@ -1,9 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import { axiosAuthZ } from "../../api/axios";
 import useToastContext from "./useToastContext";
 
 const useUser = () => {
-  const navigate = useNavigate();
   const { showToast } = useToastContext();
 
   const createUser = async (
@@ -23,7 +21,6 @@ const useUser = () => {
       setInput(initialInputValues);
       setErrors(initialErrorValues);
       showToast(response?.data.success, "success");
-      navigate("/settings/users", { replace: true });
     } catch (error) {
       if (error?.response?.data?.errors) {
         const backendErrors = error?.response?.data?.errors?.reduce(
@@ -58,7 +55,6 @@ const useUser = () => {
 
       setErrors(initialErrorValues);
       showToast(response?.data?.success, "success");
-      navigate("/settings/users", { replace: true });
     } catch (error) {
       if (error?.response?.data?.errors) {
         const backendErrors = error?.response?.data?.errors?.reduce(

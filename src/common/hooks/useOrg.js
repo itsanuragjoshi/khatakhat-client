@@ -1,10 +1,8 @@
-import { useNavigate } from "react-router-dom";
 import { axiosAuthN, axiosAuthZ } from "../../api/axios";
 import useToastContext from "./useToastContext";
 import { refreshPermissionToken } from "../../utils/refreshToken";
 
 const useOrg = () => {
-  const navigate = useNavigate();
   const { showToast } = useToastContext();
 
   const createOrg = async (
@@ -24,7 +22,6 @@ const useOrg = () => {
       setInput(initialInputValues);
       setErrors(initialErrorValues);
       showToast(response?.data.success, "success");
-      navigate("/dashboard", { replace: true });
     } catch (error) {
       if (error?.response?.data?.errors) {
         const backendErrors = error?.response?.data?.errors?.reduce(
@@ -55,7 +52,6 @@ const useOrg = () => {
       setErrors(initialErrorValues);
       showToast(response?.data.success, "success");
       await refreshPermissionToken();
-      navigate(window.location.pathname);
     } catch (error) {
       if (error?.response?.data?.errors) {
         const backendErrors = error?.response?.data?.errors?.reduce(

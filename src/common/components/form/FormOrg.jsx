@@ -4,8 +4,10 @@ import ButtonToolbar from "../button/ButtonToolbar";
 import useFetchData from "../../hooks/useFetchData";
 import useOrg from "../../hooks/useOrg";
 import Loader from "../loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const FormOrg = ({ data, formId, method, orgId }) => {
+  const navigate = useNavigate();
   const { createOrg, updateOrg } = useOrg();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -123,9 +125,11 @@ const FormOrg = ({ data, formId, method, orgId }) => {
           initialErrorValues
         );
         setIsLoading(false);
+        navigate("/dashboard", { replace: true });
       } else if (method === "PUT") {
         await updateOrg(orgId, formData, setErrors, initialErrorValues);
         setIsLoading(false);
+        navigate(window.location.pathname);
       }
     } else {
       showToast("Validation failed: Invalid or missing data");
@@ -135,6 +139,7 @@ const FormOrg = ({ data, formId, method, orgId }) => {
   const handleReset = () => {
     setInput(initialInputValues);
     setErrors(initialErrorValues);
+    navigate(-1);
   };
 
   const { data: countries } = useFetchData("/countries", {}, "authN");

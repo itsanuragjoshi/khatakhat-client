@@ -11,8 +11,10 @@ import useToastContext from "../../hooks/useToastContext";
 import useCustomer from "../../hooks/useCustomer";
 import Loader from "../loader/Loader";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const FormCustomer = ({ data, formId, method, customerId }) => {
+  const navigate = useNavigate();
   const { createCustomer, updateCustomer } = useCustomer();
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
@@ -253,6 +255,7 @@ const FormCustomer = ({ data, formId, method, customerId }) => {
           initialErrorValues
         );
         setIsLoading(false);
+        navigate("/customers", { replace: true });
       } else if (method === "PUT") {
         await updateCustomer(
           customerId,
@@ -261,6 +264,7 @@ const FormCustomer = ({ data, formId, method, customerId }) => {
           initialErrorValues
         );
         setIsLoading(false);
+        navigate("/customers", { replace: true });
       }
     } else {
       showToast("Validation failed: Invalid or missing data");
@@ -270,6 +274,7 @@ const FormCustomer = ({ data, formId, method, customerId }) => {
   const handleReset = () => {
     setInput(initialInputValues);
     setErrors(initialErrorValues);
+    navigate(-1);
   };
 
   const copyBillingToShipping = () => {
