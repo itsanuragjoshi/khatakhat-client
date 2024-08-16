@@ -11,7 +11,7 @@ import TableInvoice from "../table/TableInvoice";
 import useInvoice from "../../hooks/useInvoice";
 import { useNavigate } from "react-router-dom";
 
-const FormInvoice = ({ data, formId, method, customerId }) => {
+const FormInvoice = ({ data, formId, method, invoiceId }) => {
   const navigate = useNavigate();
   const { createInvoice, updateInvoice } = useInvoice();
   const { userRoles } = useSelector((state) => state.auth);
