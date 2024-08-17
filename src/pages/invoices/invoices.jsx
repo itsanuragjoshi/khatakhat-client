@@ -1,15 +1,19 @@
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import useFetchData from "../../common/hooks/useFetchData";
+import useDelete from "../../common/hooks/useDelete";
+
 import Header from "../../common/components/header/Header";
 import Table from "../../common/components/table/Table";
-import useFetchData from "../../common/hooks/useFetchData";
-import { useNavigate } from "react-router-dom";
+import ConfirmDelete from "../../common/components/confirmDelete/ConfirmDelete";
+import Loader from "../../common/components/loader/Loader";
+
+import { formatDate } from "../../utils/dateUtils";
+
 import AddIcon from "@mui/icons-material/AddOutlined";
 import EditIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import { useSelector } from "react-redux";
-import { formatDate } from "../../utils/dateUtils";
-import useDelete from "../../common/hooks/useDelete";
-import ConfirmDelete from "../../common/components/confirmDelete/ConfirmDelete";
-import Loader from "../../common/components/loader/Loader";
 
 const Invoices = () => {
   const navigate = useNavigate();
@@ -25,7 +29,6 @@ const Invoices = () => {
   const { showConfirmDelete, hideConfirmDelete, handleDelete, isModal } =
     useDelete("invoices", refetch);
 
-  // Define actions for each user role
   const createActions = (invoiceId) => [
     {
       btnType: "button",

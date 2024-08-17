@@ -1,15 +1,20 @@
 import styles from "./form.module.css";
+
 import { useEffect, useState } from "react";
-import ButtonToolbar from "../button/ButtonToolbar";
-import validator from "validator";
-import VisibilityOnIcon from "@mui/icons-material/VisibilityOutlined";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
-import Loader from "../loader/Loader";
-import generatePassword from "../../../utils/generatePassword";
-import useFetchData from "../../hooks/useFetchData";
-import useUser from "../../hooks/useUser";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import validator from "validator";
+
+import useFetchData from "../../hooks/useFetchData";
+import useUser from "../../hooks/useUser";
+
+import ButtonToolbar from "../button/ButtonToolbar";
+import Loader from "../loader/Loader";
+
+import VisibilityOnIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOffOutlined";
+
+import generatePassword from "../../../utils/generatePassword";
 
 const FormUser = ({ data, formId, method, userRoleId }) => {
   const navigate = useNavigate();
@@ -92,7 +97,6 @@ const FormUser = ({ data, formId, method, userRoleId }) => {
     e.preventDefault();
     if (handleValidation()) {
       const formData = new FormData();
-      // Conditionally append data based on mode
       formData.append("roleName", input.roleName);
       formData.append("userEmail", input.userEmail);
       formData.append("userName", input.userName);

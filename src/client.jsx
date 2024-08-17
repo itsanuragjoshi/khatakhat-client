@@ -1,41 +1,35 @@
 import "./assets/global.css";
+
 import React, { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import store from "./redux/store.js";
-
-import { ToastProvider } from "./common/context/ToastContext.jsx";
-import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
+import store from "./redux/store.js";
+import { ToastProvider } from "./common/context/ToastContext.jsx";
 
-import Layout from "./Layout.jsx";
-import Error from "./pages/error/error.jsx";
 import PersistAuth from "./common/components/wrapper/PersistAuth.jsx";
 import RequireAuthN from "./common/components/wrapper/RequireAuthN.jsx";
 import RequireAuthZ from "./common/components/wrapper/RequireAuthZ.jsx";
 import RedirectIfAuthenticated from "./common/components/wrapper/RedirectIfAuthenticated.jsx";
+import Layout from "./Layout.jsx";
+import Error from "./pages/error/error.jsx";
 
-// Lazy-loaded components
 const SignIn = lazy(() => import("./pages/auth/signIn.jsx"));
 const SignUp = lazy(() => import("./pages/auth/signUp.jsx"));
 const SignOut = lazy(() => import("./pages/auth/signOut.jsx"));
-
 const Orgs = lazy(() => import("./pages/organizations/orgs.jsx"));
 const OrgNew = lazy(() => import("./pages/organizations/orgNew.jsx"));
 const OrgEdit = lazy(() => import("./pages/organizations/orgEdit.jsx"));
-
 const Users = lazy(() => import("./pages/users/users.jsx"));
 const UserNew = lazy(() => import("./pages/users/userNew.jsx"));
 const UserEdit = lazy(() => import("./pages/users/userEdit.jsx"));
-
 const Customers = lazy(() => import("./pages/customers/customers.jsx"));
 const CustomerNew = lazy(() => import("./pages/customers/customerNew.jsx"));
 const CustomerEdit = lazy(() => import("./pages/customers/customerEdit.jsx"));
-
 const Invoices = lazy(() => import("./pages/invoices/invoices.jsx"));
 const InvoiceNew = lazy(() => import("./pages/invoices/invoiceNew.jsx"));
 const InvoiceEdit = lazy(() => import("./pages/invoices/invoiceEdit.jsx"));
-
 const Currencies = lazy(() => import("./pages/currencies/currencies.jsx"));
 const CurrenciesNew = lazy(() =>
   import("./pages/currencies/currenciesNew.jsx")
@@ -158,7 +152,6 @@ const invoiceRoutes = [
   },
 ];
 
-// Combine all routes
 const router = createBrowserRouter([
   {
     path: "/",

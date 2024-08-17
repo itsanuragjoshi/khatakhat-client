@@ -1,6 +1,8 @@
-import Modal from "../modal/Modal";
 import styles from "./confirmDelete.module.css";
+
+import Modal from "../modal/Modal";
 import ButtonToolbar from "../button/ButtonToolbar";
+
 import WarningIcon from "@mui/icons-material/WarningOutlined";
 
 const ConfirmDelete = ({ message, onDelete, onCancel }) => {
@@ -23,7 +25,9 @@ const ConfirmDelete = ({ message, onDelete, onCancel }) => {
     <Modal onClose={onCancel}>
       <div className={styles.confirmDelete}>
         <div className={styles.message}>
-          <span className={styles.icon}><WarningIcon /></span>
+          <span className={styles.icon}>
+            <WarningIcon />
+          </span>
           <span>{message}</span>
         </div>
         {buttons && <ButtonToolbar props={buttons} />}

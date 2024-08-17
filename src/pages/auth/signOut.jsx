@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import useAuth from "../../common/hooks/useAuth";
 
 const SignOut = () => {

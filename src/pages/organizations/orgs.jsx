@@ -1,11 +1,16 @@
-import Header from "../../common/components/header/Header";
+import styles from "./org.module.css";
+
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import AddIcon from "@mui/icons-material/AddOutlined";
-import styles from "./org.module.css";
-import Button from "../../common/components/button/Button";
+
 import useFetchData from "../../common/hooks/useFetchData";
+
+import Header from "../../common/components/header/Header";
+import Button from "../../common/components/button/Button";
+
 import { generatePermissionToken } from "../../utils/refreshToken";
+
+import AddIcon from "@mui/icons-material/AddOutlined";
 
 const Orgs = () => {
   const navigate = useNavigate();
@@ -62,9 +67,7 @@ const Orgs = () => {
               <div className={styles.listItemWrapper} key={userRole.orgId._id}>
                 <div className={styles.listItem}>
                   <div>
-                    <p className="fontXL fontBold">
-                      {userRole.orgId.orgName}
-                    </p>
+                    <p className="fontXL fontBold">{userRole.orgId.orgName}</p>
                     <p>Your Role: {userRole.roleId.roleName}</p>
                   </div>
                   <div className="btnToolbar">

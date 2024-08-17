@@ -1,6 +1,9 @@
-import { useEffect } from "react";
 import styles from "./tableInvoice.module.css";
+
+import { useEffect } from "react";
+
 import Button from "../button/Button";
+
 import AddIcon from "@mui/icons-material/AddOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
@@ -12,13 +15,11 @@ const TableInvoice = ({
   deleteItemRow,
   currencyCode,
 }) => {
-  // Function to adjust the height of the textarea
   const adjustTextareaHeight = (textarea) => {
-    textarea.style.height = "auto"; // Reset height
-    textarea.style.height = `${textarea.scrollHeight}px`; // Set to scroll height
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
   };
 
-  // Calculate amount based on quantity, rate, discount, and tax
   const calculateAmount = (quantity, rate, discount, discountType, tax) => {
     let qty = parseFloat(quantity) || 1;
     let rt = parseFloat(rate) || 0;
@@ -32,13 +33,11 @@ const TableInvoice = ({
       amount -= dsc;
     }
 
-    // Add tax
     amount += (amount * tx) / 100;
 
-    return amount.toFixed(2); // Return formatted amount
+    return amount.toFixed(2);
   };
 
-  // Function to update the amount when necessary fields change
   const updateAmount = (index) => {
     const item = invoiceItems[index];
     const newAmount = calculateAmount(
@@ -51,7 +50,6 @@ const TableInvoice = ({
     handleItemChange(index, "amount", newAmount);
   };
 
-  // Hook to adjust height on initial render
   useEffect(() => {
     invoiceItems.forEach((item, index) => {
       const textarea = document.getElementById(`item-textarea-${index}`);
@@ -81,14 +79,14 @@ const TableInvoice = ({
             <tr key={index} className={styles.tr}>
               <td className={styles.td}>
                 <textarea
-                  id={`item-textarea-${index}`} // Unique ID for each textarea
+                  id={`item-textarea-${index}`}
                   className={styles.textarea}
                   value={item.item}
                   onChange={(e) => {
                     handleItemChange(index, "item", e.target.value);
-                    adjustTextareaHeight(e.target); // Adjust height on change
+                    adjustTextareaHeight(e.target);
                   }}
-                  rows={1} // Set initial row size
+                  rows={1}
                 />
               </td>
               <td className={styles.td}>

@@ -1,4 +1,5 @@
 import styles from "./alert.module.css";
+
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 
 const InfoMessage = ({ type, message }) => {

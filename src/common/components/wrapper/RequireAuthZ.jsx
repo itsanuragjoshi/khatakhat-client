@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+
 import Loader from "../loader/Loader";
 
 const RequireAuthZ = ({ children, module, permission }) => {
   const { userRoles } = useSelector((state) => state.auth);
   const isLoading = useSelector((state) => state.loading.persistAuth);
 
-  // Check if userRoles contains an error
   if (userRoles?.error) {
     return <Navigate to="/error403" />;
   }

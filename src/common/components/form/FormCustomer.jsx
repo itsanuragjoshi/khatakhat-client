@@ -1,17 +1,21 @@
 import styles from "./form.module.css";
+
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import useFetchData from "../../hooks/useFetchData";
+import useToastContext from "../../hooks/useToastContext";
+import useCustomer from "../../hooks/useCustomer";
+
 import ButtonToolbar from "../button/ButtonToolbar";
 import Button from "../button/Button";
+import Loader from "../loader/Loader";
+
 import EmailIcon from "@mui/icons-material/EmailOutlined";
 import PhoneIcon from "@mui/icons-material/PhoneOutlined";
 import MobileIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import CopyIcon from "@mui/icons-material/ArrowDownwardOutlined";
-import useToastContext from "../../hooks/useToastContext";
-import useCustomer from "../../hooks/useCustomer";
-import Loader from "../loader/Loader";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 const FormCustomer = ({ data, formId, method, customerId }) => {
   const navigate = useNavigate();
@@ -513,6 +517,7 @@ const FormCustomer = ({ data, formId, method, customerId }) => {
               <span className={styles.error}>{errors.customerGST}</span>
             )}
           </div>
+          
           {/* Conditionally render GSTIN/UIN and Place of Supply inputs */}
           {input.customerGST === "Yes" && ( // Hide when 'No' is selected
             <>

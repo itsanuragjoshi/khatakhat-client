@@ -1,4 +1,11 @@
 import styles from "./menu.module.css";
+
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import MenuButton from "./MenuButton";
+
 import Logo from "@mui/icons-material/AccountBalanceWalletOutlined";
 import DashboardIcon from "@mui/icons-material/HomeOutlined";
 import SettingsIcon from "@mui/icons-material/SettingsOutlined";
@@ -10,11 +17,6 @@ import SignupIcon from "@mui/icons-material/HowToRegOutlined";
 import SignoutIcon from "@mui/icons-material/LogoutOutlined";
 import AccountIcon from "@mui/icons-material/AccountCircleOutlined";
 import OrgIcon from "@mui/icons-material/BusinessOutlined";
-
-import MenuButton from "./MenuButton";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const navListPublic = [
   {
@@ -95,7 +97,6 @@ const Menu = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [openSubNavIndex, setOpenSubNavIndex] = useState(null);
 
-  // Redux state selector
   const { accessToken, userInfo, userRoles } = useSelector(
     (state) => state.auth
   );

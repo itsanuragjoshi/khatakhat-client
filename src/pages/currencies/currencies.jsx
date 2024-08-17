@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
+import useFetchData from "../../common/hooks/useFetchData";
+
 import Header from "../../common/components/header/Header";
 import Table from "../../common/components/table/Table";
-import useFetchData from "../../common/hooks/useFetchData";
-import { useNavigate } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/AddOutlined";
 import EditIcon from "@mui/icons-material/EditOutlined";

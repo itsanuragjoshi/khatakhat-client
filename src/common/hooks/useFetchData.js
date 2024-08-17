@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { axiosPublic, axiosAuthN, axiosAuthZ } from "../../api/axios";
 
 const useFetchData = (url, params = {}, level = "public") => {
-  const [data, setData] = useState(null); // Initialize based on expected data type
+  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 

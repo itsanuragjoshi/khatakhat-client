@@ -1,12 +1,14 @@
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import useFetchData from "../../common/hooks/useFetchData";
+
 import Header from "../../common/components/header/Header";
 import Table from "../../common/components/table/Table";
-import useFetchData from "../../common/hooks/useFetchData";
-import { useNavigate } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/AddOutlined";
 import EditIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import { useSelector } from "react-redux";
 
 const Users = () => {
   const navigate = useNavigate();
@@ -19,7 +21,6 @@ const Users = () => {
     "authZ"
   );
 
-  // Define actions for each user role
   const createActions = (userRoleId) => [
     {
       btnType: "button",

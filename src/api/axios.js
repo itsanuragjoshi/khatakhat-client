@@ -11,28 +11,23 @@ import {
   axiosAuthZ - for requests requiring both authentication and authorization (access token and permission token)
 */
 
-// Define the base URL for the API
 const BASE_URL = import.meta.env.VITE_APP_API_URI;
 
-// Create the public Axios instance
 const axiosPublic = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
 });
 
-// Create the authentication Axios instance
 const axiosAuthN = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
 });
 
-// Create the authorization Axios instance
 const axiosAuthZ = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
 });
 
-// Request interceptor for authentication Axios instance
 axiosAuthN.interceptors.request.use(
   (config) => {
     const state = store.getState();
@@ -49,7 +44,6 @@ axiosAuthN.interceptors.request.use(
   }
 );
 
-// Request interceptor for authorization Axios instance
 axiosAuthZ.interceptors.request.use(
   (config) => {
     const state = store.getState();
@@ -79,7 +73,6 @@ axiosAuthZ.interceptors.request.use(
   }
 );
 
-// Response interceptor for authentication Axios instance
 axiosAuthN.interceptors.response.use(
   (response) => {
     return response;
@@ -91,7 +84,6 @@ axiosAuthN.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // Refresh access token
         await refreshAccessToken();
         const state = store.getState();
         const newAccessToken = state.auth.accessToken;
@@ -106,7 +98,6 @@ axiosAuthN.interceptors.response.use(
   }
 );
 
-// Response interceptor for authorization Axios instance
 axiosAuthZ.interceptors.response.use(
   (response) => {
     return response;
@@ -118,13 +109,11 @@ axiosAuthZ.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // Refresh access token
         await refreshAccessToken();
         const state = store.getState();
         const newAccessToken = state.auth.accessToken;
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-        // Refresh permission token
         await refreshPermissionToken();
         const newPermissionToken = state.auth.permissionToken;
         originalRequest.headers[

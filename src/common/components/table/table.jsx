@@ -1,8 +1,8 @@
-import ButtonToolbar from "../button/ButtonToolbar";
 import styles from "./table.module.css";
 
+import ButtonToolbar from "../button/ButtonToolbar";
+
 const Table = ({ data }) => {
-  // Handle potential errors or empty data
   if (!data || data.length === 0) {
     return <p className="container">No data to display.</p>;
   }

@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../../../redux/slices/loadingSlice";
+
+import Loader from "../loader/Loader";
+
 import {
   refreshAccessToken,
   refreshPermissionToken,
 } from "../../../utils/refreshToken";
-import Loader from "../loader/Loader";
 
 const PersistAuth = ({ children }) => {
   const dispatch = useDispatch();

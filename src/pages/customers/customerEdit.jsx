@@ -1,8 +1,10 @@
-import Header from "../../common/components/header/Header";
-import FormCustomer from "../../common/components/form/FormCustomer";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+
 import useFetchData from "../../common/hooks/useFetchData";
+
+import Header from "../../common/components/header/Header";
+import FormCustomer from "../../common/components/form/FormCustomer";
 import Loader from "../../common/components/loader/Loader";
 
 const CustomerEdit = () => {
