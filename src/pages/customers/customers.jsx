@@ -27,13 +27,13 @@ const Customers = () => {
       btnIcon: <EditIcon />,
       btnClick: () => navigate(`/customers/${customerId}/edit`),
     },
-    {
-      btnType: "button",
-      btnClass: "btnSecondary",
-      btnText: "Delete",
-      btnIcon: <DeleteIcon />,
-      btnClick: () => {},
-    },
+    // {
+    //   btnType: "button",
+    //   btnClass: "btnSecondary",
+    //   btnText: "Delete",
+    //   btnIcon: <DeleteIcon />,
+    //   btnClick: () => {},
+    // },
   ];
 
   const formatData = customersByOrg?.map(

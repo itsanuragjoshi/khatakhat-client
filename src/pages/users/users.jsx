@@ -28,13 +28,13 @@ const Users = () => {
       btnIcon: <EditIcon />,
       btnClick: () => navigate(`/settings/users/${userRoleId}/edit`),
     },
-    {
-      btnType: "button",
-      btnClass: "btnSecondary",
-      btnText: "Delete",
-      btnIcon: <DeleteIcon />,
-      btnClick: () => {},
-    },
+    // {
+    //   btnType: "button",
+    //   btnClass: "btnSecondary",
+    //   btnText: "Delete",
+    //   btnIcon: <DeleteIcon />,
+    //   btnClick: () => {},
+    // },
   ];
 
   const formatData = userRolesByOrg?.map(({ _id, userId, roleId }) => ({
