@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { axiosPublic, axiosAuthN, axiosAuthZ } from "../../api/axios";
 
 const useFetchData = (url, params = {}, level = "public") => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null); // Initialize based on expected data type
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = useCallback(
+    async (signal) => {
       if (!url) {
         return;
       }
@@ -26,22 +26,35 @@ const useFetchData = (url, params = {}, level = "public") => {
       }
 
       setIsLoading(true);
-      setError(null); // Clear previous errors on each fetch
+      setError(null);
 
       try {
-        const response = await axiosInstance.get(url, { params });
+        const response = await axiosInstance.get(url, {
+          params,
+          signal,
+        });
         setData(response.data);
       } catch (error) {
-        setError(error);
+        if (error.name !== "AbortError") {
+          setError(error.message);
+        }
       } finally {
         setIsLoading(false);
       }
+    },
+    [url, JSON.stringify(params), level]
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchData(controller.signal);
+
+    return () => {
+      controller.abort();
     };
+  }, [fetchData]);
 
-    fetchData();
-  }, [url, JSON.stringify(params), level]);
-
-  return { data, isLoading, error };
+  return { data, isLoading, error, refetch: fetchData };
 };
 
 export default useFetchData;

@@ -1,0 +1,40 @@
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 199;
+  background-color: var(--color-background-black);
+  opacity: 0.5;
+}
+
+.modalContent {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: var(--color-background-white);
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttonWrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.closeButton {
+  height: 24px;
+  cursor: pointer;
+}

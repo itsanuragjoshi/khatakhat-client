@@ -7,17 +7,23 @@ import EditIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { useSelector } from "react-redux";
 import { formatDate } from "../../utils/dateUtils";
+import useDelete from "../../common/hooks/useDelete";
+import ConfirmDelete from "../../common/components/confirmDelete/ConfirmDelete";
+import Loader from "../../common/components/loader/Loader";
 
 const Invoices = () => {
   const navigate = useNavigate();
   const { userRoles } = useSelector((state) => state.auth);
   const orgId = userRoles?.orgId?._id;
 
-  const { data: invoicesByOrg } = useFetchData(
-    "/invoices/byOrg",
-    { orgId },
-    "authZ"
-  );
+  const {
+    data: invoicesByOrg,
+    isLoading,
+    refetch,
+  } = useFetchData("/invoices/byOrg", { orgId }, "authZ");
+
+  const { showConfirmDelete, hideConfirmDelete, handleDelete, isModal } =
+    useDelete("invoices", refetch);
 
   // Define actions for each user role
   const createActions = (invoiceId) => [
@@ -33,7 +39,9 @@ const Invoices = () => {
       btnClass: "btnSecondary",
       btnText: "Delete",
       btnIcon: <DeleteIcon />,
-      btnClick: () => {},
+      btnClick: () => {
+        showConfirmDelete(invoiceId);
+      },
     },
   ];
 
@@ -67,12 +75,21 @@ const Invoices = () => {
     },
   ];
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <>
       <Header title="Invoices" buttons={buttons} />
       <main className="invoices relative">
         <Table data={formatData} />
       </main>
+      {isModal && (
+        <ConfirmDelete
+          message="Are you sure you want to delete invoice(s)?"
+          onDelete={handleDelete}
+          onCancel={hideConfirmDelete}
+        />
+      )}
     </>
   );
 };
