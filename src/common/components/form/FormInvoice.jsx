@@ -52,6 +52,18 @@ const FormInvoice = ({ data, formId, method, invoiceId }) => {
   const [errors, setErrors] = useState(initialErrorValues);
   const [selectedCustomerId, setSelectedCustomerId] = useState("");
 
+  const { data: customersByOrg } = useFetchData(
+    "/customers/byOrg",
+    { orgId },
+    "authZ"
+  );
+
+  const { data: customerData } = useFetchData(
+    selectedCustomerId ? `/customers/${selectedCustomerId}` : null,
+    { orgId },
+    "authZ"
+  );
+
   useEffect(() => {
     if (data) {
       setInput((prevInput) => ({
@@ -177,18 +189,6 @@ const FormInvoice = ({ data, formId, method, invoiceId }) => {
     setErrors(initialErrorValues);
     navigate(-1);
   };
-
-  const { data: customersByOrg } = useFetchData(
-    "/customers/byOrg",
-    { orgId },
-    "authZ"
-  );
-
-  const { data: customerData } = useFetchData(
-    selectedCustomerId ? `/customers/${selectedCustomerId}` : null,
-    { orgId },
-    "authZ"
-  );
 
   useEffect(() => {
     const calculateTotals = () => {
