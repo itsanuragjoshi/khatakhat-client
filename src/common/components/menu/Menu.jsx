@@ -30,11 +30,11 @@ const navListPublic = [
 ];
 
 const navListPrivate = [
-  {
-    to: "/dashboard",
-    icon: <DashboardIcon />,
-    title: "Dashboard",
-  },
+  // {
+  //   to: "/dashboard",
+  //   icon: <DashboardIcon />,
+  //   title: "Dashboard",
+  // },
   {
     icon: <SellIcon />,
     title: "Sales",
@@ -49,11 +49,11 @@ const navListPrivate = [
         title: "Invoices",
         new: true,
       },
-      {
-        to: "/paymentsreceived",
-        title: "Payments Received",
-        new: true,
-      },
+      // {
+      //   to: "/paymentsreceived",
+      //   title: "Payments Received",
+      //   new: true,
+      // },
     ],
   },
   {
@@ -68,10 +68,10 @@ const navListPrivate = [
         to: "/org/select",
         title: "Select Organization",
       },
-      {
-        to: "/settings/currencies",
-        title: "Currencies",
-      },
+      // {
+      //   to: "/settings/currencies",
+      //   title: "Currencies",
+      // },
       {
         to: "/settings/users",
         title: "Users",
