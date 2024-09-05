@@ -274,3 +274,16 @@ select {
 small {
   font-size: 0.875rem;
 }
+
+.headingFontLarge {
+  font-size: 3rem;
+}
+
+.headingFontMedium {
+  font-size: 2rem;
+}
+
+.btnL {
+  height: 40px;
+  font-size: 1.25rem;
+}

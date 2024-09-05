@@ -1,0 +1,28 @@
+.heroSection {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.heroTitle {
+  display: flex;
+  align-items: center;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 40px 0;
+}
+
+.heroContent p {
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.heroContent h3 {
+  font-size: 1.5rem;
+}

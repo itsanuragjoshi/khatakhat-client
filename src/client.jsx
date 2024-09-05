@@ -14,6 +14,7 @@ import RequireAuthZ from "./common/components/wrapper/RequireAuthZ.jsx";
 import RedirectIfAuthenticated from "./common/components/wrapper/RedirectIfAuthenticated.jsx";
 import Layout from "./Layout.jsx";
 import Error from "./pages/error/error.jsx";
+import Home from "./pages/home/home.jsx";
 
 const SignIn = lazy(() => import("./pages/auth/signIn.jsx"));
 const SignUp = lazy(() => import("./pages/auth/signUp.jsx"));
@@ -34,6 +35,7 @@ const Currencies = lazy(() => import("./pages/currencies/currencies.jsx"));
 const CurrenciesNew = lazy(() =>
   import("./pages/currencies/currenciesNew.jsx")
 );
+const Dashboard = lazy(() => import("./pages/dashboard/dashboard.jsx"));
 
 if (process.env.NODE_ENV === "production") {
   disableReactDevTools();
@@ -161,6 +163,7 @@ const router = createBrowserRouter([
       </PersistAuth>
     ),
     children: [
+      { path: "/", element: <Home /> },
       {
         element: <RedirectIfAuthenticated />,
         children: [
@@ -173,6 +176,7 @@ const router = createBrowserRouter([
         element: <RequireAuthN />,
         children: [
           { path: "/signout", element: <SignOut /> },
+          { path: "/dashboard", element: <Dashboard /> },
           ...organizationRoutes,
           ...userRoutes,
           ...currencyRoutes,
