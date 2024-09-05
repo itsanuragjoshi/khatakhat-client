@@ -4,7 +4,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer>
+    <footer className={styles.footer}>
       <pre>
         <span>KhataKhat © {currentYear}, </span>
         <span>Developed with ❤️ by </span>
